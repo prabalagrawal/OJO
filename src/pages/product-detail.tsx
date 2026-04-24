@@ -81,14 +81,48 @@ export function VerificationScreen({ isOpen, onClose }: VerificationScreenProps)
 export function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState<any>(null);
+  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
   const [showStory, setShowStory] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<string | null>("source");
   const navigate = useNavigate();
 
+  const trustPillars = [
+    { 
+      id: "source", 
+      title: "Verified Source", 
+      icon: <VerifiedBadge className="w-5 h-5" />, 
+      details: `Sourced directly from registered guilds in ${product?.origin || 'India'}. No middlemen involved in the chain of custody.`
+    },
+    { 
+      id: "quality", 
+      title: "Quality Checked", 
+      icon: <Eye size={18} />, 
+      details: "Thread count audited. Material purity certified (100% organic dyes and natural fibers)."
+    },
+    { 
+      id: "tracked", 
+      title: "Origin Tracked", 
+      icon: <Map size={18} />, 
+      details: "Digital provenance record exists for this item in the OJO Registry ledger since creation."
+    }
+  ];
+
   useEffect(() => {
+    setLoading(true);
     api.get(`/products/${id}`)
-      .then(setProduct)
+      .then(p => {
+        setProduct(p);
+        // Fetch related products after we have the origin
+        api.get("/products")
+          .then(all => {
+            const related = all
+              .filter((item: any) => item.origin === p.origin && item.id !== p.id)
+              .slice(0, 4);
+            setRelatedProducts(related);
+          });
+      })
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -212,21 +246,40 @@ export function ProductDetail() {
               </div>
 
               <div className="space-y-10">
-                 <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-mustard border-b border-ojo-mustard/10 pb-4">Provenance Summary</h3>
-                 <p className="text-sm font-light leading-relaxed opacity-60 font-serif italic text-ojo-stone/90">
-                    "{product.description}"
-                 </p>
-                 <div className="grid grid-cols-2 gap-x-8 gap-y-12 pt-4 pb-12">
-                    <div className="space-y-3">
-                       <Grid size={18} className="text-ojo-mustard/40" />
-                       <h5 className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal">Dimensions</h5>
-                       <p className="text-[10px] opacity-40 leading-relaxed">{product.dimensions || "Verified Custom Scale"}</p>
-                    </div>
-                    <div className="space-y-3">
-                       <ShieldCheck size={18} className="text-ojo-mustard/40" />
-                       <h5 className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal">Natural Palette</h5>
-                       <p className="text-[10px] opacity-40 leading-relaxed">Dominant Tone: {product.color || "Organic Pigments"}</p>
-                    </div>
+                 <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-mustard border-b border-ojo-mustard/10 pb-4">Provenance Architecture</h3>
+                 
+                 <div className="space-y-4">
+                    {trustPillars.map((pillar) => (
+                      <div 
+                        key={pillar.id}
+                        className={`p-6 rounded-[30px] border transition-all cursor-pointer ${expandedSection === pillar.id ? 'bg-white border-ojo-mustard/30 shadow-xl' : 'bg-white/20 border-ojo-stone/20 overflow-hidden'}`}
+                        onClick={() => setExpandedSection(expandedSection === pillar.id ? null : pillar.id)}
+                      >
+                         <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                               <div className={`p-3 rounded-xl ${expandedSection === pillar.id ? 'bg-ojo-mustard text-white' : 'bg-ojo-stone/10 text-ojo-charcoal/40'}`}>
+                                  {pillar.icon}
+                               </div>
+                               <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal">{pillar.title}</span>
+                            </div>
+                            <ArrowRight size={14} className={`transition-transform duration-300 ${expandedSection === pillar.id ? 'rotate-90 text-ojo-mustard' : 'text-ojo-stone/40'}`} />
+                         </div>
+                         <AnimatePresence>
+                            {expandedSection === pillar.id && (
+                              <motion.div 
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="pt-4 overflow-hidden"
+                              >
+                                 <p className="text-[11px] font-light leading-relaxed text-ojo-charcoal/60 pl-[52px]">
+                                    {pillar.details}
+                                 </p>
+                              </motion.div>
+                            )}
+                         </AnimatePresence>
+                      </div>
+                    ))}
                  </div>
 
                  {/* Deepened Origin Story Area */}
@@ -332,6 +385,64 @@ export function ProductDetail() {
         </div>
       </div>
 
+      {/* Related Products Section - Curated Provenance */}
+      <section className="max-w-7xl mx-auto px-6 py-40 space-y-16">
+        <div className="flex items-center justify-between">
+           <div className="space-y-4">
+              <div className="ojo-label flex items-center gap-4">
+                 <div className="w-12 h-px bg-ojo-mustard" />
+                 <span>CURATED DISCOVERY</span>
+              </div>
+              <h3 className="text-4xl font-serif text-ojo-charcoal tracking-tighter">Similar <span className="italic text-ojo-stone">Verified Entries.</span></h3>
+           </div>
+           <button onClick={() => navigate("/")} className="ojo-btn-primary !py-4">View All Registry</button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {relatedProducts.length > 0 ? relatedProducts.map((p, idx) => (
+              <motion.div 
+                key={p.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+                className="flex flex-col gap-6 group cursor-pointer" 
+                onClick={() => navigate(`/product/${p.id}`)}
+              >
+                 <div className="aspect-[4/5] rounded-[40px] overflow-hidden bg-white border border-ojo-stone/30 relative">
+                    <div className="absolute inset-0 pattern-jali opacity-[0.02]" />
+                    <img 
+                      src={JSON.parse(p.images || "[]")[0]} 
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                      alt={p.name}
+                    />
+                    <div className="absolute top-6 right-6">
+                       <VerifiedBadge className="scale-50" />
+                    </div>
+                 </div>
+                 <div className="space-y-2 px-4">
+                    <span className="text-[8px] font-black uppercase tracking-[0.4em] text-ojo-mustard">{p.origin} REGISTER</span>
+                    <h4 className="text-xl font-serif tracking-tighter opacity-80 group-hover:text-ojo-terracotta transition-colors truncate">{p.name}</h4>
+                    <div className="flex justify-between items-center pt-2">
+                       <span className="text-sm font-serif">₹{p.price.toLocaleString()}</span>
+                       <div className="w-8 h-px bg-ojo-mustard/40" />
+                    </div>
+                 </div>
+              </motion.div>
+            )) : (
+              [1, 2, 3, 4].map((i) => (
+                <div key={i} className="flex flex-col gap-6 group cursor-pointer animate-pulse">
+                   <div className="aspect-[4/5] rounded-[40px] bg-ojo-stone/10 border border-ojo-stone/30 relative" />
+                   <div className="space-y-2 px-4">
+                      <div className="h-2 w-16 bg-ojo-stone/20 rounded" />
+                      <div className="h-4 w-32 bg-ojo-stone/20 rounded" />
+                   </div>
+                </div>
+              ))
+            )}
+        </div>
+      </section>
+
       {/* Navigation Return */}
       <div className="fixed top-12 left-12 z-50">
          <button 
@@ -342,7 +453,26 @@ export function ProductDetail() {
          </button>
       </div>
 
-      <VerificationScreen isOpen={showStory} onClose={() => setShowStory(false)} />
+      {/* Sticky Conversion Footer (Mobile & Conversion focused) */}
+      <motion.div 
+        initial={{ y: 100 }}
+        animate={{ y: 0 }}
+        className="fixed bottom-0 inset-x-0 z-[60] bg-white/80 backdrop-blur-xl border-t border-ojo-stone/30 p-6 lg:hidden"
+      >
+         <div className="flex items-center justify-between gap-6">
+            <div className="flex flex-col">
+               <span className="text-2xl font-serif text-ojo-charcoal leading-none">₹{product.price.toLocaleString()}</span>
+               <span className="text-[8px] font-black uppercase tracking-widest text-ojo-mustard mt-1">Registry Verified</span>
+            </div>
+            <button 
+              onClick={addToCart}
+              disabled={adding}
+              className="flex-grow bg-ojo-charcoal text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-ojo-terracotta transition-all disabled:opacity-50"
+            >
+              {adding ? "ARCHIVING..." : "ACQUIRE NOW"}
+            </button>
+         </div>
+      </motion.div>
     </div>
   );
 }

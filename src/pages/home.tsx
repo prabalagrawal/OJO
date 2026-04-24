@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { api } from "../lib/api.ts";
 import { VerifiedBadge, VerifiedIcon } from "../components/brand.tsx";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowRight, Coffee, Leaf, Sparkles, Grid, ShieldCheck, Filter, X, ChevronDown, Search } from "lucide-react";
+import { ArrowRight, Coffee, Leaf, Sparkles, Grid, ShieldCheck, Filter, X, ChevronDown, Search, Globe } from "lucide-react";
 import { MotifMandala, MotifLotus, MotifDiamond, MotifOrnamental, MotifPaisley, MotifRangoli, MotifTraditionalMandala, MotifTraditionalRangoli } from "../components/motifs.tsx";
 
 export function QuickViewModal({ product, onClose }: { product: any; onClose: () => void }) {
@@ -174,24 +174,24 @@ export function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-6xl md:text-[140px] font-serif leading-[0.82] tracking-tighter text-ojo-charcoal"
+              className="text-6xl md:text-[120px] font-serif leading-[0.85] tracking-tighter text-ojo-charcoal"
             >
-              CRAFTED BY <br />
+              INDIA'S AUTHENTIC <br />
               <span className="italic text-ojo-terracotta relative">
-                LEGENDS
+                PRODUCTS
                 <div className="absolute -bottom-4 right-0 w-1/2 h-1 bg-ojo-mustard/30 -skew-x-12" />
               </span>. <br />
-              VERIFIED BY <br />
-              <span className="text-ojo-mustard">OJO</span>.
+              VERIFIED.
             </motion.h1>
             
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-sm md:text-xl font-light opacity-60 max-w-lg leading-relaxed border-l-2 border-ojo-mustard pl-8 ml-2"
+              className="text-sm md:text-lg font-light opacity-60 max-w-lg leading-relaxed border-l-2 border-ojo-mustard pl-8 ml-2"
             >
-              Explore an exquisite collection of Indian artifacts, each bearing the hallmark of authenticated heritage.
+              Every artifact in the OJO registry passes a rigorous 3-tier provenance check. 
+              We bridge the gap between ancient heritage and modern trust.
             </motion.p>
             
             <motion.div
@@ -223,24 +223,99 @@ export function Home() {
         </div>
       </section>
 
-      {/* Categories Bar - Ornate & Interactive */}
-      <section className="max-w-6xl mx-auto px-6">
-        <div className="flex items-center justify-between gap-8 py-10 px-10 bg-white border border-ojo-stone rounded-[40px] shadow-xl shadow-ojo-charcoal/5 relative overflow-hidden group">
-          <div className="absolute inset-0 pattern-jali opacity-[0.02] pointer-events-none group-hover:opacity-[0.04] transition-opacity" />
-          {categories.map((cat, idx) => (
-            <motion.div 
-              key={idx}
-              whileHover={{ y: -5 }}
-              className="flex items-center gap-6 group cursor-pointer transition-all border-r border-ojo-stone/30 pr-8 last:border-0"
-            >
-               <div className="category-icon scale-110 group-hover:bg-ojo-charcoal group-hover:text-white transition-all">
-                 {cat.icon}
-               </div>
-               <div className="flex flex-col">
-                 <span className="text-[8px] font-bold tracking-[0.4em] uppercase text-ojo-charcoal/30">Category</span>
-                 <span className="text-[11px] font-black tracking-widest uppercase text-ojo-charcoal group-hover:text-ojo-terracotta transition-colors">{cat.name}</span>
-               </div>
-            </motion.div>
+      {/* Trust Section - How OJO Works (Provenence Architecture) */}
+      <section className="py-20 max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+          <div className="md:col-span-4 space-y-8">
+            <div className="ojo-label flex items-center gap-4">
+              <div className="w-12 h-px bg-ojo-mustard" />
+              <span>THE TRUST PROTOCOL</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-serif text-ojo-charcoal leading-tight">
+              A Guarantee <br /><span className="italic text-ojo-terracotta">of Provenance.</span>
+            </h2>
+            <p className="text-sm font-light opacity-60 leading-relaxed">
+              In a world of mass-produced replicas, OJO stands as the definitive barrier. 
+              We don't just sell products; we register heritage.
+            </p>
+          </div>
+
+          <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[
+              { 
+                title: "Verified Source", 
+                desc: "Direct cooperatives source. No middlemen.", 
+                details: "Every item is tagged at the loom or kiln by OJO field agents.",
+                icon: <VerifiedBadge className="text-ojo-mustard" />
+              },
+              { 
+                title: "Quality Checked", 
+                desc: "Material purity & structural audit.", 
+                details: "We verify thread count, organic dye composition, and artisanal integrity.",
+                icon: <ShieldCheck size={32} className="text-ojo-mustard" />
+              },
+              { 
+                title: "Origin Tracked", 
+                desc: "Blockchain-backed heritage log.", 
+                details: "Scan any product ID to see the full cultural journey from its region of birth.",
+                icon: <Globe size={32} className="text-ojo-mustard" />
+              }
+            ].map((step, i) => (
+              <motion.div 
+                key={i}
+                whileHover={{ y: -8 }}
+                className="p-8 bg-white border border-ojo-stone/40 rounded-[30px] shadow-lg shadow-ojo-charcoal/5 space-y-6 group cursor-default"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-ojo-charcoal/5 flex items-center justify-center group-hover:bg-ojo-mustard group-hover:text-white transition-all">
+                  {step.icon}
+                </div>
+                <h4 className="text-sm font-black uppercase tracking-widest text-ojo-charcoal">{step.title}</h4>
+                <p className="text-[11px] font-light leading-relaxed opacity-50">{step.desc}</p>
+                <div className="pt-4 overflow-hidden h-0 group-hover:h-auto opacity-0 group-hover:opacity-100 transition-all duration-500">
+                  <div className="h-px w-8 bg-ojo-mustard mb-4" />
+                  <p className="text-[10px] italic text-ojo-mustard/80">{step.details}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Shop by Region - Immersive Visual Selector */}
+      <section className="py-20 max-w-7xl mx-auto px-6 space-y-16">
+        <div className="text-center space-y-6">
+          <div className="ojo-label flex items-center justify-center gap-4">
+             <div className="w-12 h-px bg-ojo-stone/30" />
+             <span>REGIONAL ATLAS</span>
+             <div className="w-12 h-px bg-ojo-stone/30" />
+          </div>
+          <h2 className="text-5xl font-serif text-ojo-charcoal">Cultural Epochs. <span className="italic text-ojo-stone">By Region.</span></h2>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {[
+            { name: "Kashmir", img: "https://images.unsplash.com/photo-1544208062-331bd1954941?q=80&w=2670", color: "#E5E1D8" },
+            { name: "Jaipur", img: "https://images.unsplash.com/photo-1590050752117-238444bc3fe2?q=80&w=2576", color: "#FDF2F0" },
+            { name: "Kanchipuram", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=2670", color: "#F0F4ED" },
+            { name: "Bankura", img: "https://images.unsplash.com/photo-1590736704728-f4730bb30770?q=80&w=2670", color: "#FAF6F1" }
+          ].map((region, i) => (
+             <motion.div 
+              key={i}
+              whileHover={{ scale: 0.98 }}
+              className="relative aspect-[3/4] rounded-[40px] overflow-hidden group cursor-pointer border border-ojo-stone/30"
+              onClick={() => {
+                setOriginFilter(region.name);
+                document.getElementById('registry-grid')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+             >
+                <img src={region.img} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0" alt={region.name} />
+                <div className="absolute inset-0 bg-ojo-charcoal/20 group-hover:bg-transparent transition-colors" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ojo-charcoal/80 to-transparent" />
+                <div className="absolute bottom-10 left-0 w-full px-8 text-white space-y-2">
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] opacity-60">Artifacts of</span>
+                  <h4 className="text-3xl font-serif tracking-tighter">{region.name}</h4>
+                </div>
+             </motion.div>
           ))}
         </div>
       </section>
@@ -448,7 +523,7 @@ export function Home() {
                       </div>
                     </div>
                     <p className="text-[10px] font-light opacity-40 line-clamp-2 leading-relaxed tracking-wide group-hover:opacity-70 transition-opacity">
-                      {product.description}
+                      {product.story ? product.story.substring(0, 80) + '...' : product.description}
                     </p>
                   </div>
                 </motion.div>
@@ -484,7 +559,7 @@ export function Home() {
             )}
             </div>
 
-            {/* Pagination Controls - Maximalist Design */}
+            {/* Pagination Controls - Moved properly inside the registry view */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-6 mt-12 pb-20 relative">
                 <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-gradient-to-r from-transparent via-ojo-stone/40 to-transparent pointer-events-none" />
@@ -535,6 +610,51 @@ export function Home() {
             )}
           </div>
         )}
+      </section>
+
+      {/* Storytelling Section - From Origin to You */}
+      <section className="-mx-6 md:-mx-12 px-6 md:px-12 py-40 relative">
+         <div className="absolute inset-0 pattern-lotus opacity-[0.03]" />
+         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center max-w-7xl mx-auto">
+            <div className="space-y-12">
+               <div className="ojo-label flex items-center gap-4">
+                  <div className="w-12 h-px bg-ojo-mustard" />
+                  <span>THE CRAFT ODYSSEY</span>
+               </div>
+               <h2 className="text-6xl md:text-8xl font-serif text-ojo-charcoal leading-none tracking-tighter">
+                  From Origin <br />
+                  <span className="italic text-ojo-stone">To You.</span>
+               </h2>
+               <p className="text-lg font-light text-ojo-charcoal/60 leading-relaxed border-l-4 border-ojo-terracotta pl-12">
+                  Authentication is our bloodline. We travel to the most remote corners of the subcontinent to verify materials, interview masters, and secure the chain of custody. 
+                  OJO isn't just a shop—it's a digital guardian of human excellence.
+               </p>
+               <div className="grid grid-cols-2 gap-12 pt-8">
+                  <div className="space-y-4">
+                     <span className="text-4xl font-serif text-ojo-terracotta tracking-tighter">47+</span>
+                     <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Registered Guilds</p>
+                  </div>
+                  <div className="space-y-4">
+                     <span className="text-4xl font-serif text-ojo-terracotta tracking-tighter">1,200+</span>
+                     <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Verified Artifacts</p>
+                  </div>
+               </div>
+            </div>
+
+            <div className="relative">
+               <div className="aspect-square rounded-[80px] overflow-hidden rotate-3 hover:rotate-0 transition-all duration-1000 shadow-3xl group">
+                  <img 
+                    src="https://images.unsplash.com/photo-1544208062-331bd1954941?q=80&w=2670&auto=format&fit=crop" 
+                    className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000" 
+                    alt="Artisan Story" 
+                  />
+               </div>
+               <div className="absolute -bottom-12 -left-12 p-12 bg-ojo-mustard text-white rounded-[40px] shadow-2xl -rotate-6">
+                  <MotifLotus size={60} />
+                  <h4 className="text-xl font-serif italic mt-6">Hand-tagged at Source</h4>
+               </div>
+            </div>
+         </div>
       </section>
 
       {/* Artisan Showcase - Immersive Split Overhaul */}
