@@ -2,11 +2,34 @@ import { useState, useEffect, useMemo } from "react";
 import { api } from "../lib/api.ts";
 import { VerifiedBadge, VerifiedIcon } from "../components/brand.tsx";
 import { motion, AnimatePresence } from "motion/react";
+import { useNavigate } from "react-router-dom";
 import { ArrowRight, Coffee, Leaf, Sparkles, Grid, ShieldCheck, Filter, X, ChevronDown, Search, Globe, Eye, CheckCircle } from "lucide-react";
 import { MotifMandala, MotifLotus, MotifDiamond, MotifOrnamental, MotifPaisley, MotifRangoli, MotifTraditionalMandala, MotifTraditionalRangoli } from "../components/motifs.tsx";
 
 export function QuickViewModal({ product, onClose }: { product: any; onClose: () => void }) {
   const images = JSON.parse(product.images || "[]");
+  const navigate = useNavigate();
+
+  const handleAddToCart = () => {
+    const savedCart = localStorage.getItem("cart");
+    const cart = savedCart ? JSON.parse(savedCart) : [];
+    const existing = cart.find((i: any) => i.productId === product.id);
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        image: images[0],
+        quantity: 1,
+        origin: product.origin
+      });
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    window.dispatchEvent(new Event("storage")); // Trigger storage event for layout
+    window.location.reload(); // Refresh to update cart count in layout
+  };
 
   return (
     <motion.div 
@@ -22,63 +45,90 @@ export function QuickViewModal({ product, onClose }: { product: any; onClose: ()
         
         <motion.div 
           layoutId={`product-${product.id}`}
-          className="bg-ojo-cream w-full max-w-5xl rounded-[60px] overflow-hidden shadow-3xl relative z-10 flex flex-col lg:flex-row max-h-[90vh]"
+          className="bg-ojo-cream w-full max-w-6xl rounded-[60px] overflow-hidden shadow-3xl relative z-10 flex flex-col lg:flex-row max-h-[90vh]"
         >
           <button 
             onClick={onClose}
-            className="absolute top-8 right-8 z-50 p-4 bg-white/20 backdrop-blur-md rounded-full text-ojo-charcoal hover:bg-ojo-charcoal hover:text-white transition-all"
+            className="absolute top-8 right-8 z-50 p-4 bg-white/20 backdrop-blur-md rounded-full text-ojo-charcoal hover:bg-ojo-charcoal hover:text-white transition-all shadow-lg"
           >
             <X size={24} />
           </button>
 
           {/* Image Side */}
-          <div className="lg:w-1/2 relative bg-white">
-            <div className="absolute inset-0 pattern-jali opacity-[0.03]" />
+          <div className="lg:w-1/2 relative bg-white h-[400px] lg:h-auto overflow-hidden">
+            <div className="absolute inset-0 pattern-jali opacity-[0.05]" />
             <img 
               src={images[0]} 
               alt={product.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-[2s] hover:scale-110"
             />
-            <div className="absolute bottom-8 left-8">
-               <VerifiedBadge className="!w-20 !h-20" />
+            <div className="absolute top-8 left-8">
+               <VerifiedBadge className="scale-125" />
+            </div>
+            <div className="absolute bottom-8 left-8 right-8 flex gap-4">
+              {images.slice(1, 4).map((img: string, i: number) => (
+                <div key={i} className="w-16 h-16 rounded-2xl border-2 border-white/50 overflow-hidden shadow-lg">
+                   <img src={img} className="w-full h-full object-cover grayscale" />
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Content Side */}
-          <div className="lg:w-1/2 p-12 lg:p-16 flex flex-col justify-center space-y-10 relative overflow-hidden">
+          <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center space-y-12 relative overflow-y-auto">
             <div className="absolute inset-0 pattern-mandala opacity-[0.02] pointer-events-none" />
             
-            <div className="space-y-4">
-               <div className="ojo-label text-ojo-mustard flex items-center gap-3">
-                 <div className="w-6 h-px bg-ojo-mustard/40" />
-                 {product.origin} Registry Entry
-               </div>
-               <div className="flex items-center gap-4">
-                 <h2 className="text-4xl lg:text-5xl font-serif tracking-tighter leading-none">{product.name}</h2>
-                 <VerifiedIcon className="scale-125" />
-               </div>
-               <div className="flex items-center gap-2 pt-1">
-                 <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40 italic">By {product.artisanName || "Master Artisan"}</span>
-               </div>
-            </div>
-
             <div className="space-y-6">
-              <span className="text-3xl font-serif text-ojo-terracotta">₹{product.price.toLocaleString()}</span>
-              <p className="text-sm font-light opacity-60 leading-relaxed italic border-l-2 border-ojo-mustard/20 pl-6">
-                {(product.story || product.description).substring(0, 180)}...
-              </p>
+               <div className="flex items-center gap-4">
+                 <div className="px-4 py-1 bg-ojo-terracotta/10 text-ojo-terracotta border border-ojo-terracotta/20 rounded-full text-[9px] font-black uppercase tracking-widest">
+                   Direct from {product.origin} artisan
+                 </div>
+                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ojo-charcoal/30">OJO-REG-{product.id.substring(0,6)}</span>
+               </div>
+               
+               <div className="space-y-2">
+                 <h2 className="text-4xl lg:text-6xl font-serif tracking-tighter leading-none text-ojo-charcoal">{product.name}</h2>
+                 <div className="flex items-center gap-4">
+                   <span className="text-3xl font-serif text-ojo-mustard">₹{product.price.toLocaleString()}</span>
+                   <div className="flex items-center gap-1">
+                     {[1,2,3,4,5].map(s => <Sparkles key={s} size={12} className="text-ojo-mustard" />)}
+                   </div>
+                 </div>
+               </div>
             </div>
 
-            <div className="flex flex-col gap-4 pt-6">
+            <div className="space-y-10">
+               <div className="grid grid-cols-3 gap-6 border-y border-ojo-stone/20 py-8">
+                  {[
+                    { label: "Verified", icon: <CheckCircle size={14} /> },
+                    { label: "Authentic", icon: <CheckCircle size={14} /> },
+                    { label: "Direct Source", icon: <CheckCircle size={14} /> }
+                  ].map((t, idx) => (
+                    <div key={idx} className="flex flex-col items-center gap-3 text-center">
+                       <div className="text-ojo-mustard">{t.icon}</div>
+                       <span className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal/60">{t.label}</span>
+                    </div>
+                  ))}
+               </div>
+
+               <p className="text-base font-light text-ojo-charcoal/70 leading-relaxed italic border-l-2 border-ojo-mustard/20 pl-8">
+                 {product.story || product.description}
+               </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-6 pt-6">
                <button 
-                onClick={() => window.location.href = `/product/${product.id}`}
-                className="ojo-btn-primary w-full"
+                onClick={() => navigate(`/product/${product.product_id || product.id}`)}
+                className="flex-1 px-12 py-5 rounded-full border-2 border-ojo-charcoal text-[10px] font-black uppercase tracking-widest hover:bg-ojo-charcoal hover:text-white transition-all text-center"
                >
                  View Full Provenance
                </button>
-               <div className="text-[9px] font-black uppercase tracking-[0.4em] opacity-20 text-center">
-                 Sovereign Ledger Artifact #{product.id.substring(0, 8)}
-               </div>
+               <button 
+                onClick={handleAddToCart}
+                className="flex-1 ojo-btn-primary !bg-ojo-mustard !text-ojo-charcoal hover:!bg-ojo-charcoal hover:!text-white"
+               >
+                 Add to Cart
+               </button>
             </div>
           </div>
         </motion.div>
@@ -590,7 +640,7 @@ export function Home() {
                     transition={{ duration: 0.6, delay: (idx % itemsPerPage) % 4 * 0.1 }}
                     viewport={{ once: true, margin: "-50px" }}
                     className="flex flex-col gap-6 group cursor-pointer lg:col-span-4 md:col-span-6"
-                    onClick={() => window.location.href = `/product/${product.id}`}
+                    onClick={() => setQuickViewProduct(product)}
                   >
                     <div className="maximalist-card overflow-hidden !p-1 relative bg-white">
                       <div className="relative aspect-[4/5] rounded-[36px] overflow-hidden bg-ojo-stone/10">

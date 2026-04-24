@@ -28,18 +28,10 @@ export function Cart() {
     }
 
     setCheckingOut(true);
-    try {
-      const orderItems = items.map(i => ({ productId: i.productId, quantity: i.quantity }));
-      await api.post("/orders", { items: orderItems });
-      localStorage.removeItem("cart");
-      setItems([]);
-      alert("Escrow Transaction Initiated. Artifacts pending provenance verification.");
-      navigate("/");
-    } catch (err) {
-      alert("Verification protocol failure. Please retry.");
-    } finally {
+    setTimeout(() => {
       setCheckingOut(false);
-    }
+      navigate("/checkout");
+    }, 1000);
   };
 
   const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);

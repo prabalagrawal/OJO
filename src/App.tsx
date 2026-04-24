@@ -8,6 +8,9 @@ import { Register } from "./pages/register.tsx";
 import { VendorDashboard } from "./pages/vendor-dashboard.tsx";
 import { AdminDashboard } from "./pages/admin-dashboard.tsx";
 import { Cart } from "./pages/cart.tsx";
+import { CustomerDashboard } from "./pages/customer-dashboard.tsx";
+import { OrderTracking } from "./pages/order-tracking.tsx";
+import { Checkout } from "./pages/checkout.tsx";
 
 export default function App() {
   const [user, setUser] = useState<any>(null);
@@ -45,7 +48,13 @@ export default function App() {
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register" element={<Register onLogin={handleLogin} />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-tracking/:id" element={<OrderTracking />} />
           
+          <Route 
+            path="/dashboard/*" 
+            element={user ? <CustomerDashboard /> : <Navigate to="/login" />} 
+          />
           <Route 
             path="/vendor/*" 
             element={user?.role === "VENDOR" ? <VendorDashboard /> : <Navigate to="/login" />} 

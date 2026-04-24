@@ -82,4 +82,15 @@
       radial-gradient(circle at bottom left, rgba(176, 126, 30, 0.05) 0%, transparent 40%),
       var(--color-ojo-cream);
   }
+
+  /* Custom Scrollbar for better UI */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-ojo-mustard/20 rounded-full;
+  }
 }

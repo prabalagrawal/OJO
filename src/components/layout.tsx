@@ -49,17 +49,19 @@ export function Layout({ children, user, onLogout }: LayoutProps) {
                />
             </div>
             
-            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-6">
                <a href="/cart" className="relative group">
                   <ShoppingCart size={18} className="text-ojo-charcoal hover:text-ojo-terracotta transition-colors" />
-                  <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-ojo-mustard text-[8px] font-black text-ojo-charcoal flex items-center justify-center">0</span>
+                  <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-ojo-mustard text-[8px] font-black text-ojo-charcoal flex items-center justify-center">
+                    {JSON.parse(localStorage.getItem("cart") || "[]").length}
+                  </span>
                </a>
                <div className="w-px h-6 bg-ojo-stone/20" />
                <div className="flex items-center gap-4">
                   {user ? (
                     <div className="flex items-center gap-4">
-                      <a href={user.role === 'ADMIN' ? '/admin' : '/vendor'} className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal hover:text-ojo-terracotta transition-colors">
-                        Panel
+                      <a href={user.role === 'ADMIN' ? '/admin' : user.role === 'VENDOR' ? '/vendor' : '/dashboard'} className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal hover:text-ojo-terracotta transition-colors">
+                        {user.role === 'CUSTOMER' ? 'Registry' : 'Panel'}
                       </a>
                       <button onClick={onLogout} className="text-[10px] font-black uppercase tracking-widest text-ojo-terracotta">
                         Exit
