@@ -515,6 +515,8 @@ export function ProductDetail() {
          </button>
       </div>
 
+      <VerificationScreen isOpen={showStory} onClose={() => setShowStory(false)} />
+
       {/* Sticky Conversion Bar */}
       <motion.div 
         initial={{ y: 100 }}

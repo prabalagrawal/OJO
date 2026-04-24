@@ -32,21 +32,29 @@ export function QuickViewModal({ product, onClose }: { product: any; onClose: ()
   };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-6 sm:p-12 lg:p-24"
-    >
-        <motion.div 
-          onClick={onClose}
-          className="absolute inset-0 bg-ojo-charcoal/60 backdrop-blur-xl"
-        />
-        
-        <motion.div 
-          layoutId={`product-${product.id}`}
-          className="bg-ojo-cream w-full max-w-6xl rounded-[60px] overflow-hidden shadow-3xl relative z-10 flex flex-col lg:flex-row max-h-[90vh]"
-        >
+    <AnimatePresence>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[100] flex items-center justify-center p-6 sm:p-12 lg:p-24"
+      >
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="absolute inset-0 bg-ojo-charcoal/80 backdrop-blur-3xl"
+          />
+          
+          <motion.div 
+            layoutId={`product-${product.id}`}
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="bg-ojo-cream w-full max-w-6xl rounded-[60px] overflow-hidden shadow-4xl relative z-10 flex flex-col lg:flex-row max-h-[90vh] ring-1 ring-white/20"
+          >
           <button 
             onClick={onClose}
             className="absolute top-8 right-8 z-50 p-4 bg-white/20 backdrop-blur-md rounded-full text-ojo-charcoal hover:bg-ojo-charcoal hover:text-white transition-all shadow-lg"
@@ -133,6 +141,7 @@ export function QuickViewModal({ product, onClose }: { product: any; onClose: ()
           </div>
         </motion.div>
       </motion.div>
+    </AnimatePresence>
   );
 }
 
@@ -209,12 +218,18 @@ export function Home() {
 
   const filteredProducts = useMemo(() => {
     setCurrentPage(1); // Reset to first page when filtering
-    return products.filter(p => {
+    const filtered = products.filter(p => {
       const matchesQuery = p.name.toLowerCase().includes(query) || p.description.toLowerCase().includes(query) || p.origin.toLowerCase().includes(query);
       const matchesOrigin = !originFilter || p.origin === originFilter;
       const matchesPrice = p.price <= priceMax;
       const matchesVerified = !verifiedOnly || p.verified; // Assuming products have verified bit
       return matchesQuery && matchesOrigin && matchesPrice && matchesVerified;
+    });
+
+    // Default Sort: Verified First
+    return [...filtered].sort((a, b) => {
+      if (a.verified === b.verified) return 0;
+      return a.verified ? -1 : 1;
     });
   }, [products, query, originFilter, priceMax, verifiedOnly]);
 
@@ -234,16 +249,21 @@ export function Home() {
     { name: "More", icon: <Grid size={24} /> },
   ];
 
+  // Hero Text
+  const heroHeadline = "Nothing fake gets through OJO.";
+  
   return (
     <div className="space-y-0 maximalist-gradient bg-ojo-cream">
-      {/* Hero / Banner Section - Dark Editorial Overhaul */}
+      {/* Hero / Banner Section - Dark Editorial Authority */}
       <section className="relative overflow-hidden bg-ojo-charcoal text-ojo-soft-cream">
-        <div className="absolute inset-0 pattern-mandala opacity-[0.05] pointer-events-none" />
+        <div className="absolute inset-0 pattern-mandala opacity-[0.08] pointer-events-none scale-150" />
+        <div className="absolute inset-0 bg-gradient-to-br from-ojo-charcoal via-ojo-charcoal to-ojo-terracotta/20" />
+        
         <div className="absolute top-10 right-10 opacity-10 animate-spin-slow pointer-events-none">
           <MotifTraditionalMandala size={800} color="#B07E1E" />
         </div>
         
-        <div className="relative min-h-screen flex items-center justify-center px-6 md:px-12 py-24">
+        <div className="relative min-h-[90vh] lg:min-h-screen flex items-center justify-center px-6 md:px-12 py-24">
           <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
             <div className="lg:col-span-7 space-y-12 relative z-10">
               <motion.div 
@@ -260,58 +280,82 @@ export function Home() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-6xl md:text-[100px] font-serif leading-[0.85] tracking-tighter text-ojo-cream"
+                className="text-6xl md:text-[110px] font-serif leading-[0.85] tracking-tighter text-ojo-cream"
               >
                 India’s Authentic <br />
-                <span className="italic text-ojo-terracotta">Products.</span> <br />
-                Verified.
+                <span className="italic text-ojo-terracotta">Artifacts.</span> <br />
+                <span className="relative">
+                  Verified.
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: "100%" }}
+                    transition={{ delay: 1, duration: 1 }}
+                    className="absolute -bottom-4 left-0 h-2 bg-ojo-mustard/40 rounded-full"
+                  />
+                </span>
               </motion.h1>
               
-              <motion.p 
+              <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-sm md:text-xl font-light text-ojo-soft-cream opacity-80 max-w-lg leading-relaxed border-l-2 border-ojo-mustard pl-8 ml-2"
+                className="space-y-6"
               >
-                Every OJO artifact passes through a three-tier rigorous provenance check. 
-                We bridge the gap between ancient lineage and modern digital trust.
-              </motion.p>
+                <p className="text-xl md:text-2xl font-serif italic text-ojo-soft-cream/80 leading-relaxed border-l-2 border-ojo-mustard pl-8">
+                  "{heroHeadline}"
+                </p>
+                <p className="text-xs md:text-sm font-light text-ojo-soft-cream/60 max-w-lg leading-relaxed ml-8">
+                  Every OJO artifact passes through a three-tier rigorous provenance check. 
+                  We bridge the gap between ancient lineage and modern digital trust.
+                </p>
+              </motion.div>
               
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
-                className="flex flex-col sm:flex-row gap-6"
+                className="flex flex-col sm:flex-row gap-6 pt-4"
               >
                 <button 
                   onClick={() => document.getElementById('registry-grid')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="bg-ojo-mustard text-ojo-black px-16 py-6 rounded-full font-black tracking-[0.3em] text-[10px] uppercase hover:shadow-[0_0_20px_rgba(176,126,30,0.4)] hover:-translate-y-1 transition-all"
+                  className="bg-ojo-mustard text-ojo-black px-16 py-7 rounded-full font-black tracking-[0.3em] text-[10px] uppercase hover:shadow-[0_0_40px_rgba(176,126,30,0.5)] hover:-translate-y-1 transition-all active:scale-95"
                 >
                   Explore Verified Products
                 </button>
-                <button className="flex items-center gap-3 text-ojo-soft-cream text-[10px] font-black uppercase tracking-widest hover:text-ojo-mustard transition-colors">
-                   The Authentication Process <ArrowRight size={14} />
+                <button className="flex items-center gap-4 text-ojo-soft-cream text-[10px] font-black uppercase tracking-widest hover:text-ojo-mustard transition-colors group">
+                   The Authentication Process 
+                   <div className="w-10 h-px bg-ojo-soft-cream/20 group-hover:bg-ojo-mustard group-hover:w-16 transition-all" />
+                   <ArrowRight size={14} />
                 </button>
               </motion.div>
             </div>
             
             <div className="lg:col-span-5 relative hidden lg:block">
                <motion.div 
-                 initial={{ opacity: 0, scale: 0.9 }}
-                 animate={{ opacity: 1, scale: 1 }}
-                 transition={{ duration: 1.2 }}
-                 className="aspect-[4/5] rounded-[80px] overflow-hidden shadow-3xl border-8 border-white/5 relative group"
+                 initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
+                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                 transition={{ duration: 1.5, type: "spring", bounce: 0.4 }}
+                 className="aspect-[4/5] rounded-[100px] overflow-hidden shadow-3xl border-[20px] border-white/5 relative group"
                >
                   <img 
                     src="https://images.unsplash.com/photo-1623126868352-794017688fa0?q=80&w=2670&auto=format&fit=crop" 
-                    className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
+                    className="w-full h-full object-cover grayscale transition-transform duration-[3s] group-hover:scale-110 group-hover:grayscale-0"
                     alt="Artisan"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ojo-charcoal to-transparent opacity-40" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ojo-charcoal to-transparent opacity-60" />
+                  
+                  <div className="absolute bottom-12 left-12 right-12 p-8 bg-white/10 backdrop-blur-xl rounded-[40px] border border-white/10 space-y-4">
+                     <div className="flex items-center gap-4">
+                        <VerifiedIcon className="scale-150" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">OJO Registry #882-JAIPUR</span>
+                     </div>
+                     <p className="text-xs font-serif italic text-white/90">"Craft and trust are two sides of the same sovereign coin."</p>
+                  </div>
                </motion.div>
-               {/* Abstract Overlay Elements */}
-               <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-ojo-mustard/20 rounded-full blur-3xl animate-float" />
-               <div className="absolute -top-10 -right-10 w-60 h-60 bg-ojo-terracotta/20 rounded-full blur-3xl animate-float-delayed" />
+               
+               {/* Decorative Abstract Elements for Depth */}
+               <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-ojo-mustard/20 rounded-full blur-[120px] animate-pulse" />
+               <div className="absolute -top-20 -right-20 w-80 h-80 bg-ojo-terracotta/20 rounded-full blur-[120px] animate-pulse delay-1000" />
             </div>
           </div>
         </div>

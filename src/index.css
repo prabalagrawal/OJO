@@ -73,24 +73,38 @@
   }
 
   .maximalist-card {
-    @apply bg-white rounded-[40px] border border-ojo-stone p-8 transition-all hover:border-ojo-mustard/40 hover:shadow-2xl hover:shadow-ojo-charcoal/5;
+    @apply bg-white rounded-[40px] border border-ojo-stone p-8 transition-all hover:border-ojo-mustard/40 hover:shadow-[0_40px_80px_-20px_rgba(56,44,35,0.15)] hover:-translate-y-1 active:scale-[0.98];
+  }
+
+  /* Premium Depth Elements */
+  .inner-shadow-soft {
+    box-shadow: inset 0 2px 10px 0 rgba(0, 0, 0, 0.02);
+  }
+
+  .text-glow-mustard {
+    text-shadow: 0 0 20px rgba(176, 126, 30, 0.3);
   }
 
   .maximalist-gradient {
     background: 
-      radial-gradient(circle at top right, rgba(156, 93, 60, 0.05) 0%, transparent 40%),
-      radial-gradient(circle at bottom left, rgba(176, 126, 30, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 0% 0%, rgba(156, 93, 60, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 100% 100%, rgba(176, 126, 30, 0.03) 0%, transparent 50%),
       var(--color-ojo-cream);
   }
 
   /* Custom Scrollbar for better UI */
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
+  ::-webkit-scrollbar {
+    width: 6px;
   }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
+  ::-webkit-scrollbar-track {
+    background: var(--color-ojo-cream);
   }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-ojo-mustard/20 rounded-full;
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ojo-charcoal);
+    border-radius: 10px;
+    border: 2px solid var(--color-ojo-cream);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-ojo-mustard);
   }
 }
