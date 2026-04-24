@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      String   @default("CUSTOMER") // ADMIN, VENDOR, CUSTOMER
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  vendor    Vendor?
+  orders    Order[]
+}
+
+model Vendor {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id])
+  name        String
+  description String?
+  status      String    @default("PENDING") // PENDING, APPROVED, REJECTED
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id                 String            @id @default(cuid())
+  vendorId           String
+  vendor             Vendor            @relation(fields: [vendorId], references: [id])
+  name               String
+  description        String
+  price              Float
+  origin             String
+  artisanName        String            @default("Master Artisan")
+  color              String?
+  dimensions         String? // e.g. "6ft x 4ft" or "12 inch"
+  story              String? // The journey behind the artifact
+  stock              Int               @default(0)
+  verificationStatus String            @default("PENDING") // PENDING, VERIFIED, REJECTED
+  images             String? // JSON string of image URLs
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  orderItems         OrderItem[]
+  verificationLogs   VerificationLog[]
+  reviews            Review[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  rating    Int
+  comment   String
+  userName  String
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  customerId String
+  customer   User        @relation(fields: [customerId], references: [id])
+  total      Float
+  status     String      @default("PENDING") // PENDING, PAID, SHIPPED, DELIVERED, RELEASED
+  items      OrderItem[]
+  payment    Payment?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+  createdAt DateTime @default(now())
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  orderId       String   @unique
+  order     Order    @relation(fields: [orderId], references: [id])
+  amount        Float
+  status        String // PENDING, COMPLETED, FAILED
+  transactionId String?
+  createdAt     DateTime @default(now())
+}
+
+model VerificationLog {
+  id           String   @id @default(cuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id])
+  adminId      String
+  status       String // VERIFIED, REJECTED
+  comments     String?
+  timestamp    DateTime @default(now())
+}
