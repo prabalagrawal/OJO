@@ -24,6 +24,11 @@ async function startServer() {
   app.use("/api/orders", orderRouter);
   app.use("/api/admin", adminRouter);
 
+  // Health check
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "ok", env: process.env.NODE_ENV });
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
@@ -31,9 +36,11 @@ async function startServer() {
       appType: "spa",
     });
     app.use(vite.middlewares);
-    
-    // SPA Fallback for development
+
+    // Explicitly handle SPA fallback for dev if needed
     app.get("*", async (req, res, next) => {
+      if (req.originalUrl.startsWith("/api")) return next();
+      
       const url = req.originalUrl;
       try {
         const fs = await import("fs");
@@ -49,6 +56,9 @@ async function startServer() {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
+      if (req.originalUrl.startsWith("/api")) {
+        return res.status(404).json({ error: "API endpoint not found" });
+      }
       res.sendFile(path.join(distPath, "index.html"));
     });
   }

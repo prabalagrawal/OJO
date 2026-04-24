@@ -241,134 +241,106 @@ export function ProductDetail() {
                      {product.origin.toUpperCase()} ORIGIN
                    </div>
                    <div className="text-[9px] font-black font-mono text-ojo-charcoal/20">
-                     OJO-ID: {product.origin.substring(0,3).toUpperCase()}-{id?.substring(0,4).toUpperCase()}-2026
+                     OJO-ID: {product.origin.substring(0,3).toUpperCase()}-{id?.substring(0,4).toUpperCase()}
                    </div>
                  </div>
-                 <div className="space-y-4">
-                    <h1 className="text-6xl lg:text-7xl font-serif tracking-tighter leading-none text-ojo-charcoal">
+                 <div className="space-y-2">
+                    <h1 className="text-5xl lg:text-7xl font-serif tracking-tighter leading-none text-ojo-charcoal">
                       {product.name}
                     </h1>
-                    
-                    {/* Trust Strip */}
-                    <div className="flex flex-wrap items-center gap-6 py-4 border-y border-ojo-stone/10">
-                       <div className="flex items-center gap-2">
-                          <CheckCircle size={14} className="text-ojo-mustard" />
-                          <span className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal/60">Verified by OJO</span>
-                       </div>
-                       <div className="flex items-center gap-2">
-                          <CheckCircle size={14} className="text-ojo-mustard" />
-                          <span className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal/60">Authentic Source</span>
-                       </div>
-                       <div className="flex items-center gap-2">
-                          <CheckCircle size={14} className="text-ojo-mustard" />
-                          <span className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal/60">Secure Checkout</span>
-                       </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <VerifiedIcon className="scale-110" />
-                      <span className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">OJO Registry Verified</span>
+                    <div className="flex items-center gap-2">
+                      <VerifiedIcon className="scale-90" />
+                      <span className="text-[9px] font-black uppercase tracking-widest text-ojo-mustard">OJO Registry Verified</span>
                     </div>
                  </div>
               </div>
 
-              <div className="flex items-baseline gap-4 border-b border-ojo-stone/20 pb-8">
+              <div className="flex items-baseline gap-4 py-6">
                  <span className="text-5xl font-serif text-ojo-charcoal">₹{product.price.toLocaleString()}</span>
-                 <div className="flex flex-col">
-                   <span className="text-[10px] font-medium opacity-30 italic">Registry Certified</span>
-                   <span className="text-[9px] font-black text-ojo-mustard uppercase tracking-widest mt-1">12 people viewed this today</span>
-                 </div>
+                 <span className="text-[10px] font-medium opacity-30 italic">Registry Certified</span>
               </div>
 
-              {/* Transparency Card (New) */}
-              <div className="p-10 bg-white rounded-[40px] shadow-2xl border border-ojo-stone/10 space-y-8 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 pattern-lotus opacity-5" />
-                <h3 className="text-xs font-black uppercase tracking-[0.4em] text-ojo-terracotta">Provenance Data</h3>
-                <div className="grid grid-cols-2 gap-8">
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-black uppercase tracking-widest opacity-30">Origin</label>
-                    <p className="text-sm font-medium">{product.origin}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-black uppercase tracking-widest opacity-30">Maker</label>
-                    <p className="text-sm font-medium">{product.artisanName || "Master Guild"}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-black uppercase tracking-widest opacity-30">Process</label>
-                    <p className="text-sm font-medium">Handcrafted</p>
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-black uppercase tracking-widest opacity-30">Verification</label>
-                    <p className="text-sm font-black text-ojo-olive tracking-widest uppercase text-[10px]">Tier 3 Pass</p>
-                  </div>
-                </div>
+              <p className="text-sm font-light text-ojo-charcoal opacity-60 leading-relaxed border-l-2 border-ojo-mustard/20 pl-6 italic">
+                {product.description}
+              </p>
+
+              {/* Action Area */}
+              <div className="space-y-4">
                 <button 
-                  onClick={() => setShowStory(true)}
-                  className="w-full py-4 border border-ojo-mustard/20 rounded-2xl text-[9px] font-black uppercase tracking-widest text-ojo-mustard hover:bg-ojo-mustard hover:text-white transition-all transform hover:-translate-y-1"
+                  onClick={addToCart}
+                  disabled={adding}
+                  className="w-full bg-ojo-mustard text-ojo-charcoal py-8 rounded-[40px] text-[11px] font-black uppercase tracking-[0.6em] hover:bg-ojo-charcoal hover:text-white transition-all shadow-3xl disabled:opacity-50"
                 >
-                  View Verification Report
+                  {adding ? "ACQUIRING..." : "ADD TO REGISTRY"}
                 </button>
               </div>
 
-              {/* Trust Panel (Accordion) */}
-              <div className="space-y-4">
-                {trustPillars.map((pillar) => (
+              {/* Progressive Disclosure: Depth Layers */}
+              <div className="space-y-4 pt-12">
+                <h3 className="ojo-label text-ojo-stone">Depth & Verification</h3>
+                
+                {/* 1. Origin & Artisan (Accordion style or quick facts) */}
+                <div className="grid grid-cols-2 gap-4">
                   <div 
-                    key={pillar.id}
-                    onClick={() => setExpandedSection(expandedSection === pillar.id ? null : pillar.id)}
-                    className="bg-white rounded-3xl border border-ojo-stone/10 shadow-lg cursor-pointer overflow-hidden group"
+                    onClick={() => setExpandedSection(expandedSection === 'origin' ? null : 'origin')}
+                    className="p-6 bg-white rounded-3xl border border-ojo-stone/10 cursor-pointer hover:border-ojo-mustard/40 transition-all text-center space-y-2"
                   >
-                    <div className="p-6 flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="text-ojo-terracotta">{pillar.icon}</div>
-                        <span className="text-[10px] font-black uppercase tracking-widest">{pillar.title}</span>
-                      </div>
-                      <RotateCcw size={14} className={`text-ojo-stone/40 transform transition-transform ${expandedSection === pillar.id ? 'rotate-180 text-ojo-mustard' : ''}`} />
-                    </div>
-                    <AnimatePresence>
-                      {expandedSection === pillar.id && (
-                        <motion.div 
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="px-6 pb-6"
-                        >
-                          <p className="text-xs font-light text-ojo-charcoal opacity-60 leading-relaxed italic border-l border-ojo-mustard/20 pl-4">
-                            {pillar.details}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    <Map size={18} className="mx-auto text-ojo-mustard/40" />
+                    <span className="block text-[8px] font-black uppercase tracking-widest text-ojo-charcoal/40">From</span>
+                    <span className="block text-xs font-serif italic">{product.origin}</span>
                   </div>
-                ))}
-              </div>
+                  <div 
+                    onClick={() => setExpandedSection(expandedSection === 'artisan' ? null : 'artisan')}
+                    className="p-6 bg-white rounded-3xl border border-ojo-stone/10 cursor-pointer hover:border-ojo-mustard/40 transition-all text-center space-y-2"
+                  >
+                    <User size={18} className="mx-auto text-ojo-mustard/40" />
+                    <span className="block text-[8px] font-black uppercase tracking-widest text-ojo-charcoal/40">By</span>
+                    <span className="block text-xs font-serif italic truncate">{product.artisanName || "Master Guild"}</span>
+                  </div>
+                </div>
 
-              {/* CTA AREA */}
-              <div className="pt-8 space-y-6">
-                <div className="flex flex-col gap-4">
-                  <button 
-                    onClick={addToCart}
-                    disabled={adding}
-                    className="w-full bg-ojo-mustard text-ojo-charcoal py-8 rounded-[40px] text-[11px] font-black uppercase tracking-[0.6em] hover:bg-ojo-charcoal hover:text-white transition-all shadow-3xl disabled:opacity-50"
-                  >
-                    {adding ? "ACQUIRING..." : "ADD TO REGISTRY"}
-                  </button>
-                  <button className="w-full bg-ojo-terracotta text-white py-8 rounded-[40px] text-[11px] font-black uppercase tracking-[0.6em] hover:bg-ojo-charcoal transition-all shadow-3xl">
-                    BUY NOW
-                  </button>
-                </div>
-                <div className="flex flex-col items-center gap-4 opacity-40">
+                {/* Depth Content Reveal */}
+                <AnimatePresence>
+                  {expandedSection === 'origin' && (
+                    <motion.div 
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="p-8 bg-ojo-charcoal text-ojo-soft-cream rounded-3xl space-y-4 shadow-2xl"
+                    >
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">Origin Chronology</h4>
+                      <p className="text-xs font-light leading-relaxed italic opacity-80">{product.story || "A legacy crafted over generations, preserving the unique identity of its region."}</p>
+                    </motion.div>
+                  )}
+                  {expandedSection === 'artisan' && (
+                    <motion.div 
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="p-8 bg-ojo-charcoal text-ojo-soft-cream rounded-3xl space-y-4 shadow-2xl"
+                    >
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">Artisan Portfolio</h4>
+                      <p className="text-xs font-light leading-relaxed italic opacity-80">{product.artisanName || "Master Artisan"} is part of the certified heritage guilds supporting regional continuity.</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* 2. Verification Report (Deep Layer) */}
+                <button 
+                  onClick={() => setShowStory(true)}
+                  className="w-full p-8 border-2 border-ojo-charcoal rounded-3xl flex items-center justify-between group hover:bg-ojo-charcoal hover:text-white transition-all shadow-xl"
+                >
                   <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2">
-                       <ShieldCheck size={14} />
-                       <span className="text-[8px] font-black uppercase tracking-widest">Verified Product</span>
+                    <div className="w-12 h-12 rounded-full border border-ojo-mustard flex items-center justify-center text-ojo-mustard shadow-[0_0_15px_rgba(176,126,30,0.2)]">
+                      <ShieldCheck size={20} />
                     </div>
-                    <div className="flex items-center gap-2">
-                       <CheckCircle size={14} />
-                       <span className="text-[8px] font-black uppercase tracking-widest">Secure Checkout</span>
+                    <div className="text-left">
+                       <span className="block text-[10px] font-black uppercase tracking-widest">View Provenance Report</span>
+                       <span className="block text-[9px] opacity-40 italic">Blockchain Verified Artifact</span>
                     </div>
                   </div>
-                </div>
+                  <ArrowRight size={20} className="text-ojo-mustard group-hover:translate-x-2 transition-transform" />
+                </button>
               </div>
            </div>
         </div>
