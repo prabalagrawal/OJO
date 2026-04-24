@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { useState, useEffect } from "react";
 import { Layout } from "./components/layout.tsx";
 import { Home } from "./pages/home.tsx";
+import { CategoryPage } from "./pages/category.tsx";
 import { ProductDetail } from "./pages/product-detail.tsx";
 import { Login } from "./pages/login.tsx";
 import { Register } from "./pages/register.tsx";
@@ -44,6 +45,7 @@ export default function App() {
       <Layout user={user} onLogout={handleLogout}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/category" element={<CategoryPage />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register" element={<Register onLogin={handleLogin} />} />
