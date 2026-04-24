@@ -185,7 +185,7 @@ export function Login({ onLogin }: { onLogin: (user: any, token: string) => void
                 <label className={`absolute -top-3 left-0 text-[9px] font-black uppercase tracking-widest bg-ojo-cream px-1 z-10 transition-colors ${emailError ? "text-ojo-terracotta" : "text-ojo-mustard"}`}>Email Identity</label>
                 <input 
                   type="email" 
-                  className={`w-full bg-transparent border-b-2 py-4 outline-none transition-all text-sm font-medium ${emailError ? "border-ojo-terracotta" : "border-ojo-stone/40 focus:border-ojo-mustard"}`}
+                  className={`w-full bg-transparent border-b-2 py-4 outline-none transition-all text-sm font-medium ${emailError ? "border-ojo-terracotta" : "border-ojo-stone/40 focus:border-ojo-mustard focus:shadow-[0_8px_20px_-12px_rgba(176,126,30,0.4)]"}`}
                   placeholder="artisan@ojo.heritage"
                   value={email}
                   onChange={(e) => {
@@ -210,7 +210,7 @@ export function Login({ onLogin }: { onLogin: (user: any, token: string) => void
                 <label className={`absolute -top-3 left-0 text-[9px] font-black uppercase tracking-widest bg-ojo-cream px-1 z-10 transition-colors ${passwordError ? "text-ojo-terracotta" : "text-ojo-mustard"}`}>Security Key</label>
                 <input 
                   type="password" 
-                  className={`w-full bg-transparent border-b-2 py-4 outline-none transition-all text-sm font-medium ${passwordError ? "border-ojo-terracotta" : "border-ojo-stone/40 focus:border-ojo-mustard"}`}
+                  className={`w-full bg-transparent border-b-2 py-4 outline-none transition-all text-sm font-medium ${passwordError ? "border-ojo-terracotta" : "border-ojo-stone/40 focus:border-ojo-mustard focus:shadow-[0_8px_20px_-12px_rgba(176,126,30,0.4)]"}`}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => {
