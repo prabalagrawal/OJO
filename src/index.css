@@ -6,16 +6,16 @@
   --font-serif: "Playfair Display", serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Brand Colors Refined for Indian Maximalism */
-  --color-ojo-charcoal: #0F0F0F;
-  --color-ojo-terracotta: #A63F1D;
-  --color-ojo-mustard: #D4AF37;
-  --color-ojo-emerald: #044B36;
-  --color-ojo-ruby: #8B0000;
-  --color-ojo-indigo: #0F1D36;
-  --color-ojo-beige: #FCF9F2;
-  --color-ojo-stone: #E5E0D5;
-  --color-ojo-gold: #B8860B;
+  /* Brand Colors Refined for Indian Marketplace - Luxury Redesign */
+  --color-ojo-charcoal: #382C23;
+  --color-ojo-terracotta: #9C5D3C;
+  --color-ojo-mustard: #B07E1E;
+  --color-ojo-cream: #F5F0E6;
+  --color-ojo-soft-cream: #D1C7B5;
+  --color-ojo-olive: #6E6B41;
+  --color-ojo-stone: #D1C7B5;
+  --color-ojo-white: #FFFFFF;
+  --color-ojo-black: #000000;
 
   /* Custom Animations */
   --animate-spin-slow: spin 45s linear infinite;
@@ -29,13 +29,13 @@
 
 @layer base {
   body {
-    @apply bg-ojo-beige text-ojo-charcoal font-sans antialiased selection:bg-ojo-mustard/30;
+    @apply bg-ojo-cream text-ojo-charcoal font-sans antialiased selection:bg-ojo-mustard/30;
   }
 }
 
 @layer components {
   .ojo-btn-primary {
-    @apply bg-ojo-charcoal text-ojo-beige px-12 py-5 rounded-full font-black tracking-[0.2em] text-[9px] hover:bg-ojo-terracotta transition-all uppercase flex items-center justify-center gap-4 shadow-xl shadow-ojo-charcoal/10 active:scale-95;
+    @apply bg-ojo-charcoal text-ojo-white px-12 py-5 rounded-full font-black tracking-[0.2em] text-[9px] hover:bg-ojo-terracotta transition-all uppercase flex items-center justify-center gap-4 shadow-xl shadow-ojo-charcoal/10 active:scale-95;
   }
   
   .category-icon {
@@ -78,8 +78,8 @@
 
   .maximalist-gradient {
     background: 
-      radial-gradient(circle at top right, rgba(161, 56, 18, 0.05) 0%, transparent 40%),
-      radial-gradient(circle at bottom left, rgba(196, 142, 18, 0.05) 0%, transparent 40%),
-      var(--color-ojo-beige);
+      radial-gradient(circle at top right, rgba(156, 93, 60, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at bottom left, rgba(176, 126, 30, 0.05) 0%, transparent 40%),
+      var(--color-ojo-cream);
   }
 }

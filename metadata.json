@@ -1,6 +1,8 @@
 {
-  "name": "OJO Marketplace",
-  "description": "A trust-first marketplace platform for authentic Indian products with a rigorous verification system.",
-  "requestFramePermissions": [],
+  "name": "OJO | The Provenance Registry",
+  "description": "The world's most trusted marketplace for verified heritage artifacts. Authenticated, audited, and origin-tracked Indian craftsmanship.",
+  "requestFramePermissions": [
+    "camera"
+  ],
   "majorCapabilities": []
 }

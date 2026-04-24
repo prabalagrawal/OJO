@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../lib/api.ts";
 import { VerifiedBadge, VerifiedIcon } from "../components/brand.tsx";
 import { motion, AnimatePresence } from "motion/react";
-import { Truck, RotateCcw, ShieldCheck, MapPin, ArrowRight, ChevronLeft, MoreVertical, Heart, Grid, CheckCircle, Shield, Map, Eye, User } from "lucide-react";
+import { Truck, RotateCcw, ShieldCheck, MapPin, ArrowRight, ChevronLeft, MoreVertical, Heart, Grid, CheckCircle, Shield, Map, Eye, User, Sparkles } from "lucide-react";
 import { MotifMandala, MotifLotus, MotifPaisley, MotifDiamond, MotifRangoli, MotifTraditionalMandala, MotifTraditionalRangoli } from "../components/motifs.tsx";
 
 interface VerificationScreenProps {
@@ -20,31 +20,31 @@ export function VerificationScreen({ isOpen, onClose }: VerificationScreenProps)
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
           transition={{ type: "spring", damping: 25, stiffness: 200 }}
-          className="fixed inset-0 z-[100] bg-ojo-red text-ojo-beige flex flex-col pt-12"
+          className="fixed inset-0 z-[100] bg-ojo-charcoal text-ojo-soft-cream flex flex-col pt-12"
         >
-           <button onClick={onClose} className="absolute top-12 left-6 p-2 bg-white/10 rounded-full">
+           <button onClick={onClose} className="absolute top-12 left-6 p-2 bg-white/10 rounded-full text-white">
               <ChevronLeft size={24} />
            </button>
 
            <div className="flex flex-col items-center gap-8 py-12">
-              <div className="w-24 h-24 rounded-full border-4 border-ojo-beige/20 flex items-center justify-center">
-                 <Shield size={48} className="text-ojo-beige" />
+              <div className="w-24 h-24 rounded-full border-4 border-ojo-mustard/40 flex items-center justify-center">
+                 <Shield size={48} className="text-ojo-mustard" />
               </div>
               <div className="text-center space-y-4">
-                 <h2 className="text-sm font-black uppercase tracking-[0.4em] opacity-40">Verified</h2>
-                 <p className="text-3xl font-serif italic text-ojo-beige px-12">
-                    This product is <br /> Authentic & Trusted
+                 <h2 className="text-sm font-black uppercase tracking-[0.4em] text-ojo-mustard">Sovereign Secured</h2>
+                 <p className="text-3xl font-serif italic text-ojo-white px-12">
+                    This artifact is <br /> Verified by OJO Registry
                  </p>
               </div>
            </div>
 
-           <div className="flex-grow bg-ojo-beige rounded-t-[60px] p-10 space-y-12 shadow-2xl-up">
+           <div className="flex-grow bg-ojo-cream rounded-t-[60px] p-10 space-y-12 shadow-2xl-up">
               <div className="space-y-10 pt-10">
                  {[
-                   { label: "Verified Source", icon: <CheckCircle className="text-ojo-terracotta" size={24} />, desc: "Directly sourced from registered artisanal guilds." },
-                   { label: "Quality Checked", icon: <Eye className="text-ojo-terracotta" size={24} />, desc: "Rigorous standards for material purity and craft." },
-                   { label: "Origin Tracked", icon: <Map className="text-ojo-terracotta" size={24} />, desc: "Geographic Indication (GI) and history verified." },
-                   { label: "Authentic Always", icon: <Shield className="text-ojo-terracotta" size={24} />, desc: "Guaranteed by the OJO trust registry ledger." }
+                   { label: "Verified Source", icon: <CheckCircle className="text-ojo-mustard" size={24} />, desc: "Directly sourced from registered artisanal guilds." },
+                   { label: "Quality Checked", icon: <Eye className="text-ojo-mustard" size={24} />, desc: "Rigorous standards for material purity and craft." },
+                   { label: "Origin Tracked", icon: <Map className="text-ojo-mustard" size={24} />, desc: "Geographic Indication (GI) and history verified." },
+                   { label: "Authentic Always", icon: <Shield className="text-ojo-mustard" size={24} />, desc: "Guaranteed by the OJO trust registry ledger." }
                  ].map((item, idx) => (
                    <motion.div 
                     initial={{ opacity: 0, x: -20 }}
@@ -53,7 +53,7 @@ export function VerificationScreen({ isOpen, onClose }: VerificationScreenProps)
                     key={idx} 
                     className="flex items-start gap-6 group"
                    >
-                     <div className="p-3 bg-ojo-stone/20 rounded-2xl group-hover:bg-ojo-terracotta transition-colors">
+                     <div className="p-3 bg-white shadow-sm border border-ojo-stone/20 rounded-2xl group-hover:bg-ojo-mustard group-hover:text-white transition-colors">
                         {item.icon}
                      </div>
                      <div className="space-y-1">
@@ -155,39 +155,29 @@ export function ProductDetail() {
   const images = JSON.parse(product.images || "[]");
 
   return (
-    <div className="min-h-screen bg-ojo-beige -mx-6 md:-mx-12 -mt-12 relative overflow-hidden maximalist-gradient">
-      {/* Detailed Background Patterns - Paisley & Lotus */}
-      <div className="absolute inset-0 pattern-paisley opacity-40 pointer-events-none mix-blend-multiply" />
-      <div className="absolute inset-0 pattern-lotus opacity-30 pointer-events-none mix-blend-multiply" />
-
-      {/* Background Decor */}
-      <div className="absolute top-[10%] -right-[15%] opacity-15 animate-spin-slow pointer-events-none">
-        <MotifTraditionalMandala size={1200} color="#B8860B" />
-      </div>
-      <div className="absolute top-[40%] -left-[10%] opacity-[0.05] animate-float pointer-events-none">
-        <MotifTraditionalRangoli size={600} color="#A63F1D" />
-      </div>
-      
-      <VerificationScreen isOpen={showStory} onClose={() => setShowStory(false)} />
-      
-      {/* Immersive Header/Gallery Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 relative">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="min-h-screen bg-ojo-cream -mx-6 md:-mx-12 -mt-12 relative overflow-hidden"
+    >
+      {/* Immersive Header/Gallery Section (Light) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 relative bg-ojo-cream">
         {/* Ornate Sidebar Info (Desktop Only) */}
         <div className="hidden lg:flex lg:col-span-1 border-r border-ojo-stone/20 pt-32 flex-col items-center gap-12 text-[9px] font-black uppercase tracking-[0.5em] [writing-mode:vertical-lr] opacity-30">
            <span>VERIFIED OJO REGISTRY ENTRY</span>
            <div className="w-px h-32 bg-ojo-stone/40" />
-           <span>SOVEREIGN ARTIFACT ID: {id?.substring(0, 8)}</span>
+           <span>ARTIFACT ID: {id?.substring(0, 8)}</span>
         </div>
 
         {/* Hero Gallery Area */}
-        <div className="lg:col-span-7 relative p-4 sm:p-8 lg:p-16">
+        <div className="lg:col-span-6 relative p-4 sm:p-8 lg:p-16">
           <div className="sticky top-32 space-y-12">
-            <div className="group relative aspect-[4/5] rounded-[60px] overflow-hidden bg-white shadow-2xl border border-ojo-stone/40">
-               <div className="absolute inset-0 pattern-jali opacity-[0.02]" />
+            <div className="group relative aspect-[4/5] rounded-[80px] overflow-hidden bg-white shadow-3xl border border-ojo-stone/10">
                <img 
                 src={images[0]} 
                 alt={product.name} 
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-[1.5s] scale-105 group-hover:scale-100"
                />
                <motion.div 
                 whileHover={{ scale: 1.1 }}
@@ -196,196 +186,199 @@ export function ProductDetail() {
                >
                   <VerifiedBadge className="!w-24 !h-24" />
                </motion.div>
-               <div className="absolute top-12 right-12 flex gap-4">
-                  <button className="p-4 bg-white/60 backdrop-blur-md rounded-full text-ojo-charcoal hover:bg-ojo-charcoal hover:text-white transition-all shadow-xl">
-                    <Heart size={20} />
-                  </button>
-               </div>
             </div>
             
-            {/* Visual Social Proof / Auth Steps */}
-            <div className="flex justify-between items-center px-8 text-ojo-charcoal/30">
-               <div className="flex items-center gap-4">
-                  <ShieldCheck size={16} />
-                  <span className="text-[10px] font-black uppercase tracking-widest leading-none">Authentication Secured</span>
-               </div>
-               <div className="h-px flex-grow mx-8 bg-ojo-stone/20" />
-               <div className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-terracotta">OJO REGISTERED</div>
+            <div className="flex justify-center gap-4">
+              {images.slice(0, 4).map((img: string, i: number) => (
+                <div key={i} className="w-20 h-20 rounded-2xl overflow-hidden border border-ojo-stone/20 shadow-lg cursor-pointer hover:border-ojo-mustard transition-all">
+                  <img src={img} className="w-full h-full object-cover" />
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
         {/* Content/Detail Area */}
-        <div className="lg:col-span-4 bg-white/40 backdrop-blur-md border-l border-ojo-stone/20 min-h-screen px-8 lg:px-16 pt-16 lg:pt-32 pb-48 relative overflow-hidden">
-           <div className="absolute inset-0 pattern-mandala opacity-[0.02] pointer-events-none" />
-           <div className="absolute top-0 right-0 w-4 h-full pattern-border-trim opacity-10" />
-           
-           <div className="max-w-md mx-auto space-y-16 relative z-10">
+        <div className="lg:col-span-5 px-8 lg:px-16 pt-16 lg:pt-32 pb-48 relative">
+           <div className="max-w-md mx-auto space-y-12">
               <div className="space-y-6">
-                 <div className="ojo-label text-ojo-mustard flex items-center gap-4">
-                   <div className="w-8 h-px bg-ojo-mustard/40" />
+                 <div className="ojo-label text-ojo-terracotta flex items-center gap-4">
+                   <div className="w-8 h-px bg-ojo-terracotta/40" />
                    {product.origin.toUpperCase()} ORIGIN
                  </div>
-                 <div className="space-y-2">
+                 <div className="space-y-4">
                     <h1 className="text-6xl lg:text-7xl font-serif tracking-tighter leading-none text-ojo-charcoal">
                       {product.name}
                     </h1>
                     <div className="flex items-center gap-3">
                       <VerifiedIcon className="scale-110" />
-                      <span className="text-[11px] font-black uppercase tracking-widest opacity-20 italic">Validated Heritage Entry</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">OJO Registry Verified</span>
                     </div>
                  </div>
               </div>
 
-              <div className="space-y-8">
-                 <div className="flex items-baseline gap-4">
-                    <span className="text-4xl font-serif text-ojo-terracotta">₹{product.price.toLocaleString()}</span>
-                    <span className="text-[10px] font-medium opacity-30 italic">Includes Sovereign Registry Certificate</span>
-                 </div>
-                 <div className="h-[2px] w-full bg-gradient-to-r from-ojo-terracotta/40 via-ojo-mustard/20 to-transparent" />
+              <div className="flex items-baseline gap-4 border-b border-ojo-stone/20 pb-8">
+                 <span className="text-5xl font-serif text-ojo-charcoal">₹{product.price.toLocaleString()}</span>
+                 <span className="text-[10px] font-medium opacity-30 italic">Registry Certified</span>
               </div>
 
-              <div className="space-y-10">
-                 <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-mustard border-b border-ojo-mustard/10 pb-4">Provenance Architecture</h3>
-                 
-                 <div className="space-y-4">
-                    {trustPillars.map((pillar) => (
-                      <div 
-                        key={pillar.id}
-                        className={`p-6 rounded-[30px] border transition-all cursor-pointer ${expandedSection === pillar.id ? 'bg-white border-ojo-mustard/30 shadow-xl' : 'bg-white/20 border-ojo-stone/20 overflow-hidden'}`}
-                        onClick={() => setExpandedSection(expandedSection === pillar.id ? null : pillar.id)}
-                      >
-                         <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                               <div className={`p-3 rounded-xl ${expandedSection === pillar.id ? 'bg-ojo-mustard text-white' : 'bg-ojo-stone/10 text-ojo-charcoal/40'}`}>
-                                  {pillar.icon}
-                               </div>
-                               <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal">{pillar.title}</span>
-                            </div>
-                            <ArrowRight size={14} className={`transition-transform duration-300 ${expandedSection === pillar.id ? 'rotate-90 text-ojo-mustard' : 'text-ojo-stone/40'}`} />
-                         </div>
-                         <AnimatePresence>
-                            {expandedSection === pillar.id && (
-                              <motion.div 
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="pt-4 overflow-hidden"
-                              >
-                                 <p className="text-[11px] font-light leading-relaxed text-ojo-charcoal/60 pl-[52px]">
-                                    {pillar.details}
-                                 </p>
-                              </motion.div>
-                            )}
-                         </AnimatePresence>
-                      </div>
-                    ))}
-                 </div>
-
-                 {/* Deepened Origin Story Area */}
-                 <div className="relative p-10 bg-ojo-terracotta/5 rounded-[40px] border border-ojo-terracotta/10 overflow-hidden group">
-                    <div className="absolute top-0 right-0 opacity-[0.08] -mr-12 -mt-12 group-hover:rotate-12 transition-transform duration-1000">
-                      <MotifPaisley size={180} color="#A63F1D" />
-                    </div>
-                    <div className="absolute bottom-0 left-0 opacity-[0.08] -ml-12 -mb-12 group-hover:-rotate-12 transition-transform duration-1000">
-                      <MotifLotus size={180} color="#D4AF37" />
-                    </div>
-                    
-                    <div className="relative z-10 space-y-8">
-                       <div className="flex items-center gap-4">
-                         <div className="w-14 h-14 rounded-full bg-ojo-terracotta/10 flex items-center justify-center border border-ojo-terracotta/20">
-                            <MapPin size={24} className="text-ojo-terracotta" />
-                         </div>
-                         <div className="space-y-1">
-                            <h4 className="text-[9px] font-black uppercase tracking-[0.4em] text-ojo-terracotta/60">Origin Story</h4>
-                            <span className="font-serif italic text-ojo-charcoal text-2xl tracking-tighter">The Legend of {product.origin}</span>
-                         </div>
-                       </div>
-
-                       <div className="space-y-6">
-                         <p className="text-[13px] font-light leading-relaxed opacity-70 font-sans text-ojo-charcoal/80 first-letter:text-4xl first-letter:font-serif first-letter:float-left first-letter:mr-3 first-letter:text-ojo-terracotta">
-                           {product.story || `In the heart of ${product.origin}, where the rivers whisper ancient secrets and the soil holds the rhythm of a thousand years, 
-                           the craft of ${product.name} was born. It is said that the first weavers drew patterns from the morning frost on lotus leaves 
-                           and the spiraling dance of peacocks.`}
-                         </p>
-                       </div>
-
-                       <div className="pt-4 flex items-center gap-6">
-                         <div className="ojo-label text-[8px] opacity-40">Regional Heritage Verified</div>
-                         <div className="h-px flex-grow bg-ojo-stone/20" />
-                          <MotifTraditionalMandala size={40} color="#B8860B" opacity={0.3} />
-                       </div>
-                    </div>
-                 </div>
-              </div>
-
-              <div className="pt-8 space-y-12">
-                 <div className="p-8 bg-ojo-charcoal text-ojo-beige rounded-[40px] relative overflow-hidden group border border-ojo-mustard/20">
-                    <div className="absolute inset-0 pattern-jali opacity-[0.05]" />
-                    <div className="relative z-10 space-y-6">
-                       <h4 className="text-xs font-black uppercase tracking-[0.4em] text-ojo-mustard">The Artisan Soul</h4>
-                       <p className="text-xs font-light opacity-60 leading-relaxed italic">
-                         "Each touch of the hand creates a connection between the past and the present. 
-                         This artifact carries the breath of my ancestors."
-                       </p>
-                       <div className="flex items-center gap-4 pt-2">
-                          <div className="w-10 h-10 rounded-full bg-ojo-mustard/20 border border-ojo-mustard/40 flex items-center justify-center">
-                            <User size={16} className="text-ojo-mustard" />
-                          </div>
-                          <div className="flex flex-col">
-                             <span className="text-[10px] font-black uppercase tracking-widest">{product.artisanName || "Master Artisan"}</span>
-                             <span className="text-[8px] opacity-40 tracking-[0.2em]">REGISTERED OJO CRAFTSMAN</span>
-                          </div>
-                       </div>
-                    </div>
-                 </div>
-              </div>
-
-              {/* Reviews Section */}
-              <div className="space-y-8 pt-8">
-                <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-mustard border-b border-ojo-mustard/10 pb-4">Patron Chronicles</h3>
-                <div className="space-y-6">
-                   {product.reviews?.length > 0 ? (
-                     product.reviews.map((review: any) => (
-                       <div key={review.id} className="p-6 bg-white/40 rounded-3xl border border-ojo-stone/20 space-y-3">
-                          <div className="flex justify-between items-center">
-                             <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal">{review.userName}</span>
-                             <div className="flex gap-1">
-                                {Array.from({ length: 5 }).map((_, i) => (
-                                  <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < review.rating ? 'bg-ojo-mustard' : 'bg-ojo-stone/20'}`} />
-                                ))}
-                             </div>
-                          </div>
-                          <p className="text-[11px] font-light leading-relaxed opacity-60 font-serif italic italic text-ojo-charcoal/80">
-                            "{review.comment}"
-                          </p>
-                       </div>
-                     ))
-                   ) : (
-                     <p className="text-[10px] opacity-30 italic">No chronicles yet from our patrons.</p>
-                   )}
+              {/* Transparency Card (New) */}
+              <div className="p-10 bg-white rounded-[40px] shadow-2xl border border-ojo-stone/10 space-y-8 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-24 h-24 pattern-lotus opacity-5" />
+                <h3 className="text-xs font-black uppercase tracking-[0.4em] text-ojo-terracotta">Provenance Data</h3>
+                <div className="grid grid-cols-2 gap-8">
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-black uppercase tracking-widest opacity-30">Origin</label>
+                    <p className="text-sm font-medium">{product.origin}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-black uppercase tracking-widest opacity-30">Maker</label>
+                    <p className="text-sm font-medium">{product.artisanName || "Master Guild"}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-black uppercase tracking-widest opacity-30">Process</label>
+                    <p className="text-sm font-medium">Handcrafted</p>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-black uppercase tracking-widest opacity-30">Verification</label>
+                    <p className="text-sm font-black text-ojo-olive tracking-widest uppercase text-[10px]">Tier 3 Pass</p>
+                  </div>
                 </div>
+                <button 
+                  onClick={() => setShowStory(true)}
+                  className="w-full py-4 border border-ojo-mustard/20 rounded-2xl text-[9px] font-black uppercase tracking-widest text-ojo-mustard hover:bg-ojo-mustard hover:text-white transition-all transform hover:-translate-y-1"
+                >
+                  View Verification Report
+                </button>
               </div>
 
-              <div className="space-y-6 pt-8">
-                 <button 
-                  onClick={addToCart}
-                  disabled={adding}
-                  className="w-full bg-ojo-charcoal text-white py-8 rounded-[40px] text-[11px] font-black uppercase tracking-[0.6em] hover:bg-ojo-terracotta transition-all shadow-3xl disabled:opacity-50 group overflow-hidden relative"
-                 >
-                   <div className="absolute inset-x-0 bottom-0 h-1 bg-ojo-mustard/40 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-700" />
-                   {adding ? "ARCHIVING TO REGISTRY..." : "ACQUIRE ARTIFACT"}
-                 </button>
-                 <div className="flex items-center justify-center gap-3 text-[9px] font-medium opacity-30 uppercase tracking-widest">
-                    <Truck size={12} />
-                    <span>Complimentary Secure Transit Worldwide</span>
-                 </div>
+              {/* Trust Panel (Accordion) */}
+              <div className="space-y-4">
+                {trustPillars.map((pillar) => (
+                  <div 
+                    key={pillar.id}
+                    onClick={() => setExpandedSection(expandedSection === pillar.id ? null : pillar.id)}
+                    className="bg-white rounded-3xl border border-ojo-stone/10 shadow-lg cursor-pointer overflow-hidden group"
+                  >
+                    <div className="p-6 flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="text-ojo-terracotta">{pillar.icon}</div>
+                        <span className="text-[10px] font-black uppercase tracking-widest">{pillar.title}</span>
+                      </div>
+                      <RotateCcw size={14} className={`text-ojo-stone/40 transform transition-transform ${expandedSection === pillar.id ? 'rotate-180 text-ojo-mustard' : ''}`} />
+                    </div>
+                    <AnimatePresence>
+                      {expandedSection === pillar.id && (
+                        <motion.div 
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="px-6 pb-6"
+                        >
+                          <p className="text-xs font-light text-ojo-charcoal opacity-60 leading-relaxed italic border-l border-ojo-mustard/20 pl-4">
+                            {pillar.details}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA AREA */}
+              <div className="pt-8 space-y-6">
+                <div className="flex flex-col gap-4">
+                  <button 
+                    onClick={addToCart}
+                    disabled={adding}
+                    className="w-full bg-ojo-mustard text-ojo-charcoal py-8 rounded-[40px] text-[11px] font-black uppercase tracking-[0.6em] hover:bg-ojo-charcoal hover:text-white transition-all shadow-3xl disabled:opacity-50"
+                  >
+                    {adding ? "ACQUIRING..." : "ADD TO REGISTRY"}
+                  </button>
+                  <button className="w-full bg-ojo-terracotta text-white py-8 rounded-[40px] text-[11px] font-black uppercase tracking-[0.6em] hover:bg-ojo-charcoal transition-all shadow-3xl">
+                    BUY NOW
+                  </button>
+                </div>
+                <div className="flex flex-col items-center gap-4 opacity-40">
+                  <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-2">
+                       <ShieldCheck size={14} />
+                       <span className="text-[8px] font-black uppercase tracking-widest">Verified Product</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                       <CheckCircle size={14} />
+                       <span className="text-[8px] font-black uppercase tracking-widest">Secure Checkout</span>
+                    </div>
+                  </div>
+                </div>
               </div>
            </div>
         </div>
       </div>
 
-      {/* Related Products Section - Curated Provenance */}
+      {/* Origin Story Section (Light) */}
+      <section className="py-40 bg-ojo-cream relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+          <div className="relative order-2 lg:order-1">
+             <div className="aspect-square rounded-[80px] overflow-hidden shadow-3xl border border-ojo-stone/10">
+               <img 
+                src="https://images.unsplash.com/photo-1590736704728-f4730bb30770?q=80&w=2670&auto=format&fit=crop" 
+                className="w-full h-full object-cover" 
+                alt="Origin" 
+               />
+             </div>
+          </div>
+          <div className="space-y-12 order-1 lg:order-2">
+            <div className="ojo-label flex items-center gap-4">
+              <div className="w-12 h-px bg-ojo-terracotta" />
+              <span>THE ORIGIN STORY</span>
+            </div>
+            <h2 className="text-5xl md:text-7xl font-serif text-ojo-charcoal leading-tight tracking-tighter">
+              Legacy from <br/><span className="italic text-ojo-terracotta">{product.origin}.</span>
+            </h2>
+            <p className="text-lg font-light text-ojo-charcoal opacity-60 leading-relaxed border-l-4 border-ojo-mustard pl-10 italic">
+              {product.story || `The craft of ${product.name} is a testament to generations of skill passed down through blood and memory. Each artifact is not just a product, but a timeline of a region's soul.`}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Maker Section (Dark) */}
+      <section className="py-40 bg-ojo-charcoal text-ojo-soft-cream">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+          <div className="space-y-12">
+            <div className="ojo-label flex items-center gap-4 text-ojo-mustard">
+              <div className="w-12 h-px bg-ojo-mustard" />
+              <span>MEET THE MAKER</span>
+            </div>
+            <h2 className="text-5xl md:text-7xl font-serif tracking-tighter">The Hand <br/><span className="italic text-ojo-mustard">Behind the Art.</span></h2>
+            <p className="text-lg font-light opacity-80 leading-relaxed max-w-lg">
+              {product.artisanName || "Master Artisan"} represents the peak of regional craftsmanship. By bringing this artifact into your home, you directly support the continuity of this ancient guild.
+            </p>
+            <div className="flex items-center gap-6 pt-6">
+              <div className="w-20 h-20 rounded-full border-2 border-ojo-mustard flex items-center justify-center p-1">
+                 <div className="w-full h-full rounded-full bg-ojo-mustard/20 flex items-center justify-center">
+                    <User size={32} className="text-ojo-mustard" />
+                 </div>
+              </div>
+              <div>
+                <h4 className="text-lg font-serif">{product.artisanName || "Master Artisan"}</h4>
+                <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Guild Member #882-{id?.substring(0,2)}</p>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-6">
+            <div className="aspect-[3/4] rounded-3xl overflow-hidden bg-white/5 border border-white/5">
+              <img src="https://images.unsplash.com/photo-1590736962234-4537156942c1?q=80&w=2670&auto=format&fit=crop" className="w-full h-full object-cover grayscale" />
+            </div>
+            <div className="aspect-[3/4] rounded-3xl overflow-hidden bg-white/5 border border-white/5 mt-12">
+              <img src="https://images.unsplash.com/photo-1544208062-331bd1954941?q=80&w=2670&auto=format&fit=crop" className="w-full h-full object-cover opacity-60" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Related Products Section (Light) */}
       <section className="max-w-7xl mx-auto px-6 py-40 space-y-16">
         <div className="flex items-center justify-between">
            <div className="space-y-4">
@@ -398,36 +391,47 @@ export function ProductDetail() {
            <button onClick={() => navigate("/")} className="ojo-btn-primary !py-4">View All Registry</button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 pb-20">
             {relatedProducts.length > 0 ? relatedProducts.map((p, idx) => (
               <motion.div 
                 key={p.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
-                viewport={{ once: true }}
+                viewport={{ once: true, margin: "-50px" }}
                 className="flex flex-col gap-6 group cursor-pointer" 
                 onClick={() => navigate(`/product/${p.id}`)}
               >
-                 <div className="aspect-[4/5] rounded-[40px] overflow-hidden bg-white border border-ojo-stone/30 relative">
+                <div className="maximalist-card overflow-hidden !p-1 relative bg-white">
+                  <div className="relative aspect-[4/5] rounded-[36px] overflow-hidden bg-ojo-stone/10">
                     <div className="absolute inset-0 pattern-jali opacity-[0.02]" />
                     <img 
                       src={JSON.parse(p.images || "[]")[0]} 
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000"
                       alt={p.name}
                     />
-                    <div className="absolute top-6 right-6">
-                       <VerifiedBadge className="scale-50" />
+                    <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-all translate-y-3 group-hover:translate-y-0 duration-500">
+                       <VerifiedBadge className="scale-75" />
                     </div>
-                 </div>
-                 <div className="space-y-2 px-4">
-                    <span className="text-[8px] font-black uppercase tracking-[0.4em] text-ojo-mustard">{p.origin} REGISTER</span>
-                    <h4 className="text-xl font-serif tracking-tighter opacity-80 group-hover:text-ojo-terracotta transition-colors truncate">{p.name}</h4>
-                    <div className="flex justify-between items-center pt-2">
-                       <span className="text-sm font-serif">₹{p.price.toLocaleString()}</span>
-                       <div className="w-8 h-px bg-ojo-mustard/40" />
+                  </div>
+                </div>
+                <div className="space-y-3 px-4 relative">
+                  <div className="flex justify-between items-start gap-4">
+                    <div className="space-y-1 flex-grow min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <VerifiedIcon className="shrink-0" />
+                        <span className="text-[8px] font-black uppercase tracking-[0.3em] text-ojo-mustard truncate">{p.origin}</span>
+                      </div>
+                      <h4 className="font-serif text-xl md:text-2xl leading-tight group-hover:text-ojo-terracotta transition-colors truncate tracking-tighter">
+                        {p.name}
+                      </h4>
                     </div>
-                 </div>
+                    <div className="flex flex-col items-end shrink-0 pt-1.5">
+                      <span className="text-base md:text-lg font-serif text-ojo-charcoal leading-none whitespace-nowrap">₹{p.price.toLocaleString()}</span>
+                      <div className="w-6 h-[1px] bg-ojo-mustard mt-2 group-hover:w-full transition-all duration-700" />
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             )) : (
               [1, 2, 3, 4].map((i) => (
@@ -462,17 +466,20 @@ export function ProductDetail() {
          <div className="flex items-center justify-between gap-6">
             <div className="flex flex-col">
                <span className="text-2xl font-serif text-ojo-charcoal leading-none">₹{product.price.toLocaleString()}</span>
-               <span className="text-[8px] font-black uppercase tracking-widest text-ojo-mustard mt-1">Registry Verified</span>
+               <div className="flex items-center gap-1 mt-1">
+                  <ShieldCheck size={8} className="text-ojo-mustard" />
+                  <span className="text-[8px] font-black uppercase tracking-widest text-ojo-mustard">OJO Registry Verified</span>
+               </div>
             </div>
             <button 
               onClick={addToCart}
               disabled={adding}
-              className="flex-grow bg-ojo-charcoal text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-ojo-terracotta transition-all disabled:opacity-50"
+              className="flex-grow bg-ojo-mustard text-ojo-charcoal py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-ojo-charcoal hover:text-white transition-all disabled:opacity-50 shadow-xl"
             >
-              {adding ? "ARCHIVING..." : "ACQUIRE NOW"}
+              {adding ? "ACQUIRING..." : "ACQUIRE NOW"}
             </button>
          </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
