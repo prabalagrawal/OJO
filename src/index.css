@@ -51,13 +51,29 @@
 }
 
 @layer components {
-  /* Premium CTA Button */
+  /* Premium CTA Button with Architectural Shape */
   .ojo-btn-primary {
-    @apply bg-ojo-mustard text-white px-10 py-5 rounded-full text-[10px] font-black uppercase tracking-[0.4em] hover:bg-ojo-charcoal transition-all duration-500 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-ojo-mustard text-white px-10 py-5 text-[10px] font-black uppercase tracking-[0.4em] hover:bg-ojo-charcoal transition-all duration-500 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden;
+    border-radius: 1.5rem 0.5rem 1.5rem 0.5rem; /* Pinched architectural corners */
   }
 
   .ojo-btn-outline {
-    @apply border border-ojo-charcoal/20 text-ojo-charcoal px-10 py-5 rounded-full text-[10px] font-black uppercase tracking-[0.4em] hover:bg-ojo-charcoal hover:text-white transition-all duration-500;
+    @apply border border-ojo-charcoal/20 text-ojo-charcoal px-10 py-5 text-[10px] font-black uppercase tracking-[0.4em] hover:bg-ojo-charcoal hover:text-white transition-all duration-500;
+    border-radius: 0.5rem 1.5rem 0.5rem 1.5rem;
+  }
+
+  /* Architectural Arch Profile */
+  .ojo-arch-mughal {
+    border-radius: 6rem 6rem 1.5rem 1.5rem;
+    position: relative;
+    clip-path: polygon(0 100%, 100% 100%, 100% 15%, 85% 5%, 50% 0, 15% 5%, 0 15%);
+  }
+
+  /* Deep Relief Shadow */
+  .ojo-shadow-relief {
+    box-shadow: 
+      inset 0 2px 4px rgba(255, 255, 255, 0.5),
+      0 10px 40px -10px rgba(56, 44, 35, 0.15);
   }
 
   /* Indian Motif Borders */

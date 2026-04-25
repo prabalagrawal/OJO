@@ -141,39 +141,49 @@ export function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-ojo-cream p-6 md:p-12 font-sans selection:bg-ojo-mustard selection:text-white">
-      <div className="max-w-[1600px] mx-auto space-y-12">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-          <div>
-            <span className="ojo-label-verified ojo-label shadow-sm">Master Control Panel v2.0</span>
-            <h1 className="text-4xl font-serif italic text-ojo-charcoal tracking-tighter mt-4">Registry Command.</h1>
+    <div className="min-h-screen bg-ojo-cream p-4 md:p-8 font-sans selection:bg-ojo-mustard selection:text-white">
+      <div className="max-w-[1600px] mx-auto space-y-16">
+        {/* Header - Architectural Jharokha Design */}
+        <div className="bg-white/70 backdrop-blur-3xl p-10 md:p-14 border border-ojo-mustard/20 shadow-4xl relative overflow-hidden"
+          style={{ borderRadius: '4rem 4rem 1.5rem 1.5rem' }}>
+          <div className="absolute inset-0 opacity-[0.05] pointer-events-none">
+            <MotifSystem type="jaali" scale={0.4} />
           </div>
-          <div className="flex gap-4">
-            <button 
-              onClick={() => setActiveTab('overview')}
-              className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'overview' ? 'bg-ojo-charcoal text-white' : 'bg-white text-ojo-charcoal/40 hover:text-ojo-charcoal'}`}
-            >
-              Overview
-            </button>
-            <button 
-              onClick={() => setActiveTab('products')}
-              className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'products' ? 'bg-ojo-charcoal text-white' : 'bg-white text-ojo-charcoal/40 hover:text-ojo-charcoal'}`}
-            >
-              Artifacts
-            </button>
-            <button 
-              onClick={() => setActiveTab('vendors')}
-              className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'vendors' ? 'bg-ojo-charcoal text-white' : 'bg-white text-ojo-charcoal/40 hover:text-ojo-charcoal'}`}
-            >
-              Guilds
-            </button>
-            <button 
-              onClick={() => setShowAddProduct(true)}
-              className="ojo-btn-primary !px-8 !py-3 flex items-center gap-3 shadow-xl shadow-ojo-mustard/20"
-            >
-              <Plus size={18} /> Add Artifact
-            </button>
+          
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 relative z-10">
+            <div>
+              <div className="flex items-center gap-4 mb-4">
+                <span className="ojo-label-verified ojo-label !px-6 shadow-sm !bg-ojo-charcoal text-white border-none">Master Registry Access v2.2</span>
+                <div className="h-px w-10 bg-ojo-mustard/30" />
+              </div>
+              <h1 className="text-4xl font-serif italic text-ojo-charcoal tracking-tighter">Registry Command.</h1>
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-mustard mt-3">Authorized Sovereign Control Node</p>
+            </div>
+            
+            <div className="flex flex-wrap gap-4">
+              <div className="flex bg-ojo-cream/60 p-1.5 rounded-[2rem] border border-ojo-stone/10">
+                {[
+                  { id: 'overview', label: 'Overview' },
+                  { id: 'products', label: 'Artifacts' },
+                  { id: 'vendors', label: 'Guilds' }
+                ].map((tab) => (
+                  <button 
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as any)}
+                    className={`px-8 py-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === tab.id ? 'bg-ojo-charcoal text-white shadow-xl' : 'text-ojo-charcoal/40 hover:text-ojo-charcoal'}`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+              
+              <button 
+                onClick={() => setShowAddProduct(true)}
+                className="ojo-btn-primary !px-10 !py-4 shadow-2xl shadow-ojo-mustard/20 flex items-center gap-3"
+              >
+                <Plus size={16} /> <span className="mt-0.5">Add Artifact</span>
+              </button>
+            </div>
           </div>
         </div>
 

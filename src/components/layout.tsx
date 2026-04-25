@@ -175,26 +175,39 @@ export function Layout({ children, user, onLogout }: LayoutProps) {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-ojo-cream">
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-[1.5s] px-6 md:px-12 ${scrolled ? 'py-4' : 'py-10'}`}>
-        <div className={`max-w-[1800px] mx-auto rounded-[3rem] transition-all duration-1000 flex items-center justify-between px-12 relative overflow-hidden ${scrolled ? 'bg-white/95 backdrop-blur-3xl shadow-4xl py-5 border border-ojo-mustard/20 shadow-ojo-mustard/5' : 'bg-white/40 backdrop-blur-md py-8 border border-white/30'}`}>
-          <div className="absolute inset-0 opacity-[0.06] pointer-events-none">
-            <MotifSystem type="jaali" scale={0.4} />
-          </div>
-          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-ojo-mustard/30 to-transparent" />
+    <div className="min-h-screen flex flex-col bg-ojo-cream font-sans">
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-[1.5s] px-4 md:px-8 ${scrolled ? 'py-2' : 'py-6'}`}>
+        <div className={`max-w-[1800px] mx-auto transition-all duration-1000 flex items-center justify-between px-10 relative overflow-hidden ${
+          scrolled 
+            ? 'bg-white/95 backdrop-blur-3xl shadow-4xl py-4 border-x border-b border-ojo-mustard/20 rounded-b-[4rem]' 
+            : 'bg-white/60 backdrop-blur-md py-8 border-b border-white/30 rounded-b-[6rem]'
+        }`}>
+          {/* Architectural Arch Detail (Subtle) */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-4 bg-ojo-mustard/10 rounded-b-full blur-xl" />
           
-          <div className="flex items-center gap-20 relative z-10">
-            <button onClick={() => navigate("/")} className="hover:opacity-80 transition-all group flex items-center gap-6">
-               <div className="w-16 h-16 rounded-[1.5rem] bg-ojo-charcoal text-white flex items-center justify-center shadow-4xl transform transition-transform group-hover:-rotate-[15deg] duration-700 border-2 border-ojo-mustard/40 relative">
-                <MotifSystem type="patola" opacity={0.15} scale={0.15} />
-                <span className="font-serif italic font-black text-3xl relative z-10">O</span>
+          <div className="absolute inset-0 opacity-[0.08] pointer-events-none">
+            <MotifSystem type="jaali" scale={0.3} />
+          </div>
+          
+          <div className="flex items-center gap-16 relative z-10 w-full justify-between">
+            {/* Logo Section as a Royal Seal */}
+            <button 
+              onClick={() => navigate("/")} 
+              className="hover:opacity-90 transition-all group flex items-center gap-6"
+            >
+               <div className="w-14 h-14 bg-ojo-charcoal text-white flex items-center justify-center shadow-4xl transform transition-all group-hover:rotate-45 duration-700 relative overflow-hidden" 
+                 style={{ borderRadius: '1.5rem 0.2rem 1.5rem 0.2rem' }}>
+                <MotifSystem type="patola" opacity={0.2} scale={0.15} />
+                <span className="font-serif italic font-black text-2xl relative z-10">O</span>
                </div>
-               <div className="flex flex-col items-start gap-1 group">
-                 <span className="font-serif italic text-4xl font-black text-ojo-charcoal tracking-tighter leading-none">OJO.</span>
-                 <span className="font-sans text-[9px] font-black uppercase tracking-[0.6em] text-ojo-mustard hidden md:block leading-none">Sovereign Heritage Registry</span>
+               <div className="flex flex-col items-start -space-y-1">
+                 <span className="font-serif italic text-3xl font-black text-ojo-charcoal tracking-tighter">OJO.</span>
+                 <span className="text-[7px] font-black uppercase tracking-[0.6em] text-ojo-mustard hidden md:block">The Sovereign Registry</span>
                </div>
             </button>
-            <nav className="hidden lg:flex items-center gap-16">
+
+            {/* Navigation with Arch Accents */}
+            <nav className="hidden lg:flex items-center gap-12">
               {[
                 { label: "The Vault", path: "/category" },
                 { label: "Provenance Records", path: "/category?verified=true" },
@@ -203,76 +216,79 @@ export function Layout({ children, user, onLogout }: LayoutProps) {
                 <button 
                   key={item.label} 
                   onClick={() => navigate(item.path)}
-                  className="relative text-[11px] font-black uppercase tracking-[0.4em] text-ojo-charcoal hover:text-ojo-mustard transition-all group py-3"
+                  className="relative text-[10px] font-black uppercase tracking-[0.5em] text-ojo-charcoal hover:text-ojo-mustard transition-all group py-1"
                 >
                   {item.label}
-                  <span className="absolute bottom-0 left-0 w-0 h-px bg-ojo-mustard transition-all duration-500 group-hover:w-full opacity-50" />
+                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-ojo-mustard rounded-full opacity-0 group-hover:opacity-100 transition-all" />
                 </button>
               ))}
             </nav>
-          </div>
-          
-          <div className="flex items-center gap-12 relative z-10">
-              <div className="flex items-center gap-12">
+
+            {/* Right Side Controls */}
+            <div className="flex items-center gap-8">
                <button 
                 onClick={() => setIsMiniCartOpen(true)}
-                className="relative group p-4 bg-white/60 hover:bg-white rounded-3xl border border-ojo-stone/20 transition-all hover:shadow-4xl box-content"
+                className="relative group p-4 bg-ojo-cream/50 hover:bg-white rounded-[1.5rem] border border-ojo-stone/20 transition-all hover:shadow-relief"
                >
-                  <ShoppingBag size={22} className="text-ojo-charcoal group-hover:text-ojo-mustard transition-colors duration-700" />
+                  <ShoppingBag size={20} className="text-ojo-charcoal group-hover:text-ojo-mustard transition-colors duration-500" />
                   {cartCount > 0 && (
-                    <span className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-ojo-mustard text-[11px] font-black text-white flex items-center justify-center shadow-2xl border-4 border-white transform group-hover:scale-125 transition-all duration-500">
+                    <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-ojo-terracotta text-[9px] font-black text-white flex items-center justify-center shadow-lg border-2 border-white">
                       {cartCount}
                     </span>
                   )}
                </button>
-               <div className="w-px h-10 bg-ojo-mustard/20" />
-               <div className="flex items-center gap-10">
+               
+               <div className="w-px h-8 bg-ojo-mustard/10" />
+
+               <div className="flex items-center gap-6">
                   {user ? (
-                    <div className="flex items-center gap-10">
+                    <div className="flex items-center gap-6">
                       {user.role?.toLowerCase() === 'admin' && (
                         <button 
                           onClick={() => navigate('/admin')}
-                          className="flex items-center gap-2 px-6 py-3 bg-ojo-charcoal text-ojo-mustard rounded-2xl border border-ojo-mustard/20 shadow-xl hover:bg-black transition-all group"
+                          className="flex items-center gap-2 px-5 py-2.5 bg-ojo-charcoal text-ojo-mustard shadow-xl hover:bg-black transition-all group"
+                          style={{ borderRadius: '1rem 0.2rem 1rem 0.2rem' }}
                         >
-                          <Lock size={14} className="group-hover:rotate-12 transition-transform" />
-                          <span className="text-[10px] font-black uppercase tracking-[0.2em]">Registry Control</span>
+                          <Lock size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                          <span className="text-[9px] font-black uppercase tracking-widest">Master Panel</span>
                         </button>
                       )}
                       <button 
                         onClick={() => navigate('/dashboard')}
-                        className="flex items-center gap-5 group"
+                        className="flex items-center gap-4 group"
                       >
-                         <div className="w-14 h-14 rounded-2xl bg-ojo-cream border-2 border-ojo-mustard/30 flex items-center justify-center text-ojo-charcoal font-black text-[14px] group-hover:bg-ojo-mustard group-hover:text-white transition-all shadow-xl transform group-hover:rotate-12 hover:scale-105 duration-500 relative overflow-hidden">
-                            <div className="absolute inset-0 opacity-[0.05]">
-                              <MotifSystem type="kolam" scale={0.3} />
+                         <div className="w-12 h-12 bg-ojo-cream border border-ojo-mustard/20 flex items-center justify-center text-ojo-charcoal font-black text-[12px] group-hover:bg-ojo-mustard group-hover:text-white transition-all shadow-md duration-500 relative overflow-hidden"
+                           style={{ borderRadius: '1rem 0.2rem 1rem 0.2rem' }}>
+                            <div className="absolute inset-0 opacity-[0.03]">
+                              <MotifSystem type="kolam" scale={0.4} />
                             </div>
                             <span className="relative z-10">{user.name?.[0].toUpperCase() || "P"}</span>
                          </div>
-                         <div className="hidden xl:block text-left">
-                            <p className="text-[11px] font-black uppercase tracking-[0.3em] text-ojo-mustard mb-0.5">VAULT ACCESS</p>
-                            <p className="text-[10px] text-ojo-charcoal/40 font-bold uppercase tracking-widest">{user.name}</p>
-                         </div>
                       </button>
-                      <button onClick={onLogout} className="text-[11px] font-black uppercase tracking-[0.4em] text-ojo-terracotta hover:text-ojo-mustard transition-all bg-ojo-cream/50 px-6 py-3 rounded-2xl border border-ojo-terracotta/20">
-                        Exit
+                      <button onClick={onLogout} className="text-[9px] font-black uppercase tracking-widest text-ojo-terracotta hover:text-ojo-mustard transition-colors">
+                        Logout
                       </button>
                     </div>
                   ) : (
                     <button 
                       onClick={() => navigate("/login")}
-                      className="ojo-btn-primary !px-12 !py-6 !text-[11px] shadow-4xl shadow-ojo-mustard/10 relative overflow-hidden"
+                      className="ojo-btn-primary !px-10 !py-4 shadow-ojo-mustard/10 flex items-center gap-3 group"
                     >
-                      <span className="relative z-10 flex items-center gap-3">Establish Identity <ArrowRight size={14} /></span>
-                      <div className="absolute inset-0 opacity-10 pointer-events-none group-hover:animate-pulse">
-                        <MotifSystem type="sozni" scale={0.2} />
-                      </div>
+                      <span className="relative z-10">Establish Identity</span>
+                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                   )}
                </div>
-               <button className="lg:hidden p-4 bg-white/60 rounded-3xl text-ojo-charcoal border border-ojo-stone/10 shadow-xl">
-                  <Menu size={28} />
+               
+               <button className="lg:hidden p-3 bg-white/60 rounded-2xl text-ojo-charcoal border border-ojo-stone/10">
+                  <Menu size={24} />
                </button>
             </div>
+          </div>
+          
+          {/* Footer Accent Line for Header */}
+          <div className="absolute bottom-0 left-0 right-0 h-0.5 overflow-hidden">
+             <div className="w-full h-full bg-gradient-to-r from-transparent via-ojo-mustard/40 to-transparent" />
           </div>
         </div>
       </header>

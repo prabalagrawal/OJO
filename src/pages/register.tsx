@@ -42,48 +42,56 @@ export function RegisterPage() {
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-xl bg-ojo-cream rounded-[4rem] p-12 md:p-20 shadow-4xl relative z-10 space-y-12"
+        className="w-full max-w-xl bg-ojo-cream border border-ojo-mustard/20 p-12 md:p-20 shadow-4xl relative z-10 space-y-12 overflow-hidden"
+        style={{ borderRadius: '6rem 6rem 1.5rem 1.5rem' }}
       >
-        <div className="text-center space-y-4">
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+           <MotifSystem type="kolam" scale={0.4} />
+        </div>
+        
+        <div className="text-center space-y-4 relative z-10">
           <div className="flex justify-center mb-8">
-            <div className="w-16 h-16 rounded-3xl bg-ojo-charcoal text-white flex items-center justify-center shadow-xl">
-              <UserPlus size={28} />
+            <div className="w-16 h-16 bg-ojo-charcoal text-white flex items-center justify-center shadow-2xl transform rotate-45 border border-ojo-mustard/40"
+              style={{ borderRadius: '1.5rem 0.2rem 1.5rem 0.2rem' }}>
+              <div className="-rotate-45">
+                <UserPlus size={24} />
+              </div>
             </div>
           </div>
-          <h1 className="text-5xl font-serif italic text-ojo-charcoal">Registry Enrollment</h1>
-          <p className="text-xs font-black uppercase tracking-[0.3em] text-ojo-charcoal/40">Initiate your sovereign membership</p>
+          <h1 className="text-4xl font-serif italic text-ojo-charcoal tracking-tighter">Registry Enrollment</h1>
+          <p className="text-xs font-black uppercase tracking-[0.4em] text-ojo-mustard">Initiate Sovereign Membership</p>
         </div>
 
-        <form onSubmit={handleRegister} className="space-y-8">
+        <form onSubmit={handleRegister} className="space-y-8 relative z-10">
           <div className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-4">Full Identity Name</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Full Identity Name</label>
               <input 
                 type="text" 
                 required 
-                className="w-full bg-white/50 border border-ojo-stone/20 rounded-full px-8 py-5 text-sm outline-none focus:border-ojo-mustard transition-all"
+                className="w-full bg-white border border-ojo-stone/10 rounded-full px-8 py-5 text-sm outline-none focus:border-ojo-mustard transition-all shadow-inner"
                 placeholder="Ravi Kumar"
                 value={name}
                 onChange={e => setName(e.target.value)}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-4">Registry Email</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Registry Email</label>
               <input 
                 type="email" 
                 required 
-                className="w-full bg-white/50 border border-ojo-stone/20 rounded-full px-8 py-5 text-sm outline-none focus:border-ojo-mustard transition-all"
+                className="w-full bg-white border border-ojo-stone/10 rounded-full px-8 py-5 text-sm outline-none focus:border-ojo-mustard transition-all shadow-inner"
                 placeholder="patron@heritage.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-4">Credential Key</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Passphrase Key</label>
               <input 
                 type="password" 
                 required 
-                className="w-full bg-white/50 border border-ojo-stone/20 rounded-full px-8 py-5 text-sm outline-none focus:border-ojo-mustard transition-all"
+                className="w-full bg-white border border-ojo-stone/10 rounded-full px-8 py-5 text-sm outline-none focus:border-ojo-mustard transition-all shadow-inner"
                 placeholder="••••••••"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
@@ -94,10 +102,13 @@ export function RegisterPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="ojo-btn-primary w-full flex items-center justify-center gap-3 !py-6"
+            className="ojo-btn-primary w-full flex items-center justify-center gap-3 !py-6 group"
           >
             {loading ? <Loader2 className="animate-spin" size={18} /> : (
-              <>Initiate Membership <ArrowRight size={18} /></>
+              <>
+                <span>Establish Membership</span> 
+                <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
+              </>
             )}
           </button>
         </form>
