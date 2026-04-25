@@ -1,53 +1,24 @@
-# Security Specification for OJO Marketplace
+# Security Specification: OJO Sovereign Registry
 
-## Data Invariants
-1. Products can only be created/updated by verified Administrators.
-2. Users can only access and modify their own profile and cart.
-3. Every write operation must validate the data structure and field types.
-4. Timestamps must be server-generated.
-5. All document IDs must be valid alphanumeric strings.
+## 1. Data Invariants
+- **Identity Integrity**: No user can spoof their ID (`uid`) or elevate their role to `admin` via the client.
+- **Relational Integrity**: Orders must belong to valid users. Verification logs must point to valid products and be authored by admins.
+- **State Locking**: Once an order is `delivered` or `cancelled`, its status cannot be reverted to a processing state by a customer.
+- **Provenance Integrity**: Only `admin` roles can set a product's status to `verified` or `live`.
 
-## The Dirty Dozen Payloads (Intended to be REJECTED)
+## 2. The "Dirty Dozen" Payloads (Deny Test Cases)
+1. **Self-Promotion**: Non-admin user trying to update their role to `admin`.
+2. **Shadow Field Injection**: Creating a product with an unapproved `internalNote` field.
+3. **Identity Spoofing**: User A trying to create an order on behalf of User B.
+4. **ID Poisoning**: Requesting a document with an ID that exceeds 128 characters or contains malicious characters.
+5. **Unauthorized Listing**: Authenticated user trying to `list` all `activity_logs`.
+6. **Price Tampering**: User trying to update the `price` of a product in the registry.
+7. **Negative Value Attack**: Creating an order with a `total` of `-100`.
+8. **Stale Data Write**: Updating a document without updating `updatedAt` to `request.time`.
+9. **Spam Creation**: Non-admin user attempting to create entries in the `products` collection.
+10. **PII Leak**: Non-owner/Non-admin attempting to `get` another user's private profile data.
+11. **Status Shortcutting**: User updating an order from `pending` directly to `delivered` (if business logic requires intermediate steps).
+12. **Recursive Cost Attack**: Crafting a deep query that forces redundant `get()` lookups across collections.
 
-1. **Identity Spoofing**: Attempting to create a user profile for a different UID.
-   ```json
-   { "uid": "victim_uid", "name": "Attacker", "role": "CUSTOMER" }
-   ```
-2. **Privilege Escalation**: User trying to register as an ADMIN.
-   ```json
-   { "uid": "user_uid", "name": "Attacker", "role": "ADMIN" }
-   ```
-3. **Shadow Update**: Adding a field not in the schema.
-   ```json
-   { "name": "Fake Tea", "price": 100, "ghost_field": "hidden_malware" }
-   ```
-4. **Invalid Type**: Setting price as a string.
-   ```json
-   { "name": "Bad Product", "price": "cheap" }
-   ```
-5. **Unauthorized Product Write**: Non-admin trying to update product stock.
-   ```json
-   { "stock": 999999 }
-   ```
-6. **Resource Poisoning**: Extremely long string in artisan name.
-   ```json
-   { "artisanName": "A".repeat(1001) }
-   ```
-7. **Negative Values**: Setting stock to -1.
-   ```json
-   { "stock": -1 }
-   ```
-8. **Invalid Enum**: Setting category to "Invalid Category".
-   ```json
-   { "category": "Car" }
-   ```
-9. **Bypassing Server Timestamp**: Providing a client-side date for addedAt.
-   ```json
-   { "productId": "p1", "quantity": 1, "addedAt": "2020-01-01T00:00:00Z" }
-   ```
-10. **Cart Theft**: Attempting to read another user's cart.
-    - Operation: GET /users/victim_uid/cart/item_id
-11. **Registry Scraping**: Attempting a blanket read of all user private data.
-    - Operation: LIST /users
-12. **Malformed ID**: Creating a product with a 2KB junk character ID.
-    - Operation: CREATE /products/%FF%FE%FD...
+## 3. Test Runner
+(Implemented via `firestore.rules.test.ts` logic or simulation logic in rules).

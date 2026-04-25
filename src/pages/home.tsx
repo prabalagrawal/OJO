@@ -126,14 +126,14 @@ export function HomePage() {
                 <span className="text-[12px] font-black uppercase tracking-[0.8em] text-ojo-mustard animate-pulse italic">Origin Authenticated</span>
               </motion.div>
               
-              <h1 className="text-[12rem] md:text-[18rem] font-serif text-ojo-charcoal leading-[0.7] tracking-tighter">
+              <h1 className="text-5xl md:text-7xl font-serif text-ojo-charcoal leading-[1.1] tracking-tighter">
                 Sovereign <br />
-                <span className="text-ojo-mustard italic block md:ml-40">Heritage.</span>
+                <span className="text-ojo-mustard italic block md:ml-12">Heritage.</span>
               </h1>
               
-              <p className="text-3xl md:text-4xl text-ojo-charcoal/70 max-w-2xl font-sans leading-tight font-light italic">
-                Direct access to India’s master artisans. <br />
-                Verification solved through permanent geographic locking.
+              <p className="text-xl md:text-2xl text-ojo-charcoal/70 max-w-2xl font-sans leading-relaxed font-light italic">
+                Direct access to India’s master artisans. <br className="hidden md:block" />
+                Authored by geography. Verified by OJO.
               </p>
             </div>
             
@@ -147,6 +147,22 @@ export function HomePage() {
               >
                  <span className="text-[10px] font-black uppercase tracking-[0.6em] text-ojo-mustard/60 group-hover:text-ojo-mustard transition-colors">Explore India by Origin ↓</span>
                  <div className="w-40 h-px bg-ojo-mustard/20 group-hover:w-60 transition-all duration-700" />
+              </div>
+            </div>
+
+            {/* Trust Badges */}
+            <div className="flex items-center gap-10 pt-4">
+              <div className="flex items-center gap-2 px-6 py-3 bg-white/50 backdrop-blur-xl rounded-full border border-ojo-mustard/20 shadow-sm">
+                <ShieldCheck size={14} className="text-ojo-mustard" />
+                <span className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal/60">Verified by OJO</span>
+              </div>
+              <div className="flex items-center gap-2 px-6 py-3 bg-white/50 backdrop-blur-xl rounded-full border border-ojo-mustard/20 shadow-sm">
+                <Award size={14} className="text-ojo-mustard" />
+                <span className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal/60">Authentic Source</span>
+              </div>
+              <div className="flex items-center gap-2 px-6 py-3 bg-white/50 backdrop-blur-xl rounded-full border border-ojo-mustard/20 shadow-sm">
+                <Lock size={14} className="text-ojo-mustard" />
+                <span className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal/60">Secure Checkout</span>
               </div>
             </div>
           </motion.div>
@@ -172,8 +188,8 @@ export function HomePage() {
                   <div className="w-4 h-4 rounded-full bg-ojo-mustard animate-pulse shadow-[0_0_20px_rgba(212,163,115,1)]" />
                   <span className="text-[12px] font-black uppercase tracking-[0.6em]">Registry Cluster Node 001</span>
                 </div>
-                <h3 className="text-7xl font-serif mb-6 italic tracking-tighter leading-none">The Darjeeling <br /> High-Mountain Reserve.</h3>
-                <p className="text-2xl opacity-80 leading-snug font-sans font-light italic">
+                <h3 className="text-3xl font-serif mb-4 italic tracking-tight leading-snug">The Darjeeling <br /> High-Mountain Reserve.</h3>
+                <p className="text-[15px] opacity-80 leading-relaxed font-sans font-light italic">
                   "Harvested within 48 hours of seasonal minerals to lock in mountain ancestry."
                 </p>
               </div>
@@ -195,11 +211,11 @@ export function HomePage() {
             className="text-center space-y-12 max-w-5xl mx-auto"
           >
             <span className="ojo-label-verified ojo-label mx-auto !px-16 shadow-2xl !bg-ojo-charcoal !text-white !border-none">Active Trust Registry v4.0</span>
-            <h2 className="text-9xl md:text-[13rem] font-serif text-ojo-charcoal leading-[0.8] tracking-tighter">
+            <h2 className="text-4xl md:text-5xl font-serif text-ojo-charcoal leading-tight tracking-tighter">
                The Provenance <br /> 
                <span className="italic text-ojo-terracotta">Registry.</span>
             </h2>
-            <p className="text-3xl text-ojo-charcoal/50 leading-snug font-sans italic font-light">
+            <p className="text-[15px] text-ojo-charcoal/50 leading-relaxed font-sans italic font-light">
               Audited by regional field teams. Every record reflects a 5-step GI-certified provenance protocol.
             </p>
           </motion.div>
@@ -248,13 +264,13 @@ export function HomePage() {
                     </div>
                   </div>
                   
-                  <div className="pt-10 space-y-6 text-center">
+                  <div className="pt-10 space-y-4 text-center">
                      <div className="space-y-2">
                         <span className="text-[10px] font-black uppercase tracking-[0.6em] text-ojo-mustard/60">{p.category}</span>
-                        <h3 className="text-4xl font-serif text-ojo-charcoal group-hover:text-ojo-mustard transition-colors italic tracking-tight leading-none">{p.name}</h3>
+                        <h3 className="text-[15px] font-serif text-ojo-charcoal group-hover:text-ojo-mustard transition-colors italic tracking-tight leading-tight">{p.name}</h3>
                      </div>
-                     <p className="text-sm text-ojo-charcoal/40 italic font-light max-w-[200px] mx-auto line-clamp-1">"{p.story}"</p>
-                     <div className="text-4xl font-mono text-ojo-charcoal pt-2">₹{p.price?.toLocaleString()}</div>
+                     <p className="text-[12px] text-ojo-charcoal/40 italic font-light max-w-[200px] mx-auto line-clamp-1">"{p.story}"</p>
+                     <div className="text-xl font-mono text-ojo-charcoal pt-1">₹{p.price?.toLocaleString()}</div>
                      <div className="flex justify-center pt-2">
                         <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.4em] text-ojo-mustard opacity-40">
                            <Award size={12} /> GI-Certified Heritage
@@ -286,13 +302,13 @@ export function HomePage() {
           <div className="flex flex-col md:flex-row justify-between items-end gap-16 border-b border-ojo-mustard/10 pb-20">
             <div className="space-y-10">
               <span className="ojo-label-verified ojo-label !px-12 !py-5 shadow-2xl !bg-ojo-mustard !text-white border-none">Geographic Trust Mapping</span>
-              <h2 className="text-9xl md:text-[12rem] font-serif text-ojo-charcoal leading-[0.7] tracking-tighter">
+              <h2 className="text-4xl md:text-5xl font-serif text-ojo-charcoal leading-tight tracking-tighter">
                 The Geography <br />
-                <span className="text-ojo-mustard italic ml-0 md:ml-48">of Ancestry.</span>
+                <span className="text-ojo-mustard italic ml-0 md:ml-12">of Ancestry.</span>
               </h2>
             </div>
             <div className="max-w-md text-right space-y-8">
-              <p className="text-3xl text-ojo-charcoal/50 font-light italic leading-relaxed">
+              <p className="text-[15px] text-ojo-charcoal/50 font-light italic leading-relaxed">
                 Connect directly with the community. Every state highlighted holds a sovereign trust certificate.
               </p>
               <div className="flex items-center justify-end gap-6 text-ojo-mustard group cursor-pointer font-black text-[12px] uppercase tracking-[0.6em] hover:text-ojo-charcoal transition-colors">
@@ -312,10 +328,10 @@ export function HomePage() {
       <section className="py-48 px-6 md:px-12 bg-white relative overflow-hidden">
         <MotifSystem type="bagru" opacity={0.03} scale={0.8} />
         <div className="max-w-[1700px] mx-auto space-y-32 relative z-10">
-           <div className="max-w-4xl space-y-12">
+           <div className="max-w-4xl space-y-8">
               <span className="ojo-label-verified ojo-label border-ojo-mustard/20 text-ojo-mustard !px-12">Heritage Clusters</span>
-              <h2 className="text-8xl md:text-[10rem] font-serif italic text-ojo-charcoal leading-none tracking-tighter">Explore by Origin.</h2>
-              <p className="text-3xl text-ojo-charcoal/50 font-light italic leading-snug">
+              <h2 className="text-4xl md:text-5xl font-serif italic text-ojo-charcoal leading-none tracking-tighter">Explore by Origin.</h2>
+              <p className="text-[15px] text-ojo-charcoal/50 font-light italic leading-relaxed">
                 From the desert command of Rajasthan to the high-mountain looms of Kashmir—every region tells a story of survival and craft.
               </p>
            </div>
@@ -340,7 +356,7 @@ export function HomePage() {
                       <div className="flex items-center gap-4">
                         <span className="text-[12px] font-black uppercase tracking-[0.5em] text-ojo-mustard bg-white/10 backdrop-blur-2xl px-10 py-3 rounded-full border border-white/20 shadow-2xl">{state.tag}</span>
                       </div>
-                      <h3 className="text-6xl font-serif italic text-white tracking-tighter leading-none">{state.name}</h3>
+                      <h3 className="text-2xl font-serif italic text-white tracking-tight leading-none">{state.name}</h3>
                       <div className="h-1 w-24 bg-ojo-mustard transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-1000 shadow-[0_0_15px_rgba(212,163,115,0.6)]" />
                    </div>
                    <div className="absolute top-16 right-16 w-20 h-20 rounded-[2.5rem] bg-white/10 backdrop-blur-3xl border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-10 group-hover:translate-y-0 shadow-2xl">
@@ -397,14 +413,14 @@ export function HomePage() {
                       <MotifSystem type={step.pattern as MotifType} scale={0.5} />
                    </div>
                    <div className="flex justify-between items-start">
-                      <div className="w-20 h-20 rounded-[2rem] bg-ojo-mustard flex items-center justify-center text-ojo-charcoal shadow-[0_0_30px_rgba(212,163,115,0.4)]">
-                         {step.icon}
+                      <div className="w-12 h-12 rounded-[1rem] bg-ojo-mustard flex items-center justify-center text-ojo-charcoal shadow-[0_0_30px_rgba(212,163,115,0.4)]">
+                         {React.cloneElement(step.icon as any, { size: 20 })}
                       </div>
-                      <span className="text-4xl font-mono text-white/20 font-black">{step.step}</span>
+                      <span className="text-xl font-mono text-white/20 font-black">{step.step}</span>
                    </div>
-                   <div className="space-y-6">
-                      <h4 className="text-5xl font-serif italic tracking-tighter leading-none">{step.title}</h4>
-                      <p className="text-white/40 leading-snug font-light italic text-xl pr-6">{step.desc}</p>
+                   <div className="space-y-4">
+                      <h4 className="text-2xl font-serif italic tracking-tight leading-none">{step.title}</h4>
+                      <p className="text-white/40 leading-relaxed font-light italic text-[14px] pr-6">{step.desc}</p>
                    </div>
                    <div className="h-1 w-0 group-hover:w-full bg-ojo-mustard transition-all duration-1000 absolute bottom-0 left-0" />
                 </motion.div>

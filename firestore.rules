@@ -14,43 +14,55 @@ service cloud.firestore {
     function incoming() { return request.resource.data; }
     function existing() { return resource.data; }
     
-    // Admin check - checking the 'users' collection for the ADMIN role
-    // Using simple role check for users, bootstrapping developer
+    // Auth tokens never contain custom claims in this env. Look up roles.
     function isAdmin() {
       return isSignedIn() && (
         request.auth.token.email == 'prabalagrawal23@gmail.com' ||
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN'
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
       );
     }
 
     // --- Validation Blueprints ---
     
     function isValidUser(data) {
-      return data.keys().hasAll(['uid', 'email', 'name', 'role', 'createdAt']) && 
-             data.keys().size() == 5 &&
-             data.uid == request.auth.uid &&
+      let requiredFields = ['email', 'role', 'displayName', 'createdAt'];
+      return data.keys().hasAll(requiredFields) && 
+             data.keys().size() == requiredFields.size() &&
              data.email == request.auth.token.email &&
-             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
-             data.role in ['CUSTOMER', 'VENDOR', 'ADMIN'] &&
-             data.createdAt is string; 
+             data.role in ['customer', 'admin'] &&
+             data.displayName is string && data.displayName.size() <= 100 &&
+             data.createdAt == request.time;
     }
 
     function isValidProduct(data) {
-      return data.keys().hasAll(['name', 'price', 'category', 'origin']) &&
+      let requiredFields = ['name', 'price', 'origin', 'status'];
+      return data.keys().hasAll(requiredFields) &&
              data.name is string && data.name.size() <= 200 &&
              data.price is number && data.price >= 0 &&
-             data.category in ["Tea", "Saree", "Handicraft", "Jewelry", "Spice"] &&
              data.origin is string && data.origin.size() <= 100 &&
-             (data.get('artisanName', '') is string) &&
+             data.status in ['pending', 'verified', 'live'] &&
+             (data.get('category', '') is string) &&
              (data.get('description', '') is string) &&
-             (data.get('verificationStatus', 'PENDING') in ["VERIFIED", "PENDING", "FAILED"]);
+             (data.get('artisanName', '') is string) &&
+             (data.get('decisionTag', 'Most Trusted') in ['Most Trusted', 'Best for Gifting', 'Premium Pick']);
     }
 
-    function isValidCartItem(data) {
-      return data.keys().hasAll(['productId', 'quantity']) &&
-             data.productId is string &&
-             data.quantity is number && data.quantity > 0 && data.quantity <= 100 &&
-             (data.get('addedAt', request.time) == request.time);
+    function isValidOrder(data) {
+      let requiredFields = ['userId', 'total', 'status', 'items', 'createdAt'];
+      return data.keys().hasAll(requiredFields) &&
+             data.userId == request.auth.uid &&
+             data.total is number && data.total >= 0 &&
+             data.status in ['pending', 'processing', 'shipped', 'delivered', 'cancelled'] &&
+             data.items is list && data.items.size() > 0 &&
+             data.createdAt == request.time;
+    }
+
+    function isValidActivityLog(data) {
+      let requiredFields = ['event', 'userId', 'details', 'timestamp'];
+      return data.keys().hasAll(requiredFields) &&
+             data.event is string &&
+             data.userId == request.auth.uid &&
+             data.timestamp == request.time;
     }
 
     // --- Collection Routes ---
@@ -62,43 +74,62 @@ service cloud.firestore {
 
     // Products Registry
     match /products/{productId} {
-      allow get: if true;
+      allow get: if isValidId(productId);
       allow list: if true;
       
       allow create: if isAdmin() && isValidId(productId) && isValidProduct(incoming());
       
-      allow update: if isAdmin() && isValidProduct(incoming()) && (
-        incoming().diff(existing()).affectedKeys().hasOnly([
-          'name', 'price', 'images', 'description', 'origin', 
-          'artisanName', 'story', 'category', 'decisionHelper', 
-          'verificationStatus', 'stock'
-        ])
+      allow update: if (isAdmin() || (isSignedIn() && isEmailVerified())) && isValidId(productId) && isValidProduct(incoming()) && (
+        isAdmin() || (
+           // Only allow status updates for non-admins if they are vendors (future proofing) or limited fields
+           incoming().diff(existing()).affectedKeys().hasOnly(['status']) && existing().status == 'pending'
+        )
       );
       
-      allow delete: if isAdmin();
+      allow delete: if isAdmin() && isValidId(productId);
     }
 
     // User Profiles
-    match /users/{uid} {
-      allow get: if isOwner(uid) || isAdmin();
+    match /users/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
       allow list: if isAdmin();
       
-      allow create: if isOwner(uid) && isValidUser(incoming()) && incoming().role in ['CUSTOMER', 'VENDOR']; 
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && incoming().role == 'customer'; 
       
-      allow update: if isOwner(uid) && isValidUser(incoming()) && (
-        incoming().role == existing().role &&
-        incoming().diff(existing()).affectedKeys().hasOnly(['name', 'email'])
-      ) || isAdmin();
+      allow update: if isValidId(userId) && (
+        (isOwner(userId) && incoming().role == existing().role && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'email'])) || 
+        isAdmin()
+      );
     }
 
-    // User Cart (if managed in Firestore)
-    match /users/{uid}/cart/{itemId} {
-      allow read: if isOwner(uid);
-      allow create: if isOwner(uid) && isValidCartItem(incoming());
-      allow update: if isOwner(uid) && isValidCartItem(incoming()) && (
-        incoming().diff(existing()).affectedKeys().hasOnly(['quantity'])
+    // Orders
+    match /orders/{orderId} {
+      allow get: if isValidId(orderId) && (isOwner(existing().userId) || isAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      
+      allow create: if isSignedIn() && isEmailVerified() && isValidId(orderId) && isValidOrder(incoming());
+      
+      allow update: if isValidId(orderId) && (
+        isAdmin() || (
+          isOwner(existing().userId) && 
+          incoming().diff(existing()).affectedKeys().hasOnly(['status']) &&
+          existing().status == 'pending' &&
+          incoming().status == 'cancelled'
+        )
       );
-      allow delete: if isOwner(uid);
+    }
+
+    // Activity Logs
+    match /activity_logs/{logId} {
+      allow get: if isValidId(logId) && (isOwner(existing().userId) || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isSignedIn() && isValidId(logId) && isValidActivityLog(incoming());
+    }
+
+    // Verification Logs
+    match /verification_logs/{logId} {
+      allow get, list: if isAdmin();
+      allow create: if isAdmin() && isValidId(logId);
     }
   }
 }

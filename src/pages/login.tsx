@@ -42,7 +42,7 @@ export function LoginPage() {
               <Lock size={28} />
             </div>
           </div>
-          <h1 className="text-5xl font-serif italic text-ojo-charcoal">Secure Access</h1>
+          <h1 className="text-4xl font-serif italic text-ojo-charcoal">Secure Access</h1>
           <p className="text-xs font-black uppercase tracking-[0.3em] text-ojo-charcoal/40">Enter the Sovereign Registry</p>
         </div>
 

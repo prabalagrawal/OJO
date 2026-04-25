@@ -42,11 +42,11 @@
 
 @layer base {
   body {
-    @apply bg-ojo-cream text-ojo-charcoal font-sans antialiased selection:bg-ojo-mustard selection:text-white;
+    @apply bg-ojo-cream text-ojo-charcoal font-sans text-[15px] leading-relaxed antialiased selection:bg-ojo-mustard selection:text-white;
   }
 
   h1, h2, h3, h4, .font-serif {
-    @apply font-serif font-bold text-ojo-charcoal;
+    @apply font-serif font-bold text-ojo-charcoal tracking-tight;
   }
 }
 

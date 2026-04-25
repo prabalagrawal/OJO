@@ -20,6 +20,15 @@ import { toast } from "sonner";
 import { QuickViewModal } from "../components/quick-view-modal.tsx";
 import { MotifSystem } from "../components/motifs.tsx";
 
+const MOTIF_MAP: Record<string, any> = {
+  "Kashmir": "sozni",
+  "Rajasthan": "bagru",
+  "Gujarat": "patola",
+  "Tamil Nadu": "kolam",
+  "Maharashtra": "warli",
+  "Assam": "gond"
+};
+
 export function CategoryPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -120,7 +129,22 @@ export function CategoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-ojo-cream">
+    <div className="min-h-screen bg-ojo-cream relative">
+      <AnimatePresence mode="wait">
+        {originFilter && MOTIF_MAP[originFilter] && (
+          <motion.div
+            key={originFilter}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5 }}
+            className="fixed inset-0 pointer-events-none z-0"
+          >
+            <MotifSystem type={MOTIF_MAP[originFilter]} opacity={0.03} scale={1.2} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Header & Filter System */}
       <section className="pt-40 pb-20 px-6 md:px-12 bg-white relative overflow-hidden">
         <MotifSystem type="jaali" opacity={0.05} />
@@ -129,7 +153,7 @@ export function CategoryPage() {
           <div className="flex flex-col md:flex-row justify-between items-end gap-12">
             <div className="space-y-6">
               <span className="ojo-label ojo-label-verified">The Sovereign Registry</span>
-              <h1 className="text-6xl md:text-8xl font-serif text-ojo-charcoal leading-[0.8] tracking-tighter">
+              <h1 className="text-4xl md:text-6xl font-serif text-ojo-charcoal leading-tight tracking-tighter">
                 Browse <br />
                 <span className="text-ojo-terracotta italic">Artifacts.</span>
               </h1>
@@ -221,7 +245,7 @@ export function CategoryPage() {
                <div className="w-20 h-20 bg-ojo-cream rounded-full flex items-center justify-center mx-auto">
                  <Filter size={32} className="text-ojo-stone" />
                </div>
-               <h3 className="text-4xl font-serif text-ojo-charcoal italic opacity-30">No provenance match.</h3>
+               <h3 className="text-2xl font-serif text-ojo-charcoal italic opacity-30">No provenance match.</h3>
                <button onClick={() => setSearchParams(new URLSearchParams())} className="ojo-btn-primary">Clear Registry</button>
             </div>
           ) : (
@@ -259,10 +283,10 @@ export function CategoryPage() {
                      <div className="text-center space-y-4 px-2">
                         <div className="flex flex-col items-center gap-1">
                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-ojo-mustard/60">{p.category}</span>
-                           <h3 className="text-3xl font-serif text-ojo-charcoal group-hover:text-ojo-mustard transition-colors leading-tight italic">{p.name}</h3>
+                           <h3 className="text-[15px] font-serif text-ojo-charcoal group-hover:text-ojo-mustard transition-colors leading-tight italic">{p.name}</h3>
                         </div>
                         <div className="flex flex-col items-center gap-2">
-                           <div className="text-2xl font-mono text-ojo-charcoal font-medium">₹{p.price?.toLocaleString()}</div>
+                           <div className="text-xl font-mono text-ojo-charcoal font-medium">₹{p.price?.toLocaleString()}</div>
                            <span className="text-[9px] font-bold uppercase tracking-widest text-ojo-charcoal/30 bg-ojo-cream px-3 py-1 rounded-full border border-ojo-stone/10">{p.artisanName || "Verified Heritage Cluster"}</span>
                         </div>
                      </div>
@@ -285,11 +309,11 @@ export function CategoryPage() {
                                   <span className="ojo-label ojo-label-verified bg-ojo-mustard/10 text-ojo-mustard">{p.origin}</span>
                                   <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/30">{p.category}</span>
                                </div>
-                               <h3 className="text-4xl font-serif text-ojo-charcoal">{p.name}</h3>
-                               <p className="text-sm text-ojo-charcoal/60 leading-relaxed font-sans font-light italic max-w-xl">{p.description}</p>
+                               <h3 className="text-2xl font-serif text-ojo-charcoal">{p.name}</h3>
+                               <p className="text-[14px] text-ojo-charcoal/60 leading-relaxed font-sans font-light italic max-w-xl">{p.description}</p>
                              </div>
                              <div className="text-right space-y-4">
-                                <div className="text-3xl font-mono text-ojo-charcoal">₹{p.price?.toLocaleString()}</div>
+                                <div className="text-xl font-mono text-ojo-charcoal">₹{p.price?.toLocaleString()}</div>
                                 <button 
                                   onClick={(e) => {
                                     e.stopPropagation();
