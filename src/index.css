@@ -1,110 +1,110 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Playfair Display", serif;
-  --font-mono: "JetBrains Mono", monospace;
-
-  /* Brand Colors Refined for Indian Marketplace - Luxury Redesign */
   --color-ojo-charcoal: #382C23;
+  --color-ojo-cream: #F5F0E6;
   --color-ojo-terracotta: #9C5D3C;
   --color-ojo-mustard: #B07E1E;
-  --color-ojo-cream: #F5F0E6;
-  --color-ojo-soft-cream: #D1C7B5;
-  --color-ojo-olive: #6E6B41;
   --color-ojo-stone: #D1C7B5;
   --color-ojo-white: #FFFFFF;
-  --color-ojo-black: #000000;
 
-  /* Custom Animations */
-  --animate-spin-slow: spin 45s linear infinite;
-  --animate-float: float 6s ease-in-out infinite;
-}
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  --shadow-3xl: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
+  --shadow-4xl: 0 50px 100px -20px rgba(56, 44, 35, 0.1), 0 30px 60px -30px rgba(0, 0, 0, 0.15);
+
+  --animate-motif-fade: motifFade 1s ease-in-out forwards;
+  --animate-border-gold: borderGold 3s infinite alternate;
+
+  @keyframes motifFade {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes borderGold {
+    0% { border-color: rgba(176, 126, 30, 0.1); }
+    100% { border-color: rgba(176, 126, 30, 0.4); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }
 
 @layer base {
   body {
-    @apply bg-ojo-cream text-ojo-charcoal font-sans antialiased selection:bg-ojo-mustard/30;
+    @apply bg-ojo-cream text-ojo-charcoal font-sans antialiased selection:bg-ojo-mustard selection:text-white;
+  }
+
+  h1, h2, h3, h4, .font-serif {
+    @apply font-serif font-bold text-ojo-charcoal;
   }
 }
 
 @layer components {
+  /* Premium CTA Button */
   .ojo-btn-primary {
-    @apply bg-ojo-charcoal text-ojo-white px-12 py-5 rounded-full font-black tracking-[0.2em] text-[9px] hover:bg-ojo-terracotta transition-all uppercase flex items-center justify-center gap-4 shadow-xl shadow-ojo-charcoal/10 active:scale-95;
-  }
-  
-  .category-icon {
-    @apply w-16 h-16 rounded-[24px] bg-white flex items-center justify-center border border-ojo-stone shadow-sm text-ojo-charcoal/40 transition-all hover:border-ojo-mustard hover:text-ojo-mustard hover:shadow-lg hover:-translate-y-1;
+    @apply bg-ojo-mustard text-white px-10 py-5 rounded-full text-[10px] font-black uppercase tracking-[0.4em] hover:bg-ojo-charcoal transition-all duration-500 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  .search-input {
-    @apply w-full bg-white/40 backdrop-blur-md border border-ojo-stone/60 rounded-full px-8 py-5 text-xs font-light focus:outline-none focus:ring-1 focus:ring-ojo-mustard transition-all placeholder:text-ojo-charcoal/30;
+  .ojo-btn-outline {
+    @apply border border-ojo-charcoal/20 text-ojo-charcoal px-10 py-5 rounded-full text-[10px] font-black uppercase tracking-[0.4em] hover:bg-ojo-charcoal hover:text-white transition-all duration-500;
   }
 
+  /* Indian Motif Borders */
+  .ojo-border-motif {
+    @apply border border-ojo-mustard/20 relative before:absolute before:inset-[-2px] before:border before:border-ojo-mustard/10 before:rounded-[inherit] before:pointer-events-none;
+  }
+
+  /* Trust Labels */
   .ojo-label {
-    @apply text-[9px] font-black uppercase tracking-[0.4em] text-ojo-charcoal/50 leading-none;
+    @apply text-[9px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-full backdrop-blur-md border border-white/20;
   }
 
-  /* Traditional Indian Patterns - Orchestrated for Maximalism */
-  .pattern-lotus {
-    background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23B8860B' fill-opacity='0.03'%3E%3Cpath d='M40 15c4 0 7 10 7 15s-3 10-7 10-7-5-7-10 3-15 7-15zm10 10c3 3 5 8 2 12s-8 2-12-2 2-12 10-10zm-20 0c-8-2-13 6-10 10s9 6 12 2-3-9-2-12zm25 15c5 0 8 5 5 10s-10 3-15 0 3-10 10-10zm-30 0c-7 0-13 5-10 10s10 3 15 0-3-10-5-10z' /%3E%3C/g%3E%3C/svg%3E");
+  .ojo-label-trusted {
+    @apply bg-ojo-mustard text-white shadow-lg;
   }
 
-  .pattern-paisley {
-    background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23A63F1D' fill-opacity='0.02'%3E%3Cpath d='M50 90c-30 0-45-20-45-45 0-35 45-45 45-45s0 25 25 25c20 0 30 15 30 35 0 25-25 30-55 30z'/%3E%3Ccircle cx='55' cy='60' r='5' opacity='0.5'/%3E%3C/g%3E%3C/svg%3E");
+  .ojo-label-verified {
+    @apply bg-ojo-cream text-ojo-terracotta border-ojo-terracotta/20;
   }
 
-  .pattern-mandala {
-    background-image: url("data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23B8860B' stroke-opacity='0.03' stroke-width='1'%3E%3Ccircle cx='100' cy='100' r='90' /%3E%3Ccircle cx='100' cy='100' r='75' /%3E%3Ccircle cx='100' cy='100' r='60' /%3E%3Ccircle cx='100' cy='100' r='45' /%3E%3Ccircle cx='100' cy='100' r='30' /%3E%3Cpath d='M100 0v200M0 100h200' stroke-dasharray='4' opacity='0.5' /%3E%3C/g%3E%3C/svg%3E");
+  /* Cards */
+  .ojo-card {
+    @apply bg-white border border-ojo-stone/20 rounded-[3rem] p-8 transition-all duration-700 hover:shadow-4xl hover:shadow-ojo-charcoal/5;
   }
 
-  .pattern-border-trim {
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='24' viewBox='0 0 100 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 12h100' stroke='%23B8860B' stroke-opacity='0.15' stroke-width='0.5'/%3E%3Cpath d='M10 4 L14 12 L10 20 M30 4 L34 12 L30 20 M50 4 L54 12 L50 20 M70 4 L74 12 L70 20 M90 4 L94 12 L90 20' fill='none' stroke='%23B8860B' stroke-opacity='0.1' stroke-width='1' /%3E%3Ccircle cx='50' cy='12' r='2' fill='%23B8860B' fill-opacity='0.3'/%3E%3C/svg%3E");
-    background-repeat: repeat-x;
+  /* Patterns */
+  .pattern-global {
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 L100 50 L50 100 L0 50 Z' fill='%23382c23' fill-opacity='0.02'/%3E%3C/svg%3E");
   }
 
-  .pattern-jali {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30-30-30z' fill='%23B8860B' fill-opacity='0.02'/%3E%3Cpath d='M0 30h60M30 0v60' stroke='%23B8860B' stroke-opacity='0.01' stroke-width='0.5' /%3E%3C/svg%3E");
+  .pattern-divider {
+    @apply h-24 w-full opacity-10;
+    mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+    background-size: 60px 60px;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30 Z' fill='%23382c23'/%3E%3C/svg%3E");
   }
 
-  .maximalist-card {
-    @apply bg-white rounded-[40px] border border-ojo-stone p-8 transition-all hover:border-ojo-mustard/40 hover:shadow-[0_40px_80px_-20px_rgba(56,44,35,0.15)] hover:-translate-y-1 active:scale-[0.98];
-  }
+}
 
-  /* Premium Depth Elements */
-  .inner-shadow-soft {
-    box-shadow: inset 0 2px 10px 0 rgba(0, 0, 0, 0.02);
-  }
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
-  .text-glow-mustard {
-    text-shadow: 0 0 20px rgba(176, 126, 30, 0.3);
-  }
-
-  .maximalist-gradient {
-    background: 
-      radial-gradient(circle at 0% 0%, rgba(156, 93, 60, 0.03) 0%, transparent 50%),
-      radial-gradient(circle at 100% 100%, rgba(176, 126, 30, 0.03) 0%, transparent 50%),
-      var(--color-ojo-cream);
-  }
-
-  /* Custom Scrollbar for better UI */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--color-ojo-cream);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-ojo-charcoal);
-    border-radius: 10px;
-    border: 2px solid var(--color-ojo-cream);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-ojo-mustard);
-  }
+.perspective-1000 {
+  perspective: 1000px;
 }

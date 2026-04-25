@@ -1,0 +1,59 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Authentic artifact available in the registry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "images": { "type": "array" },
+        "description": { "type": "string" },
+        "origin": { "type": "string" },
+        "artisanName": { "type": "string" },
+        "story": { "type": "string" },
+        "category": { "type": "string", "enum": ["Tea", "Saree", "Handicraft", "Jewelry", "Spice"] },
+        "decisionHelper": { "type": "string", "enum": ["Best for beginners", "Most trusted", "Premium verified", "Limited Edition"] },
+        "verificationStatus": { "type": "string", "enum": ["VERIFIED", "PENDING", "FAILED"] },
+        "stock": { "type": "number" }
+      },
+      "required": ["name", "price", "category", "origin"]
+    },
+    "User": {
+      "title": "User",
+      "description": "System user",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["CUSTOMER", "VENDOR", "ADMIN"] }
+      }
+    },
+    "CartItem": {
+      "title": "CartItem",
+      "description": "Item in user cart",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "quantity": { "type": "number" },
+        "addedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Collection of verified artifacts"
+    },
+    "/users/{uid}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/users/{uid}/cart": {
+      "schema": "CartItem",
+      "description": "User's active cart"
+    }
+  }
+}

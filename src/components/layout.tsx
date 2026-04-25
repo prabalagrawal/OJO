@@ -1,8 +1,10 @@
 import { ReactNode } from "react";
 import { OjoLogo } from "./brand.tsx";
-import { ShoppingCart, User, LogOut, ShieldCheck, Store, CheckCircle, Search } from "lucide-react";
+import { ShoppingCart, Trash2, X, ShoppingBag, ArrowRight, ShieldCheck, Lock, ChevronRight, Menu } from "lucide-react";
 import { useState, useEffect } from "react";
-import { MotifOrnamental, MotifRangoli, MotifTraditionalMandala, MotifTraditionalRangoli } from "./motifs.tsx";
+import { motion, AnimatePresence } from "motion/react";
+import { useNavigate } from "react-router-dom";
+import { MotifSystem } from "./motifs.tsx";
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,155 +12,268 @@ interface LayoutProps {
   onLogout: () => void;
 }
 
-export function Layout({ children, user, onLogout }: LayoutProps) {
+export function MiniCart({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [items, setItems] = useState<any[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadCart = () => {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      setItems(cart);
+    };
+    if (isOpen) loadCart();
+    window.addEventListener("storage", loadCart);
+    return () => window.removeEventListener("storage", loadCart);
+  }, [isOpen]);
+
+  const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  const removeItem = (id: string) => {
+    const newItems = items.filter(i => i.productId !== id);
+    localStorage.setItem("cart", JSON.stringify(newItems));
+    window.dispatchEvent(new Event("storage"));
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-ojo-cream relative antialiased">
-      {/* Subtle Pattern Layer */}
-      <div className="fixed inset-0 pattern-jali opacity-[0.015] pointer-events-none" />
-      
-      <header className="px-6 md:px-12 py-8 sticky top-0 z-50 bg-ojo-cream/95 backdrop-blur-xl border-b border-ojo-stone/10">
-        <div className="max-w-[1700px] mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-12">
-            <a href="/" className="hover:opacity-80 transition-opacity">
-              <OjoLogo size="sm" />
-            </a>
-            <nav className="hidden lg:flex items-center gap-8">
-              {["Registry", "Provenance", "Guilds", "Our Story"].map((item) => (
-                <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="text-[10px] font-black uppercase tracking-[0.3em] text-ojo-charcoal/60 hover:text-ojo-terracotta transition-colors">
-                  {item}
-                </a>
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-ojo-charcoal/80 backdrop-blur-md z-[200]"
+          />
+          <motion.div 
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="fixed top-0 right-0 h-full w-full max-w-lg bg-ojo-cream z-[201] shadow-4xl flex flex-col pt-32 p-12 overflow-hidden"
+          >
+            <MotifSystem type="jaali" opacity={0.04} />
+            
+            <div className="absolute top-12 left-12 flex items-center gap-4 z-10">
+              <div className="w-12 h-12 rounded-2xl bg-ojo-charcoal text-white flex items-center justify-center shadow-lg">
+                <ShoppingBag size={20} />
+              </div>
+              <div>
+                <h2 className="text-3xl font-serif italic text-ojo-charcoal">Your Collection</h2>
+                <div className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40 flex items-center gap-2">
+                  <ShieldCheck size={10} /> Verified Registry
+                </div>
+              </div>
+            </div>
+            
+            <button onClick={onClose} className="absolute top-12 right-12 p-3 hover:bg-ojo-charcoal/5 rounded-full transition-all z-10">
+              <X size={24} />
+            </button>
+
+            <div className="flex-1 overflow-y-auto space-y-10 py-10 relative z-10 scrollbar-hide">
+              {items.length === 0 ? (
+                <div className="h-full flex flex-col items-center justify-center text-center space-y-8 opacity-30">
+                  <ShoppingBag size={64} className="animate-pulse" />
+                  <p className="text-sm font-serif italic max-w-[200px]">The sovereign registry is currently unpopulated</p>
+                  <button 
+                    onClick={() => {
+                      navigate("/category");
+                      onClose();
+                    }}
+                    className="ojo-btn-outline !py-3 !px-6"
+                  >
+                    Examine Catalog
+                  </button>
+                </div>
+              ) : (
+                items.map((item) => (
+                  <div key={item.productId} className="flex gap-8 group">
+                    <div className="w-32 h-40 rounded-[2rem] overflow-hidden bg-white shrink-0 shadow-2xl border border-ojo-stone/10">
+                      <img src={item.image} className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="" referrerPolicy="no-referrer" />
+                    </div>
+                    <div className="flex-1 flex flex-col justify-between py-2">
+                      <div className="space-y-4">
+                        <div className="space-y-1">
+                          <h4 className="text-xl font-serif italic text-ojo-charcoal truncate pr-8">{item.name}</h4>
+                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-ojo-terracotta">{item.origin}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[9px] font-bold text-ojo-charcoal/40">QUANTITY</span>
+                          <span className="text-xs font-mono font-bold">{item.quantity}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                         <span className="text-2xl font-mono text-ojo-charcoal">₹{item.price.toLocaleString()}</span>
+                         <button onClick={() => removeItem(item.productId)} className="p-3 text-ojo-stone hover:text-ojo-terracotta transition-colors">
+                            <Trash2 size={18} />
+                         </button>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {items.length > 0 && (
+              <div className="pt-12 border-t border-ojo-stone/10 relative z-10">
+                <div className="flex justify-between items-end mb-12">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Artifact Valuation</span>
+                    <p className="text-[10px] text-ojo-mustard flex items-center gap-2 font-bold">
+                       <Lock size={10} /> SECURE TRANSACTION
+                    </p>
+                  </div>
+                  <span className="text-5xl font-mono text-ojo-charcoal">₹{total.toLocaleString()}</span>
+                </div>
+                <div className="flex flex-col gap-4">
+                  <button 
+                    onClick={() => {
+                      navigate("/cart");
+                      onClose();
+                    }}
+                    className="ojo-btn-primary w-full flex items-center justify-center gap-3 !py-6"
+                  >
+                    Initiate Acquisition <ArrowRight size={18} />
+                  </button>
+                  <button 
+                    onClick={onClose}
+                    className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40 hover:text-ojo-charcoal transition-colors py-4"
+                  >
+                    Continue Examining Registry
+                  </button>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
+export function Layout({ children, user, onLogout }: LayoutProps) {
+  const [isMiniCartOpen, setIsMiniCartOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const updateCount = () => {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      setCartCount(cart.length);
+    };
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    updateCount();
+    window.addEventListener("storage", updateCount);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("storage", updateCount);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  return (
+    <div className="min-h-screen flex flex-col bg-ojo-cream">
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-[1.5s] px-6 md:px-12 ${scrolled ? 'py-4' : 'py-10'}`}>
+        <div className={`max-w-[1800px] mx-auto rounded-[3rem] transition-all duration-1000 flex items-center justify-between px-12 relative overflow-hidden ${scrolled ? 'bg-white/95 backdrop-blur-3xl shadow-4xl py-5 border border-ojo-mustard/20 shadow-ojo-mustard/5' : 'bg-white/40 backdrop-blur-md py-8 border border-white/30'}`}>
+          <div className="absolute inset-0 opacity-[0.06] pointer-events-none">
+            <MotifSystem type="jaali" scale={0.4} />
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-ojo-mustard/30 to-transparent" />
+          
+          <div className="flex items-center gap-20 relative z-10">
+            <button onClick={() => navigate("/")} className="hover:opacity-80 transition-all group flex items-center gap-6">
+               <div className="w-16 h-16 rounded-[1.5rem] bg-ojo-charcoal text-white flex items-center justify-center shadow-4xl transform transition-transform group-hover:-rotate-[15deg] duration-700 border-2 border-ojo-mustard/40 relative">
+                <MotifSystem type="patola" opacity={0.2} scale={0.2} />
+                <span className="font-serif italic font-black text-3xl relative z-10">O</span>
+               </div>
+               <div className="flex flex-col items-start leading-none group pt-1">
+                 <span className="font-serif italic text-4xl font-black text-ojo-charcoal tracking-tighter">OJO.</span>
+                 <span className="text-[8px] font-black uppercase tracking-[0.5em] text-ojo-mustard hidden md:block mt-1">Sovereign Heritage Registry</span>
+               </div>
+            </button>
+            <nav className="hidden lg:flex items-center gap-16">
+              {[
+                { label: "The Vault", path: "/category" },
+                { label: "Provenance Records", path: "/category?verified=true" },
+                { label: "State Clusters", path: "/category" }
+              ].map((item) => (
+                <button 
+                  key={item.label} 
+                  onClick={() => navigate(item.path)}
+                  className="relative text-[11px] font-black uppercase tracking-[0.4em] text-ojo-charcoal hover:text-ojo-mustard transition-all group py-3"
+                >
+                  {item.label}
+                  <span className="absolute bottom-0 left-0 w-0 h-px bg-ojo-mustard transition-all duration-500 group-hover:w-full opacity-50" />
+                </button>
               ))}
             </nav>
           </div>
           
-          <div className="flex items-center gap-8">
-            <div className="hidden md:flex items-center gap-3 px-6 py-2 bg-white/50 rounded-full border border-ojo-stone/20">
-               <Search size={14} className="text-ojo-charcoal/30" />
-               <input 
-                 type="text" 
-                 placeholder="Provenance ID or Origin..." 
-                 className="bg-transparent text-[10px] font-medium focus:outline-none w-48"
-                 onChange={(e) => {
-                   const q = e.target.value;
-                   const url = new URL(window.location.href);
-                   if (q) url.searchParams.set("q", q);
-                   else url.searchParams.delete("q");
-                   window.history.replaceState({}, "", url);
-                   window.dispatchEvent(new Event("popstate"));
-                 }}
-               />
-            </div>
-            
-              <div className="flex items-center gap-6">
-               <a href="/cart" className="relative group">
-                  <ShoppingCart size={18} className="text-ojo-charcoal hover:text-ojo-terracotta transition-colors" />
-                  <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-ojo-mustard text-[8px] font-black text-ojo-charcoal flex items-center justify-center">
-                    {JSON.parse(localStorage.getItem("cart") || "[]").length}
-                  </span>
-               </a>
-               <div className="w-px h-6 bg-ojo-stone/20" />
-               <div className="flex items-center gap-4">
+          <div className="flex items-center gap-12 relative z-10">
+              <div className="flex items-center gap-12">
+               <button 
+                onClick={() => setIsMiniCartOpen(true)}
+                className="relative group p-4 bg-white/60 hover:bg-white rounded-3xl border border-ojo-stone/20 transition-all hover:shadow-4xl box-content"
+               >
+                  <ShoppingBag size={22} className="text-ojo-charcoal group-hover:text-ojo-mustard transition-colors duration-700" />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-ojo-mustard text-[11px] font-black text-white flex items-center justify-center shadow-2xl border-4 border-white transform group-hover:scale-125 transition-all duration-500">
+                      {cartCount}
+                    </span>
+                  )}
+               </button>
+               <div className="w-px h-10 bg-ojo-mustard/20" />
+               <div className="flex items-center gap-10">
                   {user ? (
-                    <div className="flex items-center gap-4">
-                      <a href={user.role === 'ADMIN' ? '/admin' : user.role === 'VENDOR' ? '/vendor' : '/dashboard'} className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal hover:text-ojo-terracotta transition-colors">
-                        {user.role === 'CUSTOMER' ? 'Registry' : 'Panel'}
-                      </a>
-                      <button onClick={onLogout} className="text-[10px] font-black uppercase tracking-widest text-ojo-terracotta">
+                    <div className="flex items-center gap-10">
+                      <button 
+                        onClick={() => navigate('/dashboard')}
+                        className="flex items-center gap-5 group"
+                      >
+                         <div className="w-14 h-14 rounded-2xl bg-ojo-cream border-2 border-ojo-mustard/30 flex items-center justify-center text-ojo-charcoal font-black text-[14px] group-hover:bg-ojo-mustard group-hover:text-white transition-all shadow-xl transform group-hover:rotate-12 hover:scale-105 duration-500 relative overflow-hidden">
+                            <div className="absolute inset-0 opacity-[0.05]">
+                              <MotifSystem type="kolam" scale={0.3} />
+                            </div>
+                            <span className="relative z-10">{user.name?.[0].toUpperCase() || "P"}</span>
+                         </div>
+                         <div className="hidden xl:block text-left">
+                            <p className="text-[11px] font-black uppercase tracking-[0.3em] text-ojo-mustard mb-0.5">VAULT ACCESS</p>
+                            <p className="text-[10px] text-ojo-charcoal/40 font-bold uppercase tracking-widest">{user.name}</p>
+                         </div>
+                      </button>
+                      <button onClick={onLogout} className="text-[11px] font-black uppercase tracking-[0.4em] text-ojo-terracotta hover:text-ojo-mustard transition-all bg-ojo-cream/50 px-6 py-3 rounded-2xl border border-ojo-terracotta/20">
                         Exit
                       </button>
                     </div>
                   ) : (
-                    <a href="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-ojo-charcoal hover:text-ojo-terracotta transition-colors">
-                      Enter
-                    </a>
+                    <button 
+                      onClick={() => navigate("/login")}
+                      className="ojo-btn-primary !px-12 !py-6 !text-[11px] shadow-4xl shadow-ojo-mustard/10 relative overflow-hidden"
+                    >
+                      <span className="relative z-10 flex items-center gap-3">Establish Identity <ArrowRight size={14} /></span>
+                      <div className="absolute inset-0 opacity-10 pointer-events-none group-hover:animate-pulse">
+                        <MotifSystem type="sozni" scale={0.2} />
+                      </div>
+                    </button>
                   )}
                </div>
+               <button className="lg:hidden p-4 bg-white/60 rounded-3xl text-ojo-charcoal border border-ojo-stone/10 shadow-xl">
+                  <Menu size={28} />
+               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="flex-grow">
+
+      <main className="flex-grow pt-8">
         {children}
       </main>
 
-      <footer className="footer-maximalist bg-ojo-charcoal text-ojo-soft-cream py-32 px-6 md:px-12 relative overflow-hidden mt-20">
-        <div className="absolute inset-0 pattern-mandala opacity-[0.12] pointer-events-none scale-150 animate-spin-slow" />
-        <div className="absolute inset-0 pattern-jali opacity-[0.05] pointer-events-none" />
-        <div className="absolute inset-0 pattern-lotus opacity-[0.08] pointer-events-none scale-50" />
-        
-        {/* Ornate Trims */}
-        <div className="absolute top-0 left-0 right-0 h-6 pattern-border-trim opacity-60" />
-        <div className="absolute bottom-0 left-0 right-0 h-6 pattern-border-trim opacity-60 rotate-180" />
-        
-        {/* Floating Motifs */}
-        <div className="absolute -bottom-32 -left-32 opacity-10 animate-spin-slow">
-          <MotifTraditionalMandala size={600} color="#D4AF37" />
-        </div>
-        <div className="absolute top-20 right-20 opacity-[0.06] animate-float">
-          <MotifTraditionalRangoli size={400} color="#A63F1D" />
-        </div>
-        
-        <div className="max-w-[1440px] mx-auto relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
-            <div className="lg:col-span-4 space-y-12">
-              <OjoLogo size="md" dark />
-              <div className="space-y-6">
-                <p className="text-sm border-l-2 border-ojo-mustard pl-8 font-serif italic text-ojo-stone/80 leading-relaxed">
-                  "Truth is one, but the wise speak of it in many ways."
-                </p>
-                <p className="text-xs font-light opacity-50 max-w-sm leading-relaxed tracking-wide">
-                  OJO is a global hallmark for Indian artifacts. We combine ancestral verification 
-                  methods with modern provenance technology to protect the soul of Indian craft.
-                </p>
-              </div>
-              <div className="flex gap-6">
-                 {["Instagram", "Twitter", "Registry"].map(link => (
-                   <a key={link} href="#" className="text-[10px] font-black uppercase tracking-[0.2em] text-ojo-mustard hover:text-white transition-colors">{link}</a>
-                 ))}
-              </div>
-            </div>
-            
-            <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-12 border-l border-ojo-soft-cream/10 pl-0 lg:pl-20">
-              <div className="space-y-8">
-                <h4 className="text-xs font-black uppercase tracking-[0.4em] text-ojo-mustard/60">Registry</h4>
-                <ul className="space-y-4 text-[11px] font-medium opacity-60">
-                   <li><a href="#" className="hover:text-ojo-mustard transition-colors flex items-center gap-2 underline decoration-ojo-mustard/20 decoration-2 underline-offset-4">Public Ledger</a></li>
-                   <li><a href="#" className="hover:text-ojo-mustard transition-colors flex items-center gap-2 underline decoration-ojo-mustard/20 decoration-2 underline-offset-4">Artisan Verification</a></li>
-                   <li><a href="#" className="hover:text-ojo-mustard transition-colors flex items-center gap-2 underline decoration-ojo-mustard/20 decoration-2 underline-offset-4">Provenance Lookup</a></li>
-                </ul>
-              </div>
-              <div className="space-y-8">
-                <h4 className="text-xs font-black uppercase tracking-[0.4em] text-ojo-mustard/60">Community</h4>
-                <ul className="space-y-4 text-[11px] font-medium opacity-60">
-                   <li><a href="#" className="hover:text-ojo-mustard transition-colors flex items-center gap-2 underline decoration-ojo-mustard/20 decoration-2 underline-offset-4">Artisan Circles</a></li>
-                   <li><a href="#" className="hover:text-ojo-mustard transition-colors flex items-center gap-2 underline decoration-ojo-mustard/20 decoration-2 underline-offset-4">The Craft Story</a></li>
-                   <li><a href="#" className="hover:text-ojo-mustard transition-colors flex items-center gap-2 underline decoration-ojo-mustard/20 decoration-2 underline-offset-4">Support Center</a></li>
-                </ul>
-              </div>
-              <div className="col-span-2 sm:col-span-1 p-8 bg-white/5 rounded-[32px] border border-white/10 space-y-6">
-                <h4 className="text-xs font-black uppercase tracking-[0.4em] text-ojo-mustard italic font-serif">Trust Protocol</h4>
-                <p className="text-[10px] leading-relaxed opacity-40">
-                  Every artifact in our registry is verified through a 3-tier validation process involving heritage experts and digital footprinting.
-                </p>
-                <ShieldCheck className="text-ojo-mustard/40" size={32} />
-              </div>
-            </div>
-          </div>
-          
-          <div className="mt-32 pt-12 border-t border-ojo-soft-cream/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[9px] uppercase tracking-[0.5em] font-black opacity-30">
-            <div className="flex items-center gap-4">
-              <div className="w-1.5 h-1.5 rounded-full bg-ojo-mustard shadow-[0_0_10px_rgba(212,175,55,0.8)]" />
-              <span>OJO Sovereign Registry 2.0</span>
-            </div>
-            <div className="flex gap-12">
-               <span>Privacy Charter</span>
-               <span>Terms of Origin</span>
-            </div>
-            <span>© 2026 BRIDGING TRADITION & TRUTH</span>
-          </div>
-        </div>
-      </footer>
+      <MiniCart isOpen={isMiniCartOpen} onClose={() => setIsMiniCartOpen(false)} />
     </div>
   );
 }
