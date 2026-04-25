@@ -18,8 +18,13 @@ export function LoginPage() {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      const isAdmin = email.toLowerCase() === 'prabalagrawal23@gmail.com';
       toast.success("Identity Verified. Welcome back.");
-      navigate("/");
+      if (isAdmin) {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     } catch (err: any) {
       toast.error(err.message || "Failed to establish secure session");
     } finally {
