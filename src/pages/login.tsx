@@ -59,8 +59,11 @@ export function LoginPage() {
                 onChange={e => setEmail(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-4">Credential Key</label>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center px-4">
+                <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60">Password</label>
+                <Link to="/forgot-password" className="text-[9px] font-black uppercase tracking-widest text-ojo-mustard hover:underline">Recover Access</Link>
+              </div>
               <input 
                 type="password" 
                 required 

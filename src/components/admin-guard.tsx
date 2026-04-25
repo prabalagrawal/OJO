@@ -18,7 +18,16 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
 
       try {
         const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists() && userDoc.data()?.role === 'admin') {
+        const userData = userDoc.data();
+        const userEmail = user.email;
+
+        // Log for debugging (will be visible in dev console)
+        console.log("Checking admin access for:", userEmail, "Role:", userData?.role);
+
+        if (
+          (userDoc.exists() && userData?.role?.toLowerCase() === 'admin') ||
+          userEmail === 'prabalagrawal23@gmail.com'
+        ) {
           setIsAdmin(true);
         } else {
           setIsAdmin(false);

@@ -6,6 +6,7 @@ import { CategoryPage } from "./pages/category.tsx";
 import { ProductDetailPage } from "./pages/product-detail.tsx";
 import { LoginPage } from "./pages/login.tsx";
 import { RegisterPage } from "./pages/register.tsx";
+import { ForgotPasswordPage } from "./pages/forgot-password.tsx";
 import { VendorDashboard } from "./pages/vendor-dashboard.tsx";
 import { AdminDashboard } from "./pages/admin/dashboard";
 import { Cart } from "./pages/cart.tsx";
@@ -37,6 +38,7 @@ function AppRoutes() {
         <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-tracking/:id" element={<OrderTracking />} />
@@ -47,11 +49,11 @@ function AppRoutes() {
         />
         <Route 
           path="/vendor/*" 
-          element={user?.role === "VENDOR" ? <VendorDashboard /> : <Navigate to="/login" />} 
+          element={user?.role?.toLowerCase() === "vendor" ? <VendorDashboard /> : <Navigate to="/login" />} 
         />
         <Route 
           path="/admin/*" 
-          element={user?.role === "ADMIN" ? <AdminDashboard /> : <Navigate to="/login" />} 
+          element={user?.role?.toLowerCase() === "admin" ? <AdminDashboard /> : <Navigate to="/login" />} 
         />
       </Routes>
     </Layout>

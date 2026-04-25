@@ -23,11 +23,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         // Fetch additional user data from Firestore
-        const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
-        if (userDoc.exists()) {
-          setUser({ ...firebaseUser, ...userDoc.data() });
-        } else {
-          // Fallback if doc doesn't exist yet
+        try {
+          const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+          if (userDoc.exists()) {
+            setUser({ ...firebaseUser, ...userDoc.data() });
+          } else {
+            // Fallback for admin email even if doc doesn't exist
+            if (firebaseUser.email === 'prabalagrawal23@gmail.com') {
+              setUser({ ...firebaseUser, role: 'admin', displayName: 'Registry Admin' });
+            } else {
+              setUser(firebaseUser);
+            }
+          }
+        } catch (error) {
+          console.error("Auth Context Fetch Error:", error);
           setUser(firebaseUser);
         }
       } else {

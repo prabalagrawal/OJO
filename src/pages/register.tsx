@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "motion/react";
@@ -21,10 +21,10 @@ export function RegisterPage() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, "users", userCredential.user.uid), {
-        name,
+        displayName: name,
         email,
-        role: "CUSTOMER",
-        createdAt: new Date().toISOString()
+        role: "customer",
+        createdAt: serverTimestamp()
       });
       toast.success("Membership Established. Welcome to the Registry.");
       navigate("/");

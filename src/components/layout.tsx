@@ -229,6 +229,15 @@ export function Layout({ children, user, onLogout }: LayoutProps) {
                <div className="flex items-center gap-10">
                   {user ? (
                     <div className="flex items-center gap-10">
+                      {user.role?.toLowerCase() === 'admin' && (
+                        <button 
+                          onClick={() => navigate('/admin')}
+                          className="flex items-center gap-2 px-6 py-3 bg-ojo-charcoal text-ojo-mustard rounded-2xl border border-ojo-mustard/20 shadow-xl hover:bg-black transition-all group"
+                        >
+                          <Lock size={14} className="group-hover:rotate-12 transition-transform" />
+                          <span className="text-[10px] font-black uppercase tracking-[0.2em]">Registry Control</span>
+                        </button>
+                      )}
                       <button 
                         onClick={() => navigate('/dashboard')}
                         className="flex items-center gap-5 group"
