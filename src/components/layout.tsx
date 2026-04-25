@@ -186,12 +186,12 @@ export function Layout({ children, user, onLogout }: LayoutProps) {
           <div className="flex items-center gap-20 relative z-10">
             <button onClick={() => navigate("/")} className="hover:opacity-80 transition-all group flex items-center gap-6">
                <div className="w-16 h-16 rounded-[1.5rem] bg-ojo-charcoal text-white flex items-center justify-center shadow-4xl transform transition-transform group-hover:-rotate-[15deg] duration-700 border-2 border-ojo-mustard/40 relative">
-                <MotifSystem type="patola" opacity={0.2} scale={0.2} />
+                <MotifSystem type="patola" opacity={0.15} scale={0.15} />
                 <span className="font-serif italic font-black text-3xl relative z-10">O</span>
                </div>
-               <div className="flex flex-col items-start leading-none group pt-1">
-                 <span className="font-serif italic text-4xl font-black text-ojo-charcoal tracking-tighter">OJO.</span>
-                 <span className="text-[8px] font-black uppercase tracking-[0.5em] text-ojo-mustard hidden md:block mt-1">Sovereign Heritage Registry</span>
+               <div className="flex flex-col items-start gap-1 group">
+                 <span className="font-serif italic text-4xl font-black text-ojo-charcoal tracking-tighter leading-none">OJO.</span>
+                 <span className="font-sans text-[9px] font-black uppercase tracking-[0.6em] text-ojo-mustard hidden md:block leading-none">Sovereign Heritage Registry</span>
                </div>
             </button>
             <nav className="hidden lg:flex items-center gap-16">

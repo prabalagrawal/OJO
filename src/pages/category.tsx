@@ -17,7 +17,7 @@ import {
   List
 } from "lucide-react";
 import { toast } from "sonner";
-import { QuickViewModal } from "./home.tsx";
+import { QuickViewModal } from "../components/quick-view-modal.tsx";
 import { MotifSystem } from "../components/motifs.tsx";
 
 export function CategoryPage() {
