@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MapPin, ArrowRight, ShieldCheck, Star, X } from 'lucide-react';
+import { MapPin, ArrowRight, ShieldCheck, Star, X, Globe } from 'lucide-react';
 import { MotifSystem } from './motifs';
 
 interface StateData {
@@ -17,105 +17,105 @@ const STATES_DATA: StateData[] = [
   {
     id: 'rajasthan',
     name: 'Rajasthan',
-    path: "M140,160 L180,140 L220,160 L240,220 L200,260 L140,240 Z", // Simplified paths
-    description: "The land of kings, known for its vibrant block prints and heritage jewelry.",
-    famousFor: ["Bagru Prints", "Blue Pottery", "Kundan Jewelry"],
+    path: "M140,160...", 
+    description: "The desert kingdom where artisans command the language of block printing and precious stones.",
+    famousFor: ["Bagru Block Printing", "Sanganeri Prints", "Thewa Jewelry"],
     pattern: "bagru",
     img: "https://images.unsplash.com/photo-1599661046289-e31897846e41?q=80&w=2670&auto=format&fit=crop"
   },
   {
     id: 'gujarat',
     name: 'Gujarat',
-    path: "M100,240 L140,240 L160,280 L140,320 L80,300 Z",
-    description: "Home to the intricate Ajrakh patterns and world-famous Patola silks.",
-    famousFor: ["Ajrakh Prints", "Patola Silk", "Bandhani"],
+    path: "M100,240...",
+    description: "A maritime gateway preserving the geometric complexity of Ajrakh and double-ikat Patola weaves.",
+    famousFor: ["Ajrakh Hand-block", "Patola Silk", "Kutch Embroidery"],
     pattern: "ajrakh",
     img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=2070&auto=format&fit=crop"
   },
   {
     id: 'maharashtra',
     name: 'Maharashtra',
-    path: "M160,280 L220,260 L260,300 L240,380 L180,400 L140,360 Z",
-    description: "A hub of tribal Warli art and Paithani silk traditions.",
-    famousFor: ["Warli Art", "Paithani Saree", "Kolhapuri Chappals"],
+    path: "M160,280...",
+    description: "From the Sahyadri ranges to the Deccan, home to Warli cave traditions and Paithani elegance.",
+    famousFor: ["Warli Tribal Art", "Paithani Silks", "Himroo Weaving"],
     pattern: "warli",
     img: "https://images.unsplash.com/photo-1599940859674-a7fef12b94a0?q=80&w=2600&auto=format&fit=crop"
   },
   {
     id: 'west-bengal',
     name: 'West Bengal',
-    path: "M400,220 L440,240 L460,300 L420,340 L380,300 Z",
-    description: "Famed for its fine Jamdani weaves and heritage terracotta crafts.",
-    famousFor: ["Jamdani Silk", "Kantha Embroidery", "Terracotta Art"],
+    path: "M400,220...",
+    description: "The soul of craftsmanship where Jamdani looms breathe and terracotta tells ancient stories.",
+    famousFor: ["Muslin-Jamdani", "Kantha Heritage", "Bankura Terracotta"],
     pattern: "jaali",
     img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=2670&auto=format&fit=crop"
   },
   {
     id: 'kashmir',
     name: 'Kashmir',
-    path: "M180,40 L240,20 L280,60 L240,100 L180,100 Z",
-    description: "The crown of India, producing the world's finest Pashmina and Sozni embroidery.",
-    famousFor: ["Pashmina Shawls", "Sozni Embroidery", "Paper Mache"],
+    path: "M180,40...",
+    description: "A high-altitude sanctuary for the world's most delicate Pashmina and intricate Sozni needlework.",
+    famousFor: ["Pashmina & Kani", "Sozni Needlepoint", "Walnut Wood Carving"],
     pattern: "sozni",
     img: "https://images.unsplash.com/photo-1594191543882-626dfca15494?q=80&w=2574&auto=format&fit=crop"
-  },
-  {
-    id: 'tamil-nadu',
-    name: 'Tamil Nadu',
-    path: "M240,480 L300,480 L320,540 L280,600 L220,560 Z",
-    description: "Southern heritage known for Kanchipuram silks and sacred Kolam patterns.",
-    famousFor: ["Kanchipuram Silk", "Thanjavur Paintings", "Bronze Idols"],
-    pattern: "kolam",
-    img: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=2610&auto=format&fit=crop"
   }
 ];
 
 export function IndiaExplorer({ onStateClick }: { onStateClick: (state: StateData) => void }) {
   const [hoveredState, setHoveredState] = useState<string | null>(null);
 
-  // Since a full SVG map is complex for this demo, we'll use a stylized interactive grid 
-  // with a background map silhouette 
   return (
-    <div className="relative w-full aspect-square md:aspect-video bg-ojo-cream rounded-[4rem] overflow-hidden border border-ojo-mustard/10 shadow-inner">
-       {/* Map Silhouette Placeholder */}
-       <div className="absolute inset-0 flex items-center justify-center opacity-[0.03]">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/India_map_blank.svg" className="h-[90%] grayscale" alt="India Map" />
+    <div className="relative w-full aspect-[16/8] bg-white rounded-[5rem] overflow-hidden border border-ojo-stone/10 shadow-4xl group">
+       <div className="absolute inset-0 opacity-[0.05] pointer-events-none">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/India_map_blank.svg" className="w-full h-full object-contain p-10 grayscale scale-90" alt="" />
        </div>
 
-       <div className="absolute inset-0 p-12 flex flex-col justify-between z-10">
-          <div className="space-y-4">
-            <span className="ojo-label-verified ojo-label">Interactive Atlas</span>
-            <h3 className="text-4xl font-serif italic text-ojo-charcoal">The Geography of Trust</h3>
+       <div className="absolute inset-0 p-20 flex flex-col justify-between z-10">
+          <div className="flex justify-between items-start">
+            <div className="space-y-6">
+              <span className="ojo-label-verified ojo-label shadow-xl">Provenance Geography 2.0</span>
+              <h3 className="text-7xl font-serif italic text-ojo-charcoal leading-none tracking-tighter">OJO India <br /> Explorer.</h3>
+              <p className="text-xl text-ojo-charcoal/50 max-w-sm font-light italic leading-relaxed">
+                Interact with the clusters. Every state highlighted holds a sovereign trust certificate in our vault.
+              </p>
+            </div>
+            
+            <div className="flex gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-ojo-mustard flex items-center justify-center text-ojo-charcoal shadow-lg">
+                <Globe size={24} />
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="flex gap-8 overflow-x-auto pb-10 no-scrollbar">
             {STATES_DATA.map((state) => (
               <motion.button
                 key={state.id}
                 onMouseEnter={() => setHoveredState(state.id)}
                 onMouseLeave={() => setHoveredState(null)}
                 onClick={() => onStateClick(state)}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ scale: 1.02 }}
-                className="group p-8 bg-white/60 backdrop-blur-xl border border-ojo-mustard/10 rounded-[2.5rem] text-left transition-all hover:bg-white hover:shadow-4xl relative overflow-hidden"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                className="flex-shrink-0 w-[400px] group p-10 bg-white/40 backdrop-blur-3xl border border-white/50 rounded-[3.5rem] text-left transition-all hover:bg-white hover:shadow-4xl relative overflow-hidden"
               >
-                <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute top-10 right-10 opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-2">
                    <ArrowRight size={20} className="text-ojo-mustard" />
                 </div>
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none group-hover:opacity-[0.08] transition-opacity">
-                   <MotifSystem type={state.pattern} scale={0.5} />
+                <div className="absolute inset-0 opacity-[0.04] pointer-events-none transition-all group-hover:opacity-[0.12] duration-700">
+                   <MotifSystem type={state.pattern} scale={0.8} />
                 </div>
                 
-                <div className="relative z-10 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-ojo-mustard/10 flex items-center justify-center text-ojo-mustard">
-                      <MapPin size={18} />
+                <div className="relative z-10 space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-ojo-cream border border-ojo-mustard/20 flex items-center justify-center text-ojo-mustard shadow-inner">
+                      <MapPin size={22} />
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-ojo-mustard">Cluster {state.id.slice(0,3).toUpperCase()}</span>
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-mustard block">Registry {state.id.slice(0,3).toUpperCase()}</span>
+                      <h4 className="text-3xl font-serif italic text-ojo-charcoal leading-none pt-1">{state.name}</h4>
+                    </div>
                   </div>
-                  <h4 className="text-2xl font-serif italic text-ojo-charcoal">{state.name}</h4>
-                  <p className="text-xs text-ojo-charcoal/50 leading-relaxed line-clamp-2">{state.description}</p>
+                  <p className="text-sm text-ojo-charcoal/60 leading-relaxed font-light italic line-clamp-2 pr-6">"{state.description}"</p>
                 </div>
               </motion.button>
             ))}
@@ -128,13 +128,14 @@ export function IndiaExplorer({ onStateClick }: { onStateClick: (state: StateDat
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 pointer-events-none border-4 border-ojo-mustard/20 z-20 rounded-[4rem]"
+              className="absolute inset-0 pointer-events-none border-t border-ojo-mustard/20 z-20"
             />
           )}
        </AnimatePresence>
     </div>
   );
 }
+
 
 export function StateDrawer({ state, isOpen, onClose }: { state: StateData | null, isOpen: boolean, onClose: () => void }) {
   if (!state) return null;
