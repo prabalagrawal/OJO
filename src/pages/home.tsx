@@ -110,12 +110,16 @@ export function HomePage() {
           >
             <OjoLogo size="lg" className="mx-auto mb-12 opacity-80" />
             <h1 className="text-6xl md:text-[84px] font-serif text-white leading-[0.9] tracking-tighter max-w-5xl mx-auto italic">
-              India’s <br className="hidden md:block" />
-              <span className="text-ojo-mustard">Authentic Records.</span>
+              India’s Authentic <br className="hidden md:block" />
+              <span className="text-ojo-mustard">Products. Verified.</span>
             </h1>
-            <p className="mt-10 text-xl md:text-2xl text-white/70 max-w-2xl mx-auto font-light italic">
-              A curated pilgrimage through the verified master-crafts of the subcontinent.
+            <p className="mt-10 text-xl md:text-2xl text-white/70 max-w-3xl mx-auto font-light italic">
+              Discover India’s authentic products by origin — from crafts and textiles to tea, spices, and more.
             </p>
+            <div className="mt-8 flex items-center justify-center gap-4 text-white/50">
+               <ShieldCheck size={18} className="text-ojo-mustard" />
+               <span className="text-sm font-medium tracking-wide uppercase">Every product is verified at source, ensuring authenticity, quality, and trust.</span>
+            </div>
           </motion.div>
 
           <motion.div
@@ -140,17 +144,17 @@ export function HomePage() {
       </section>
 
       {/* 2. INDIA EXPLORER: SIGNATURE INTERACTION */}
-      <section id="explorer" className="min-h-screen py-40 flex flex-col justify-center bg-ojo-cream relative overflow-hidden">
+      <section id="explorer" className="min-h-screen py-20 flex flex-col justify-center bg-ojo-cream relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none">
            <MotifSystem type="jaali" scale={4} opacity={1} />
         </div>
-        <div className="max-w-[1800px] mx-auto w-full px-6 md:px-12 space-y-20 relative z-10">
-          <div className="text-center space-y-6">
+        <div className="w-full px-4 md:px-0 space-y-12 relative z-10">
+          <div className="text-center space-y-4">
              <span className="ojo-badge ojo-badge-verified">SIGNATURE EXPERIENCE</span>
-             <h2 className="text-6xl md:text-[140px] font-serif italic text-ojo-charcoal leading-none tracking-tighter opacity-10 absolute left-1/2 -translate-x-1/2 top-40 whitespace-nowrap pointer-events-none uppercase select-none">GEOGRAPHIC DNA</h2>
-             <h3 className="text-4xl md:text-6xl font-serif italic text-ojo-charcoal tracking-tighter relative z-10">Discover by Origin.</h3>
+             <h3 className="text-4xl md:text-7xl font-serif italic text-ojo-charcoal tracking-tighter">Discover by Origin.</h3>
+             <p className="text-ojo-charcoal/40 font-light italic text-lg max-w-xl mx-auto">Click any state to audit its verified cultural records.</p>
           </div>
-          <div className="relative w-full overflow-hidden">
+          <div className="relative w-full max-w-[1920px] mx-auto">
             <IndiaExplorer onStateClick={(state) => setSelectedState(state)} />
           </div>
         </div>
@@ -177,15 +181,15 @@ export function HomePage() {
               viewport={{ once: true }}
               className="max-w-2xl space-y-12"
             >
-               <span className="text-[10px] font-black uppercase tracking-[0.5em] text-ojo-mustard">The Human Dossier</span>
+               <span className="text-[10px] font-black uppercase tracking-[0.5em] text-ojo-mustard">The Sovereign Narrative</span>
                <h2 className="text-6xl md:text-8xl font-serif italic text-white leading-none tracking-tighter">
-                  Every stitch <br />
-                  is a signature.
+                  From the deserts <br />
+                  of Rajasthan...
                </h2>
                <p className="text-xl md:text-2xl text-white/60 font-light italic leading-snug">
-                  "Heritage is not just a legacy preserved in archives; it is lived on the artisan's loom every single dawn."
+                  "Every artifact is a travelogue of technique. We trace the lineage from the shifting sands to the high mountain looms, ensuring every record is authentic."
                </p>
-               <button onClick={() => navigate("/category")} className="ojo-btn-primary !px-16 !py-6">Discover The Origin Stories</button>
+               <button onClick={() => navigate("/category")} className="ojo-btn-primary !px-16 !py-6 !bg-white !text-ojo-charcoal hover:!bg-ojo-mustard">Explore Collection</button>
             </motion.div>
          </div>
       </section>
@@ -225,7 +229,13 @@ export function HomePage() {
                      <div className="ojo-badge !bg-ojo-mustard !text-ojo-charcoal !border-none">MASTERPIECE ARCHIVE</div>
                      <h3 className="text-5xl md:text-7xl font-serif text-white italic">{products[0].name}</h3>
                      <div className="flex justify-between items-end">
-                        <p className="text-xl text-white/50 italic font-light max-w-lg">{products[0].short_description}</p>
+                        <div className="space-y-4">
+                           <p className="text-xl text-white/50 italic font-light max-w-lg">{products[0].short_description}</p>
+                           <div className="flex gap-3">
+                              <span className="ojo-badge !border-white/20 !text-white text-[9px]">Verified from {products[0].origin}</span>
+                              <span className="ojo-badge !bg-white !text-ojo-charcoal !border-none text-[9px]">GI CERTIFIED</span>
+                           </div>
+                        </div>
                         <div className="text-4xl font-mono text-ojo-mustard italic font-black">₹{products[0].price.toLocaleString()}</div>
                      </div>
                   </div>
@@ -251,13 +261,20 @@ export function HomePage() {
                           alt={p.name}
                         />
                         <div className="absolute inset-0 bg-ojo-charcoal/10 group-hover:bg-transparent transition-colors" />
+                        <div className="absolute top-6 left-6 flex flex-col gap-2">
+                           <div className="ojo-badge !bg-white/90 !text-ojo-charcoal !border-none text-[8px] font-black tracking-widest shadow-lg">GI Tagged</div>
+                           <div className="ojo-badge !bg-ojo-mustard !text-ojo-charcoal !border-none text-[8px] font-black tracking-widest shadow-lg uppercase">{p.decisionTag || 'PREMIUM'}</div>
+                        </div>
                      </div>
                      <div className="space-y-3 px-4">
                         <div className="flex justify-between items-baseline">
                            <h4 className="text-3xl font-serif italic text-ojo-charcoal group-hover:text-ojo-mustard transition-colors leading-none">{p.name}</h4>
                            <span className="text-xl font-mono text-ojo-mustard font-bold italic">₹{p.price.toLocaleString()}</span>
                         </div>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40 bg-ojo-charcoal/5 px-4 py-1 rounded-full inline-block">{p.origin.toUpperCase()}</span>
+                        <div className="flex items-center gap-2">
+                           <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40 bg-ojo-charcoal/5 px-4 py-1 rounded-full inline-block">Origin: {p.origin.toUpperCase()}</span>
+                           <ShieldCheck size={12} className="text-ojo-mustard" />
+                        </div>
                      </div>
                   </motion.div>
                 ))}
@@ -272,39 +289,58 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* 5. TRUST: THE SOVEREIGN VOW */}
+      {/* 5. TRUST: ECVO-LEVEL CREDIBILITY */}
       <section className="py-60 bg-ojo-charcoal text-white relative overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-ojo-cream to-transparent opacity-10" />
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
            <MotifSystem type="jaali" scale={3} />
         </div>
         
         <div className="max-w-7xl mx-auto px-8 relative z-10 text-center space-y-32">
            <div className="space-y-12">
-              <span className="text-[11px] font-black uppercase tracking-[1em] text-ojo-mustard">The Sovereign Audit</span>
-              <h2 className="text-7xl md:text-[140px] font-serif italic text-white leading-none tracking-tighter">
+              <span className="text-[11px] font-black uppercase tracking-[1em] text-ojo-mustard">Identity & Trust Registry</span>
+              <h2 className="text-7xl md:text-[120px] font-serif italic text-white leading-none tracking-tighter">
                  Verified from <br />
                  <span className="text-ojo-mustard">Origin.</span>
               </h2>
+              <p className="max-w-2xl mx-auto text-2xl text-white/50 font-light italic leading-snug">
+                Every product on OJO is sourced directly from its place of origin — ensuring authenticity, quality, and transparency.
+              </p>
            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-24">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-24">
               {[
-                { title: "GI Tagged", detail: "Government certified geographical indication Protocol 102." },
-                { title: "Origin Verified", detail: "Permanent verifiable records of artisan heritage." },
-                { title: "Quality Checked", detail: "Three-tier sensory audit for every single collectible." }
+                { title: "GI Tagged Products", detail: "Government certified geographical indications for absolute provenance." },
+                { title: "Artisan Verified Sources", detail: "Direct cluster audits ensure master-level command and ethical origins." },
+                { title: "Quality Checked & Curated", detail: "Rigorous three-tier sensory audit for every single artifact." }
               ].map((item, i) => (
                 <motion.div 
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.2 }}
-                  className="space-y-8 text-center"
+                   key={i}
+                   initial={{ opacity: 0, y: 20 }}
+                   whileInView={{ opacity: 1, y: 0 }}
+                   transition={{ delay: i * 0.2 }}
+                   className="space-y-8 text-center p-12 bg-white/5 border border-white/10 rounded-[4rem] hover:bg-white/10 transition-all duration-700"
                 >
-                   <h4 className="text-4xl font-serif italic text-ojo-mustard">{item.title}</h4>
-                   <div className="w-12 h-[1px] bg-white/20 mx-auto" />
+                   <div className="w-16 h-16 rounded-full bg-ojo-mustard/20 flex items-center justify-center mx-auto mb-8 border border-ojo-mustard/30">
+                      <span className="text-ojo-mustard text-2xl">✔</span>
+                   </div>
+                   <h4 className="text-3xl font-serif italic text-ojo-mustard leading-tight">{item.title}</h4>
                    <p className="text-xl text-white/40 font-light italic leading-snug">{item.detail}</p>
                 </motion.div>
               ))}
+           </div>
+
+           <div className="pt-20">
+              <div className="inline-flex items-center gap-6 px-12 py-6 bg-white/5 border border-white/10 rounded-full">
+                 <div className="flex -space-x-4">
+                    {[1,2,3,4].map(i => (
+                      <div key={i} className="w-10 h-10 rounded-full border-2 border-ojo-charcoal bg-ojo-stone p-1">
+                         <div className="w-full h-full rounded-full bg-ojo-cream opacity-20" />
+                      </div>
+                    ))}
+                 </div>
+                 <span className="text-sm font-medium tracking-wider text-white/40 uppercase">Trusted by thousands of customers across India.</span>
+              </div>
            </div>
         </div>
       </section>
