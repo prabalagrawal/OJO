@@ -3,21 +3,18 @@
 
 @theme {
   --color-ojo-charcoal: #382C23;
-  --color-ojo-cream: #F5F0E6;
+  --color-ojo-cream: #FDFBF7; /* Slightly cleaner off-white */
   --color-ojo-terracotta: #9C5D3C;
   --color-ojo-mustard: #B07E1E;
-  --color-ojo-stone: #D1C7B5;
+  --color-ojo-stone: #E5DFD3;
   --color-ojo-white: #FFFFFF;
 
   --font-serif: "Playfair Display", serif;
   --font-sans: "Inter", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  --shadow-3xl: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
-  --shadow-4xl: 0 50px 100px -20px rgba(56, 44, 35, 0.1), 0 30px 60px -30px rgba(0, 0, 0, 0.15);
-
-  --animate-motif-fade: motifFade 1s ease-in-out forwards;
-  --animate-border-gold: borderGold 3s infinite alternate;
+  --shadow-premium: 0 20px 40px -10px rgba(56, 44, 35, 0.08);
+  --shadow-deep: 0 30px 60px -15px rgba(56, 44, 35, 0.12);
 
   @keyframes motifFade {
     from { opacity: 0; transform: scale(0.98); }
@@ -25,24 +22,15 @@
   }
 
   @keyframes borderGold {
-    0% { border-color: rgba(176, 126, 30, 0.1); }
-    100% { border-color: rgba(176, 126, 30, 0.4); }
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    0% { border-color: rgba(176, 126, 30, 0.05); }
+    100% { border-color: rgba(176, 126, 30, 0.2); }
   }
 }
 
 @layer base {
   body {
-    @apply bg-ojo-cream text-ojo-charcoal font-sans text-[15px] leading-relaxed antialiased selection:bg-ojo-mustard selection:text-white;
+    /* Increased font size by 15% (15px * 1.15 ≈ 17px) */
+    @apply bg-ojo-cream text-ojo-charcoal font-sans text-[17px] leading-relaxed antialiased selection:bg-ojo-mustard selection:text-white;
   }
 
   h1, h2, h3, h4, .font-serif {
@@ -51,66 +39,62 @@
 }
 
 @layer components {
-  /* Premium CTA Button with Architectural Shape */
+  /* Refined Button System */
   .ojo-btn-primary {
-    @apply bg-ojo-mustard text-white px-10 py-5 text-[10px] font-black uppercase tracking-[0.4em] hover:bg-ojo-charcoal transition-all duration-500 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden;
-    border-radius: 1.5rem 0.5rem 1.5rem 0.5rem; /* Pinched architectural corners */
+    @apply bg-ojo-mustard text-white px-8 py-4 text-[11px] font-black uppercase tracking-[0.4em] transition-all duration-500 shadow-premium active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden flex items-center justify-center gap-3;
+    border-radius: 1.2rem 0.4rem 1.2rem 0.4rem; /* Modern Indian Arch Shape */
+  }
+
+  .ojo-btn-primary:hover {
+    @apply bg-ojo-charcoal shadow-deep -translate-y-1 scale-[1.02];
   }
 
   .ojo-btn-outline {
-    @apply border border-ojo-charcoal/20 text-ojo-charcoal px-10 py-5 text-[10px] font-black uppercase tracking-[0.4em] hover:bg-ojo-charcoal hover:text-white transition-all duration-500;
-    border-radius: 0.5rem 1.5rem 0.5rem 1.5rem;
+    @apply border border-ojo-charcoal/10 text-ojo-charcoal px-8 py-4 text-[11px] font-black uppercase tracking-[0.4em] transition-all duration-500 flex items-center justify-center gap-3 bg-white/20 backdrop-blur-sm;
+    border-radius: 0.4rem 1.2rem 0.4rem 1.2rem;
   }
 
-  /* Architectural Arch Profile */
-  .ojo-arch-mughal {
-    border-radius: 6rem 6rem 1.5rem 1.5rem;
-    position: relative;
-    clip-path: polygon(0 100%, 100% 100%, 100% 15%, 85% 5%, 50% 0, 15% 5%, 0 15%);
+  .ojo-btn-outline:hover {
+    @apply border-ojo-mustard text-ojo-mustard scale-[1.02] shadow-premium;
   }
 
-  /* Deep Relief Shadow */
-  .ojo-shadow-relief {
-    box-shadow: 
-      inset 0 2px 4px rgba(255, 255, 255, 0.5),
-      0 10px 40px -10px rgba(56, 44, 35, 0.15);
+  /* Architectural Elements */
+  .ojo-arch-header {
+    border-radius: 0 0 4rem 4rem;
+    @apply border-b border-ojo-mustard/10 shadow-sm relative overflow-hidden;
   }
 
-  /* Indian Motif Borders */
-  .ojo-border-motif {
-    @apply border border-ojo-mustard/20 relative before:absolute before:inset-[-2px] before:border before:border-ojo-mustard/10 before:rounded-[inherit] before:pointer-events-none;
+  .ojo-card-product {
+    @apply bg-white border border-ojo-stone/30 p-6 transition-all duration-700 relative flex flex-col gap-6;
+    border-radius: 3rem 0.8rem 0.8rem 0.8rem; /* Refined Arch Top */
   }
 
-  /* Trust Labels */
-  .ojo-label {
-    @apply text-[9px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-full backdrop-blur-md border border-white/20;
+  .ojo-card-product:hover {
+    @apply shadow-deep scale-[1.01];
   }
 
-  .ojo-label-trusted {
-    @apply bg-ojo-mustard text-white shadow-lg;
+  /* Heritage Motifs & Textures */
+  .ojo-texture-heritage {
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 L100 50 L50 100 L0 50 Z' fill='%23B07E1E' fill-opacity='0.03'/%3E%3C/svg%3E");
   }
 
-  .ojo-label-verified {
-    @apply bg-ojo-cream text-ojo-terracotta border-ojo-terracotta/20;
+  .ojo-warli-divider {
+    @apply h-px w-full bg-ojo-mustard/10 relative overflow-visible;
   }
 
-  /* Cards */
-  .ojo-card {
-    @apply bg-white border border-ojo-stone/20 rounded-[3rem] p-8 transition-all duration-700 hover:shadow-4xl hover:shadow-ojo-charcoal/5;
+  .ojo-warli-divider::after {
+    content: "◈ ◈ ◈";
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-ojo-cream px-6 text-[10px] text-ojo-mustard/40 tracking-[1em];
   }
 
-  /* Patterns */
-  .pattern-global {
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 L100 50 L50 100 L0 50 Z' fill='%23382c23' fill-opacity='0.02'/%3E%3C/svg%3E");
+  /* Labels & UI Accents */
+  .ojo-badge {
+    @apply text-[9px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-full border backdrop-blur-md;
   }
 
-  .pattern-divider {
-    @apply h-24 w-full opacity-10;
-    mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
-    background-size: 60px 60px;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30 Z' fill='%23382c23'/%3E%3C/svg%3E");
+  .ojo-badge-verified {
+    @apply bg-white/50 text-ojo-mustard border-ojo-mustard/20 shadow-sm;
   }
-
 }
 
 .scrollbar-hide::-webkit-scrollbar {

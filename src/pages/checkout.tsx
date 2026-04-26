@@ -14,6 +14,8 @@ import {
   ArrowRight
 } from "lucide-react";
 import { OjoLogo } from "../components/brand.tsx";
+import { api } from "../lib/api.ts";
+import { toast } from "sonner";
 
 export function Checkout() {
   const [step, setStep] = useState(1);
@@ -33,12 +35,23 @@ export function Checkout() {
     else handleComplete();
   };
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const order = await api.post("/orders", { 
+        items: cartItems,
+        address: "Primary Vault, Bangalore Hub", // Fallback for demo
+        paymentId: "PAY-" + Math.random().toString(36).substr(2, 9).toUpperCase()
+      });
+      
+      toast.success("Acquisition executed successfully.");
       localStorage.removeItem("cart");
-      navigate("/dashboard/orders");
-    }, 2000);
+      navigate(`/order-tracking/${order.id}`);
+    } catch (err) {
+      toast.error("Handshake with ledger failed.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

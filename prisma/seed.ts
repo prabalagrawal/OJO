@@ -43,89 +43,87 @@ async function main() {
   });
 
   // 3. Create initial products
-  const products = [
+  const regions = [
+    { id: "AP", name: "Andhra Pradesh", items: ["Kondapalli Toys", "Dharmavaram Silk"] },
+    { id: "AR", name: "Arunachal Pradesh", items: ["Apatani Weaves", "Monpa Wood Craft"] },
+    { id: "AS", name: "Assam", items: ["Muga Silk", "Bamboo Craft"] },
+    { id: "BR", name: "Bihar", items: ["Madhubani Painting", "Bhagalpury Silk"] },
+    { id: "CH", name: "Chandigarh", items: ["Le Corbusier Inspired Craft", "Heritage Furniture"] },
+    { id: "CT", name: "Chhattisgarh", items: ["Dhokra Art", "Kosa Silk"] },
+    { id: "DN", name: "Dadra Nagar Haveli", items: ["Warli Art Sculpture", "Leather Craft"] },
+    { id: "DL", name: "Delhi", items: ["Meenakari Jewellery", "Zardozi Work"] },
+    { id: "GA", name: "Goa", items: ["Azuljos Tiles", "Kunbi Saree"] },
+    { id: "GJ", name: "Gujarat", items: ["Patola Silk", "Ajrakh Prints"] },
+    { id: "HR", name: "Haryana", items: ["Terracotta Artifacts", "Brassware"] },
+    { id: "HP", name: "Himachal Pradesh", items: ["Kullu Shawl", "Kangra Painting"] },
+    { id: "JK", name: "Jammu and Kashmir", items: ["Pashmina Shawl", "Walnut Wood Carving"] },
+    { id: "JH", name: "Jharkhand", items: ["Sohrai Art", "Tussar Silk"] },
+    { id: "KA", name: "Karnataka", items: ["Mysore Silk", "Channapatna Toys"] },
+    { id: "KL", name: "Kerala", items: ["Aranmula Mirror", "Kasavu Saree"] },
+    { id: "LA", name: "Ladakh", items: ["Changpa Pashmina", "Apricot Wood Craft"] },
+    { id: "LD", name: "Lakshadweep", items: ["Coir Decorative Shells", "Coral Inspired Art"] },
+    { id: "MP", name: "Madhya Pradesh", items: ["Chanderi Saree", "Bagh Prints"] },
+    { id: "MH", name: "Maharashtra", items: ["Paithani Saree", "Warli Tribal Art"] },
+    { id: "MN", name: "Manipur", items: ["Longpi Pottery", "Meithei Handloom"] },
+    { id: "ML", name: "Meghalaya", items: ["Cane Picnic Basket", "Eri Silk Stole"] },
+    { id: "MZ", name: "Mizoram", items: ["Puan Textiles", "Bamboo Hat"] },
+    { id: "NL", name: "Nagaland", items: ["Naga Shawl", "Basketry"] },
+    { id: "OR", name: "Odisha", items: ["Pattachitra", "Sambalpuri Ikat"] },
+    { id: "PB", name: "Punjab", items: ["Phulkari Dupatta", "Leather Jutti"] },
+    { id: "PY", name: "Puducherry", items: ["Auroville Handmade Paper", "Terracotta Lamps"] },
+    { id: "RJ", name: "Rajasthan", items: ["Blue Pottery", "Sanganeri Handblock"] },
+    { id: "SK", name: "Sikkim", items: ["Thangka Painting", "Handwoven Carpet"] },
+    { id: "TN", name: "Tamil Nadu", items: ["Kanchipuram Silk", "Thanjavur Painting"] },
+    { id: "TG", name: "Telangana", items: ["Bidriware Vase", "Pochampally Ikat"] },
+    { id: "TR", name: "Tripura", items: ["Bamboo Sculpture", "Woven Shawl"] },
+    { id: "UP", name: "Uttar Pradesh", items: ["Banarasi Saree", "Lucknow Chikan"] },
+    { id: "UK", name: "Uttarakhand", items: ["Aipan Art Frame", "Ringal Bamboo Craft"] },
+    { id: "WB", name: "West Bengal", items: ["Bankura Terracotta", "Darjeeling Loose Leaf"] }
+  ];
+
+  const productTemplates = [
     {
-      name: "Hand-Woven Pashmina Shawl",
-      description: "Authenticated 100% Pashmina from the high altitudes of Ladakh, woven in Srinagar by master craftsmen.",
-      price: 24500,
-      origin: "Kashmir",
-      artisanName: "Ghulam Mohammed",
-      color: "Natural Cream",
-      dimensions: "2m x 1m",
-      story: "Tracing back to the 15th century, the art of Pashmina was brought to Kashmir by Mir Sayyid Ali Hamadani. Each shawl takes months of painstaking labor, beginning with the hand-combing of the Changthangi goat's undercoat.",
-      stock: 12,
-      verificationStatus: "VERIFIED",
-      images: JSON.stringify(["https://images.unsplash.com/photo-1544208062-331bd1954941?q=80&w=2670&auto=format&fit=crop"]),
-    },
-    {
-      name: "Blue Pottery Geometric Vase",
-      description: "Traditional Jaipur Blue Pottery featuring hand-painted geometric patterns using natural cobalt oxides.",
-      price: 3200,
-      origin: "Jaipur",
-      artisanName: "Rajesh Saini",
-      color: "Cobalt Blue",
-      dimensions: "12 inch height",
-      story: "Jaipur blue pottery is unique because it is the only pottery in the world that does not use clay. It is made from a mix of stone powder, glass, and borax, techniques brought from Persia during the 19th century.",
-      stock: 45,
-      verificationStatus: "VERIFIED",
-      images: JSON.stringify(["https://images.unsplash.com/photo-1578749553570-2cc50ca53017?q=80&w=2670&auto=format&fit=crop"]),
-    },
-    {
-      name: "Chanderi Silk Saree",
-      description: "Hand-loomed Chanderi Silk with intricate zari work, passed through 3 levels of quality verification.",
-      price: 18900,
-      origin: "Madhya Pradesh",
-      artisanName: "Anwar Ali",
-      color: "Deep Emerald",
-      dimensions: "5.5 meters",
-      story: "Chanderi weavers have been perfecting their craft since the Vedic period. Known for their sheer texture and glossy transparency, these sarees represent the peak of Indian textile finesse.",
-      stock: 8,
-      verificationStatus: "VERIFIED",
-      images: JSON.stringify(["https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=2670&auto=format&fit=crop"]),
-    },
-    {
-      name: "Terracotta Horse Figurine",
-      description: "Bankura style clay work from West Bengal, representing the distinct ritualistic art form of the region.",
-      price: 1500,
-      origin: "West Bengal",
-      artisanName: "Shanti Pal",
-      color: "Burnt Sienna",
-      dimensions: "18 inch height",
-      story: "The Bankura horse is the most famous example of Terracotta art in India. Its origins lie in the 17th century Malla Dynasty, where it was offered to local deities as a symbol of nobility and strength.",
-      stock: 20,
-      verificationStatus: "VERIFIED",
-      images: JSON.stringify(["https://images.unsplash.com/photo-1590736704728-f4730bb30770?q=80&w=2670&auto=format&fit=crop"]),
+      price: [2500, 4500, 12000, 25000],
+      stories: [
+        "A legacy technique passed through 7 generations of master craftsmen.",
+        "Verified by OJO regional field agents for 100% material authenticity.",
+        "An iconic example of geographic protected heritage from the heart of the cluster."
+      ],
+      artisans: ["Master Rajesh", "Begum Zeba", "Devi Prasad", "Shanti Pal", "Anwar Ali"]
     }
   ];
 
-  for (const p of products) {
-    const product = await prisma.product.create({
-      data: {
-        ...p,
-        vendorId: officialVendor.id,
-      },
-    });
-
-    // Add 2 reviews per product
-    await prisma.review.createMany({
-      data: [
-        {
-          productId: product.id,
-          userName: "Anjali Gupta",
-          rating: 5,
-          comment: "The craftsmanship is unparalleled. You can feel the heritage in every thread.",
+  for (const region of regions) {
+    for (const itemName of region.items) {
+      const template = productTemplates[0];
+      const product = await prisma.product.create({
+        data: {
+          name: `${itemName} - Verified Record`,
+          description: `A premium example of ${itemName} heritage, strictly audited for provenance and material trust.`,
+          price: template.price[Math.floor(Math.random() * template.price.length)],
+          origin: region.name,
+          artisanName: template.artisans[Math.floor(Math.random() * template.artisans.length)],
+          story: template.stories[Math.floor(Math.random() * template.stories.length)],
+          stock: 10,
+          verificationStatus: "VERIFIED",
+          images: JSON.stringify(["https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=2670&auto=format&fit=crop"]),
+          vendorId: officialVendor.id,
         },
-        {
+      });
+
+      // Add reviews
+      await prisma.review.create({
+        data: {
           productId: product.id,
-          userName: "Vikram Malhotra",
-          rating: 4,
-          comment: "Truly authentic. The verification badge gave me the confidence to buy.",
+          userName: "OJO Auditor",
+          rating: 5,
+          comment: "Provenance verified via field audit. GI-Tag compliance confirmed.",
         }
-      ]
-    });
+      });
+    }
   }
 
-  console.log("Seed data created successfully");
+  console.log(`Created ${regions.length * 2} heritage records successfully`);
 }
 
 main()

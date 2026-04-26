@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { ShieldCheck, ArrowRight, Loader2, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { MotifSystem } from "../components/motifs.tsx";
+import { OjoLogo } from "../components/brand.tsx";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
@@ -37,50 +38,45 @@ export function LoginPage() {
       <MotifSystem type="jaali" opacity={0.06} />
       
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-xl bg-ojo-cream border border-ojo-mustard/20 p-12 md:p-20 shadow-4xl relative z-10 space-y-12 overflow-hidden"
-        style={{ borderRadius: '6rem 6rem 1.5rem 1.5rem' }}
+        className="w-full max-w-2xl bg-white border border-ojo-stone/20 p-12 md:p-24 shadow-premium relative z-10 space-y-16 overflow-hidden"
+        style={{ borderRadius: '8rem 1rem 1rem 1rem' }}
       >
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+        <div className="absolute top-0 right-0 opacity-[0.04] pointer-events-none p-10 h-full w-full">
            <MotifSystem type="jaali" scale={0.4} />
         </div>
         
-        <div className="text-center space-y-4 relative z-10">
-          <div className="flex justify-center mb-8">
-            <div className="w-16 h-16 bg-ojo-charcoal text-white flex items-center justify-center shadow-2xl transform rotate-45 border border-ojo-mustard/40"
-              style={{ borderRadius: '1.5rem 0.2rem 1.5rem 0.2rem' }}>
-              <div className="-rotate-45">
-                <Lock size={24} />
-              </div>
-            </div>
+        <div className="text-center space-y-6 relative z-10">
+          <div className="flex justify-center mb-10">
+            <OjoLogo size="lg" />
           </div>
-          <h1 className="text-4xl font-serif italic text-ojo-charcoal">Secure Access</h1>
-          <p className="text-xs font-black uppercase tracking-[0.4em] text-ojo-mustard">The Sovereign Registry</p>
+          <h1 className="text-5xl font-serif italic text-ojo-charcoal">Sovereign Access</h1>
+          <p className="text-[11px] font-black uppercase tracking-[0.5em] text-ojo-mustard">Establish Your Identity</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-8 relative z-10">
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Registry Identity</label>
+        <form onSubmit={handleLogin} className="space-y-10 relative z-10">
+          <div className="space-y-8">
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/50 ml-8">Registry Identity</label>
               <input 
                 type="email" 
                 required 
-                className="w-full bg-white border border-ojo-stone/10 rounded-full px-8 py-5 text-sm outline-none focus:border-ojo-mustard transition-all shadow-inner"
+                className="w-full bg-ojo-cream/50 border border-ojo-stone/10 rounded-full px-10 py-6 text-[15px] outline-none focus:border-ojo-mustard transition-all"
                 placeholder="patron@heritage.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
               />
             </div>
             <div className="space-y-4">
-              <div className="flex justify-between items-center px-6">
-                <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60">Passcode</label>
-                <Link to="/forgot-password" className="text-[9px] font-black uppercase tracking-widest text-ojo-mustard hover:underline underline-offset-4 decoration-ojo-mustard/30 transition-all">Forgot Passphrase?</Link>
+              <div className="flex justify-between items-center px-8">
+                <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/50">Passcode</label>
+                <Link to="/forgot-password" className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard hover:opacity-70 transition-all">Recover?</Link>
               </div>
               <input 
                 type="password" 
                 required 
-                className="w-full bg-white border border-ojo-stone/10 rounded-full px-8 py-5 text-sm outline-none focus:border-ojo-mustard transition-all shadow-inner"
+                className="w-full bg-ojo-cream/50 border border-ojo-stone/10 rounded-full px-10 py-6 text-[15px] outline-none focus:border-ojo-mustard transition-all"
                 placeholder="••••••••"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
@@ -91,23 +87,23 @@ export function LoginPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="ojo-btn-primary w-full flex items-center justify-center gap-3 !py-6 group"
+            className="ojo-btn-primary w-full flex items-center justify-center gap-4 !py-8 group"
           >
-            {loading ? <Loader2 className="animate-spin" size={18} /> : (
+            {loading ? <Loader2 className="animate-spin" size={20} /> : (
               <>
-                <span>Establish Identity</span> 
-                <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
+                <span>Secure Identity Verification</span> 
+                <ArrowRight size={20} className="group-hover:translate-x-3 transition-transform" />
               </>
             )}
           </button>
         </form>
 
-        <div className="text-center space-y-6 pt-4">
-          <p className="text-[10px] uppercase font-bold tracking-widest text-ojo-charcoal/40">
-            No Registry Access? <Link to="/register" className="text-ojo-mustard hover:underline underline-offset-4">Establish Membership</Link>
+        <div className="text-center space-y-10 pt-6">
+          <p className="text-xl text-ojo-charcoal/50 font-light italic">
+            No Registry Access? <Link to="/register" className="text-ojo-mustard !not-italic font-bold hover:underline">Establish Membership</Link>
           </p>
-          <div className="flex items-center justify-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-ojo-terracotta">
-            <ShieldCheck size={12} /> Encrypted Origin Protection Active
+          <div className="flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-ojo-terracotta opacity-60">
+            <ShieldCheck size={14} /> Encrypted Origin Protection Active
           </div>
         </div>
       </motion.div>

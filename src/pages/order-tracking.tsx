@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { 
@@ -12,20 +12,59 @@ import {
   ShieldCheck,
   Phone,
   MessageSquare,
-  ArrowRight
+  ArrowRight,
+  Loader2
 } from "lucide-react";
-
-const steps = [
-  { status: "Order Placed", date: "April 18, 10:24 AM", icon: <Package size={20} />, completed: true },
-  { status: "Processing & Quality Audit", date: "April 19, 02:15 PM", icon: <ShieldCheck size={20} />, completed: true },
-  { status: "Shipped from Origin", date: "April 20, 09:30 AM", icon: <Truck size={20} />, completed: true, current: true },
-  { status: "Out for Delivery", date: "Expected April 23", icon: <MapPin size={20} />, completed: false },
-  { status: "Delivered", date: "Expected April 24", icon: <CheckCircle size={20} />, completed: false },
-];
+import { api } from "../lib/api.ts";
+import { toast } from "sonner";
 
 export function OrderTracking() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [order, setOrder] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadOrder();
+  }, [id]);
+
+  const loadOrder = async () => {
+    try {
+      const data = await api.get(`/orders/${id}`);
+      setOrder(data);
+    } catch (err) {
+      toast.error("Failed to fetch order details.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-ojo-cream">
+        <Loader2 className="animate-spin text-ojo-mustard" size={48} />
+      </div>
+    );
+  }
+
+  if (!order) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-ojo-cream">
+        <div className="text-center space-y-4">
+          <h2 className="text-3xl font-serif">Order Not Found</h2>
+          <button onClick={() => navigate("/")} className="ojo-btn-primary">Return to Registry</button>
+        </div>
+      </div>
+    );
+  }
+
+  const steps = [
+    { status: "Order Placed", date: new Date(order.createdAt).toLocaleDateString(), icon: <Package size={20} />, completed: true },
+    { status: "Processing & Quality Audit", date: "System Verified", icon: <ShieldCheck size={20} />, completed: order.status !== 'PENDING' },
+    { status: "Shipped from Origin", date: "Transit Active", icon: <Truck size={20} />, completed: order.status === 'SHIPPED' || order.status === 'DELIVERED', current: order.status === 'SHIPPED' },
+    { status: "Out for Delivery", date: "Expected Soon", icon: <MapPin size={20} />, completed: order.status === 'DELIVERED' },
+    { status: "Delivered", date: "Final Handshake", icon: <CheckCircle size={20} />, completed: order.status === 'DELIVERED' },
+  ];
 
   return (
     <div className="min-h-screen bg-ojo-cream p-8 md:p-16">
@@ -126,14 +165,26 @@ export function OrderTracking() {
 
             <div className="bg-white rounded-[50px] p-10 shadow-xl border border-ojo-stone/10 space-y-8">
                <h4 className="text-xl font-serif text-ojo-charcoal">Registry Summary</h4>
-               <div className="flex items-center gap-6">
-                  <div className="w-16 h-16 rounded-2xl bg-ojo-stone/10 overflow-hidden shadow-inner shrink-0">
-                    <img src="https://images.unsplash.com/photo-1590736704728-f4730bb30770?q=80&w=2670" className="w-full h-full object-cover grayscale" />
+               <div className="space-y-6">
+                {order.items?.map((item: any) => (
+                  <div key={item.id} className="flex items-center gap-6">
+                     <div className="w-16 h-16 rounded-2xl bg-ojo-stone/10 overflow-hidden shadow-inner shrink-0">
+                       <img 
+                        src={JSON.parse(item.product.images || "[]")[0]} 
+                        className="w-full h-full object-cover grayscale" 
+                        alt="" 
+                       />
+                     </div>
+                     <div className="min-w-0">
+                       <h5 className="font-serif text-ojo-charcoal truncate">{item.product.name}</h5>
+                       <p className="text-[10px] font-black uppercase tracking-widest text-ojo-stone">Item ID: #{item.product.id.slice(-6).toUpperCase()}</p>
+                     </div>
                   </div>
-                  <div className="min-w-0">
-                    <h5 className="font-serif text-ojo-charcoal truncate">Royal Vase Block VIII</h5>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-ojo-stone">Item ID: RG-99201-B</p>
-                  </div>
+                ))}
+               </div>
+               <div className="pt-6 border-t border-ojo-stone/10 flex justify-between items-center">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40">Total Ledger</span>
+                  <span className="text-xl font-mono font-bold">₹{order.total.toLocaleString()}</span>
                </div>
                <button onClick={() => navigate("/")} className="w-full py-5 rounded-full border-2 border-ojo-stone/20 text-[10px] font-black uppercase tracking-widest hover:border-ojo-mustard transition-all group flex items-center justify-center gap-3">
                  Return to Registry <ArrowRight size={14} className="group-hover:translate-x-2 transition-transform" />

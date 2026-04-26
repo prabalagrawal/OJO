@@ -7,6 +7,7 @@ import { motion } from "motion/react";
 import { ShieldCheck, ArrowRight, Loader2, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import { MotifSystem } from "../components/motifs.tsx";
+import { OjoLogo } from "../components/brand.tsx";
 
 export function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -51,12 +52,7 @@ export function RegisterPage() {
         
         <div className="text-center space-y-4 relative z-10">
           <div className="flex justify-center mb-8">
-            <div className="w-16 h-16 bg-ojo-charcoal text-white flex items-center justify-center shadow-2xl transform rotate-45 border border-ojo-mustard/40"
-              style={{ borderRadius: '1.5rem 0.2rem 1.5rem 0.2rem' }}>
-              <div className="-rotate-45">
-                <UserPlus size={24} />
-              </div>
-            </div>
+            <OjoLogo size="md" />
           </div>
           <h1 className="text-4xl font-serif italic text-ojo-charcoal tracking-tighter">Registry Enrollment</h1>
           <p className="text-xs font-black uppercase tracking-[0.4em] text-ojo-mustard">Initiate Sovereign Membership</p>

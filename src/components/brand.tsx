@@ -8,87 +8,100 @@ export function OjoLogo({ size = "md", dark = false }: { size?: "sm" | "md" | "l
   };
 
   const h = heights[size];
-  const charcoal = dark ? "#F5F0E6" : "#382C23";
-  const terracota = "#9C5D3C";
-  const gold = "#B07E1E";
+  const charcoal = dark ? "#F5F0E6" : "#0A0A0A"; // Solid black for the text
+  const red = "#BA251B"; // Deeper red for the bindu
+  const gold = "#E6A519"; // Vibrant golden-yellow for the leaves
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {/* Logo Mark */}
+      {/* Logo Mark - Precise recreation of the uploaded design */}
       <svg 
         height={h} 
-        viewBox="0 0 240 140" 
+        viewBox="0 0 500 250" 
         fill="none" 
         xmlns="http://www.w3.org/2000/svg"
         className="overflow-visible"
       >
-        {/* Tilak Ornament - Modern Heritage */}
-        <g transform="translate(120, 25)">
-          {/* Three golden flame leaves */}
+        {/* Tilak Ornament - strictly above the J */}
+        <g transform="translate(250, 65)">
+          {/* Three golden leaves */}
           <motion.path 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            d="M0 -8 C-4 -14 -4 -24 0 -32 C4 -24 4 -14 0 -8 Z" 
+            d="M0 -22 C-7 -35 -7 -55 0 -68 C7 -55 7 -35 0 -22 Z" 
             fill={gold} 
           />
           <motion.path 
-            initial={{ opacity: 0, x: 5, rotate: -15 }}
-            animate={{ opacity: 1, x: 0, rotate: 0 }}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
-            d="M-8 -6 C-12 -9 -18 -14 -22 -22 C-16 -18 -10 -14 -8 -6 Z" 
+            d="M-12 -15 C-25 -20 -45 -22 -58 -18 C-45 -10 -25 -8 -12 -15 Z" 
             fill={gold} 
+            transform="rotate(-25, -12, -15)"
           />
           <motion.path 
-            initial={{ opacity: 0, x: -5, rotate: 15 }}
-            animate={{ opacity: 1, x: 0, rotate: 0 }}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
-            d="M8 -6 C12 -9 18 -14 22 -22 C16 -18 10 -14 8 -6 Z" 
+            d="M12 -15 C25 -20 45 -22 58 -18 C45 -10 25 -8 12 -15 Z" 
             fill={gold} 
+            transform="rotate(25, 12, -15)"
           />
-          {/* Red Bindu/Dot */}
-          <circle cx="0" cy="0" r="7" fill={terracota} />
+          {/* Red Bindu */}
+          <circle cx="0" cy="0" r="14" fill={red} />
         </g>
 
-        {/* OJO Textmark */}
-        <g transform="translate(0, 45)">
-          {/* First Eye (O) */}
-          <g transform="translate(60, 45)">
-            <circle cx="0" cy="0" r="42" stroke={charcoal} strokeWidth="14" />
-            <circle cx="0" cy="0" r="30" stroke={terracota} strokeWidth="1.5" />
-            <circle cx="0" cy="0" r="14" fill={charcoal} />
-            <circle cx="3" cy="-3" r="3" fill="white" opacity="0.4" />
-          </g>
+        {/* Eye Left (O) */}
+        <g transform="translate(145, 145)">
+          <circle cx="0" cy="0" r="82" stroke={charcoal} strokeWidth="32" />
+          {/* Pupil */}
+          <circle cx="0" cy="0" r="42" fill={charcoal} />
+          {/* Reflection */}
+          <circle cx="12" cy="-12" r="9" fill="white" />
+          {/* Inner Red ring - visible in some versions but keeping it subtle or matching original */}
+          <circle cx="0" cy="0" r="66" stroke={red} strokeWidth="2" opacity="0.4" />
+        </g>
 
-          {/* The Styled 'j' */}
+        {/* The 'j' character */}
+        <g transform="translate(250, 145)">
           <path 
-            d="M120 10 L120 70 C120 82 112 88 100 88" 
+            d="M-5 -45 L-5 45 C-5 75 -25 95 -60 95" 
             stroke={charcoal} 
-            strokeWidth="14" 
+            strokeWidth="32" 
             strokeLinecap="round" 
             strokeLinejoin="round" 
             fill="none"
           />
+        </g>
 
-          {/* Second Eye (O) */}
-          <g transform="translate(180, 45)">
-            <circle cx="0" cy="0" r="42" stroke={charcoal} strokeWidth="14" />
-            <circle cx="0" cy="0" r="30" stroke={terracota} strokeWidth="1.5" />
-            <circle cx="0" cy="0" r="14" fill={charcoal} />
-            <circle cx="3" cy="-3" r="3" fill="white" opacity="0.4" />
-          </g>
+        {/* Eye Right (O) */}
+        <g transform="translate(355, 145)">
+          <circle cx="0" cy="0" r="82" stroke={charcoal} strokeWidth="32" />
+          {/* Pupil */}
+          <circle cx="0" cy="0" r="42" fill={charcoal} />
+          {/* Reflection */}
+          <circle cx="12" cy="-12" r="9" fill="white" />
+          {/* Inner Red ring */}
+          <circle cx="0" cy="0" r="66" stroke={red} strokeWidth="2" opacity="0.4" />
         </g>
       </svg>
 
-      {/* Tagline - Clean Swiss-inspired typography */}
-      <div 
-        className="mt-3 flex items-center gap-[0.8em] font-sans font-bold tracking-[0.25em] uppercase whitespace-nowrap"
-        style={{ fontSize: h * 0.22 }}
-      >
-        <span style={{ color: charcoal }}>See.</span>
-        <span style={{ color: charcoal }}>Verify.</span>
-        <span style={{ color: terracota }}>Trust.</span>
-      </div>
+      {/* Brand Ethos */}
+      {size !== "sm" && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mt-4 flex items-center gap-4 font-sans font-black tracking-[0.3em] uppercase text-ojo-stone/40"
+          style={{ fontSize: h * 0.2 }}
+        >
+          <span>See</span>
+          <div className="w-1.5 h-1.5 rounded-full bg-ojo-mustard" />
+          <span>Verify</span>
+          <div className="w-1.5 h-1.5 rounded-full bg-ojo-mustard" />
+          <span className="text-ojo-mustard">OJO</span>
+        </motion.div>
+      )}
     </div>
   );
 }
