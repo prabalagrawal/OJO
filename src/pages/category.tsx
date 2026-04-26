@@ -167,71 +167,70 @@ export function CategoryPage() {
       </AnimatePresence>
 
       {/* Header Section */}
-      <header className="pt-40 md:pt-48 pb-20 px-8 md:px-20 bg-white border-b border-ojo-stone/10 relative overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-full opacity-[0.03] pointer-events-none">
+      <header className="pt-32 md:pt-48 pb-12 md:pb-20 px-6 md:px-20 bg-white border-b border-ojo-stone/10 relative overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-full opacity-[0.015] pointer-events-none">
            <MotifSystem type="jaali" scale={1} opacity={1} />
         </div>
         
-        <div className="max-w-[1800px] mx-auto space-y-16 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-12">
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                 <div className="ojo-badge ojo-badge-verified !px-6">Sovereign Registry</div>
-                 <div className="h-px w-20 bg-ojo-mustard/20" />
-                 <span className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-mustard">Origin Nodes: {origins.length}</span>
+        <div className="max-w-[1800px] mx-auto space-y-10 md:space-y-16 relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-12">
+            <div className="space-y-4 md:space-y-6">
+              <div className="flex items-center gap-3 md:gap-4">
+                 <div className="ojo-badge ojo-badge-verified !px-4 md:!px-6 text-[8px] md:text-[10px]">Sovereign Registry</div>
+                 <div className="h-px w-12 md:w-20 bg-ojo-mustard/20" />
+                 <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-ojo-mustard">Origin Nodes: {origins.length}</span>
               </div>
-              <h1 className="text-5xl md:text-8xl font-serif text-ojo-charcoal leading-none tracking-tighter">
-                Geographic <br />
+              <h1 className="text-4xl md:text-8xl font-serif text-ojo-charcoal leading-none tracking-tighter">
+                Geographic <br className="hidden md:block" />
                 <span className="text-ojo-mustard italic">Provenances.</span>
               </h1>
             </div>
             
-            <div className="flex flex-col gap-8 w-full md:w-auto">
-              <div className="relative group shadow-2xl rounded-full overflow-hidden">
-                <Search className="absolute left-8 top-1/2 -translate-y-1/2 text-ojo-stone/40 group-focus-within:text-ojo-mustard" size={20} />
+            <div className="flex flex-col gap-6 md:gap-8 w-full md:w-auto">
+              <div className="relative group shadow-lg md:shadow-2xl rounded-2xl md:rounded-full overflow-hidden">
+                <Search className="absolute left-6 md:left-8 top-1/2 -translate-y-1/2 text-ojo-stone/40 group-focus-within:text-ojo-mustard" size={18} />
                 <input 
                   type="text" 
                   placeholder="Search the Archive..."
                   value={queryText}
                   onChange={(e) => updateFilters("q", e.target.value)}
-                  className="w-full md:w-[500px] border-none bg-ojo-cream/80 backdrop-blur-xl pl-20 pr-10 py-6 text-base italic outline-none"
+                  className="w-full md:w-[500px] border-none bg-ojo-cream/80 backdrop-blur-xl pl-16 md:pl-20 pr-8 py-5 md:py-6 text-sm md:text-base italic outline-none"
                 />
               </div>
-              <div className="flex items-center gap-6 justify-end">
-                <div className="flex p-2 bg-ojo-cream rounded-2xl border border-ojo-stone/10">
+              <div className="flex items-center gap-6 justify-between md:justify-end">
+                <div className="flex p-1.5 bg-ojo-cream rounded-xl md:rounded-2xl border border-ojo-stone/10">
                   <button 
                     onClick={() => setViewMode("grid")}
-                    className={`p-3 rounded-xl transition-all ${viewMode === "grid" ? 'bg-ojo-charcoal text-white shadow-xl' : 'text-ojo-charcoal/30'}`}
+                    className={`p-2 md:p-3 rounded-lg md:rounded-xl transition-all ${viewMode === "grid" ? 'bg-ojo-charcoal text-white shadow-lg' : 'text-ojo-charcoal/30'}`}
                   >
-                    <LayoutGrid size={18} />
+                    <LayoutGrid size={16} />
                   </button>
                   <button 
                     onClick={() => setViewMode("list")}
-                    className={`p-3 rounded-xl transition-all ${viewMode === "list" ? 'bg-ojo-charcoal text-white shadow-xl' : 'text-ojo-charcoal/30'}`}
+                    className={`p-2 md:p-3 rounded-lg md:rounded-xl transition-all ${viewMode === "list" ? 'bg-ojo-charcoal text-white shadow-lg' : 'text-ojo-charcoal/30'}`}
                   >
-                    <List size={18} />
+                    <List size={16} />
                   </button>
                 </div>
                 <button 
                   onClick={() => setSearchParams(new URLSearchParams())}
-                  className="text-[10px] font-black uppercase tracking-[0.3em] text-ojo-charcoal/30 hover:text-ojo-charcoal flex items-center gap-2 group"
+                  className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-ojo-charcoal/30 hover:text-ojo-charcoal flex items-center gap-2 group"
                 >
-                  <X size={14} className="group-hover:rotate-90 transition-transform" /> Clear Audit
+                  <X size={12} className="group-hover:rotate-90 transition-transform" /> Clear Audit
                 </button>
               </div>
             </div>
           </div>
 
-          {/* New Modern Filter Strip */}
-          <div className="flex flex-wrap items-center gap-10 pt-16 border-t border-ojo-mustard/10">
-            <div className="flex items-center gap-4">
-              <span className="text-[9px] font-black uppercase tracking-[0.5em] text-ojo-mustard/40">Categories</span>
-              <div className="flex gap-3">
+          <div className="flex flex-col gap-8 pt-8 md:pt-16 border-t border-ojo-mustard/10">
+            <div className="flex flex-col md:flex-row md:items-center gap-4">
+              <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-ojo-mustard/40">Categories</span>
+              <div className="flex gap-2.5 overflow-x-auto pb-4 md:pb-0 scrollbar-hide">
                 {categories.map(cat => (
                   <button 
                     key={cat}
                     onClick={() => updateFilters("category", cat)}
-                    className={`px-8 py-3 rounded-full text-[10px] font-black tracking-widest transition-all ${categoryFilter === cat ? 'bg-ojo-mustard text-white shadow-premium scale-105' : 'bg-ojo-cream/50 text-ojo-charcoal/40 border border-ojo-stone/10 hover:bg-white'}`}
+                    className={`px-6 md:px-8 py-2 md:py-3 rounded-full text-[9px] md:text-[10px] font-black tracking-widest transition-all whitespace-nowrap active:scale-95 ${categoryFilter === cat ? 'bg-ojo-mustard text-white shadow-premium' : 'bg-ojo-cream/50 text-ojo-charcoal/40 border border-ojo-stone/10 hover:bg-white'}`}
                   >
                     {cat}
                   </button>
@@ -239,16 +238,14 @@ export function CategoryPage() {
               </div>
             </div>
             
-            <div className="w-px h-10 bg-ojo-mustard/10 hidden lg:block" />
-
-            <div className="flex items-center gap-4">
-              <span className="text-[9px] font-black uppercase tracking-[0.5em] text-ojo-mustard/40">Territories</span>
-              <div className="flex gap-3 overflow-x-auto no-scrollbar max-w-[400px]">
+            <div className="flex flex-col md:flex-row md:items-center gap-4">
+              <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-ojo-mustard/40">Territories</span>
+              <div className="flex gap-2.5 overflow-x-auto pb-4 md:pb-0 scrollbar-hide">
                 {origins.map(origin => (
                   <button 
                     key={origin}
                     onClick={() => updateFilters("origin", origin)}
-                    className={`px-8 py-3 rounded-full text-[10px] font-black tracking-widest whitespace-nowrap transition-all ${originFilter === origin ? 'bg-ojo-charcoal text-white shadow-premium scale-105' : 'bg-ojo-cream/50 text-ojo-charcoal/40 border border-ojo-stone/10 hover:bg-white'}`}
+                    className={`px-6 md:px-8 py-2 md:py-3 rounded-full text-[9px] md:text-[10px] font-black tracking-widest whitespace-nowrap transition-all active:scale-95 ${originFilter === origin ? 'bg-ojo-charcoal text-white shadow-premium' : 'bg-ojo-cream/50 text-ojo-charcoal/40 border border-ojo-stone/10 hover:bg-white'}`}
                   >
                     {origin}
                   </button>
@@ -261,7 +258,7 @@ export function CategoryPage() {
 
       {/* Product Discovery Grid */}
       <main className="py-24 px-8 md:px-20 max-w-[1800px] mx-auto min-h-[60vh] relative">
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+          <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
              <MotifSystem type="jaali" scale={2} />
           </div>
           {loading ? (
@@ -288,63 +285,48 @@ export function CategoryPage() {
                <button onClick={() => setSearchParams(new URLSearchParams())} className="ojo-btn-primary !px-20 ring-4 ring-ojo-mustard/10">Reset Discovery</button>
             </div>
           ) : (
-            <div className={`${viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-24" : "flex flex-col gap-12"}`}>
+            <div className={`${viewMode === "grid" ? "grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-12 gap-y-8 md:gap-y-24" : "flex flex-col gap-12"}`}>
                {paginatedProducts.map((p, idx) => {
                  const images = Array.isArray(p.images) ? p.images : JSON.parse(p.images || "[]");
                  return viewMode === "grid" ? (
                    <motion.div 
                      key={p.id}
-                     initial={{ opacity: 0, y: 40 }}
+                     initial={{ opacity: 0, y: 20 }}
                      whileInView={{ opacity: 1, y: 0 }}
-                     whileHover={{ y: -12 }}
                      viewport={{ once: true }}
-                     transition={{ 
-                       duration: 1, 
-                       ease: [0.16, 1, 0.3, 1]
-                     }}
-                     className="group flex flex-col ojo-card-product overflow-hidden cursor-pointer bg-white border border-ojo-stone/10 p-6 rounded-[4rem] hover:shadow-deep hover:border-ojo-mustard/20 transition-all duration-700"
+                     transition={{ duration: 0.8 }}
+                     className="group flex flex-col ojo-card-product overflow-hidden cursor-pointer bg-white border border-ojo-stone/10 p-3 md:p-6 rounded-2xl md:rounded-[4rem] hover:shadow-deep transition-all duration-700"
                      onClick={() => setQuickViewProduct(p)}
                    >
-                     <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden bg-ojo-cream mb-8 border border-ojo-stone/5">
+                     <div className="relative aspect-[4/5] rounded-xl md:rounded-[3rem] overflow-hidden bg-ojo-cream mb-4 md:mb-8 border border-ojo-stone/5">
                        <div className="absolute inset-0 bg-ojo-charcoal/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10" />
-                       <img src={images[0]} className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-[1.5s]" alt="" referrerPolicy="no-referrer" />
+                       <img src={images[0]} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-[1.5s]" alt="" referrerPolicy="no-referrer" />
                        
-                       <div className="absolute top-8 left-8 z-20 flex flex-col gap-3">
-                          <div className="ojo-badge !bg-white/95 backdrop-blur-3xl shadow-premium !px-5 !py-3 border-ojo-mustard/10">
-                             <ShieldCheck size={12} className="inline mr-2 text-ojo-mustard" />
-                             <span className="text-[9px] font-bold tracking-widest">{p.origin}</span>
-                          </div>
-                          {idx % 5 === 0 && (
-                            <div className="ojo-badge !bg-ojo-mustard text-white shadow-xl !px-5">
-                              <Award size={10} className="inline mr-2" /> AUDIT PICK
-                            </div>
-                          )}
-                       </div>
-                       
-                       <div className="absolute bottom-8 right-8 z-20 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-700">
-                          <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center text-ojo-charcoal shadow-deep border border-ojo-stone/10">
-                             <ChevronRight size={20} />
+                       <div className="absolute top-4 md:top-8 left-4 md:left-8 z-20 flex flex-col gap-2 md:gap-3 scale-75 origin-top-left md:scale-100">
+                          <div className="ojo-badge !bg-white/95 backdrop-blur-3xl shadow-premium !px-4 md:!px-5 !py-2 md:!py-3 border-ojo-mustard/10">
+                             <ShieldCheck size={10} className="inline mr-1 md:mr-2 text-ojo-mustard" />
+                             <span className="text-[8px] md:text-[9px] font-bold tracking-widest">{p.origin}</span>
                           </div>
                        </div>
+                       
                      </div>
 
-                     <div className="space-y-4 px-4 relative z-10">
-                        <div className="space-y-3">
-                           <div className="flex justify-between items-baseline">
-                              <h3 className="text-3xl font-serif text-ojo-charcoal italic tracking-tight">{p.name}</h3>
-                              <div className="text-xl font-mono text-ojo-mustard font-bold italic tracking-tighter">₹{p.price?.toLocaleString()}</div>
+                     <div className="space-y-2 md:space-y-4 px-1 md:px-4 relative z-10">
+                        <div className="space-y-1 md:space-y-3">
+                           <div className="flex flex-col md:flex-row justify-between items-start md:items-baseline gap-1 md:gap-4">
+                              <h3 className="text-[13px] md:text-3xl font-serif text-ojo-charcoal italic tracking-tight truncate w-full">{p.name}</h3>
+                              <div className="text-xs md:text-xl font-mono text-ojo-mustard font-black">₹{p.price?.toLocaleString()}</div>
                            </div>
-                           <p className="text-sm text-ojo-charcoal/40 italic font-light line-clamp-2 leading-relaxed">"{p.story || p.description}"</p>
+                           <p className="text-[9px] md:text-sm text-ojo-charcoal/40 italic font-light line-clamp-1 md:line-clamp-2 leading-relaxed">"{p.story || p.description}"</p>
                         </div>
                         
-                        <div className="pt-6 border-t border-ojo-mustard/10 flex items-center justify-between">
-                           <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-ojo-cream border border-ojo-mustard/20 flex items-center justify-center text-ojo-mustard italic font-serif text-xs">
+                        <div className="pt-3 md:pt-6 border-t border-ojo-mustard/10 flex items-center justify-between">
+                           <div className="flex items-center gap-1.5 md:gap-3">
+                              <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-ojo-cream border border-ojo-mustard/20 flex items-center justify-center text-ojo-mustard italic font-serif text-[8px] md:text-xs">
                                  {p.artisanName?.charAt(0) || "H"}
                               </div>
-                              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ojo-charcoal/30">{p.artisanName || "Heritage Guild"}</span>
+                              <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/30 truncate max-w-[60px] md:max-w-none">{p.artisanName || "Guild"}</span>
                            </div>
-                           <div className="ojo-label-verified border-none bg-ojo-mustard/5 text-ojo-mustard px-4 !py-1 text-[8px]">SIGNED</div>
                         </div>
                      </div>
                    </motion.div>
