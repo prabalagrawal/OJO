@@ -21,6 +21,7 @@ import {
 import { toast } from "sonner";
 import { QuickViewModal } from "../components/quick-view-modal.tsx";
 import { MotifSystem } from "../components/motifs.tsx";
+import { PRODUCT_DATASET } from "../data/product-dataset";
 
 const MOTIF_MAP: Record<string, any> = {
   "Kashmir": "sozni",
@@ -53,9 +54,30 @@ export function CategoryPage() {
     setLoading(true);
     try {
       const items = await api.get("/products");
-      setProducts(items);
+      if (items && items.length > 0) {
+        setProducts(items);
+      } else {
+        // Fallback to rich dataset
+        setProducts(PRODUCT_DATASET.map(p => ({
+          ...p,
+          description: p.short_description,
+          images: JSON.stringify([p.image]),
+          verificationStatus: "VERIFIED",
+          artisanName: "Master Artisan",
+          story: "Heritage artifact verified by OJO Geographic nodes."
+        })));
+      }
     } catch (err) {
-      toast.error("Registry connection lost.");
+      // Fallback on error too
+      setProducts(PRODUCT_DATASET.map(p => ({
+        ...p,
+        description: p.short_description,
+        images: JSON.stringify([p.image]),
+        verificationStatus: "VERIFIED",
+        artisanName: "Master Artisan",
+        story: "Heritage artifact verified by OJO Geographic nodes."
+      })));
+      toast.error("Registry connection lost. Using local archives.");
     } finally {
       setLoading(false);
     }
@@ -417,6 +439,7 @@ export function CategoryPage() {
         product={quickViewProduct} 
         isOpen={!!quickViewProduct}
         onClose={() => setQuickViewProduct(null)} 
+        onProductUpdate={(p) => setQuickViewProduct(p)}
         onAddToCart={addToCart}
       />
       

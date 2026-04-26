@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, ShoppingBag, ShieldCheck, Star, Truck, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import { MotifSystem } from './motifs';
+import { Recommendations } from './recommendations';
 
 interface Product {
   id: string;
@@ -13,6 +14,9 @@ interface Product {
   category: string;
   origin: string;
   artisanName?: string;
+  tags?: string[];
+  popularity_score?: number;
+  gi_tag?: boolean;
 }
 
 interface QuickViewModalProps {
@@ -20,9 +24,10 @@ interface QuickViewModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddToCart: (product: any) => void;
+  onProductUpdate?: (product: any) => void;
 }
 
-export function QuickViewModal({ product, isOpen, onClose, onAddToCart }: QuickViewModalProps) {
+export function QuickViewModal({ product, isOpen, onClose, onAddToCart, onProductUpdate }: QuickViewModalProps) {
   if (!product) return null;
   
   const images = Array.isArray(product.images) ? product.images : JSON.parse(product.images || "[]");
@@ -43,21 +48,21 @@ export function QuickViewModal({ product, isOpen, onClose, onAddToCart }: QuickV
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: 10 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 m-auto w-full max-w-6xl h-full md:h-[80vh] bg-white z-[110] overflow-hidden flex flex-col md:flex-row shadow-deep"
+            className="fixed inset-0 m-auto w-full max-w-7xl h-full md:h-[90vh] bg-white z-[110] overflow-hidden flex flex-col md:flex-row shadow-deep"
             style={{ borderRadius: '6rem 1rem 1rem 1rem' }}
           >
             <button 
               onClick={onClose}
-              className="absolute top-10 right-10 z-50 w-14 h-14 rounded-full bg-white/20 backdrop-blur-3xl flex items-center justify-center border border-white/20 hover:bg-white transition-all shadow-2xl group"
+              className="fixed md:absolute top-10 right-10 z-[120] w-14 h-14 rounded-full bg-white/20 backdrop-blur-3xl flex items-center justify-center border border-white/20 hover:bg-white transition-all shadow-2xl group"
             >
               <X size={24} className="text-ojo-stone group-hover:rotate-90 transition-transform" />
             </button>
 
             {/* Left: Swiper-like Image Section */}
-            <div className="w-full md:w-1/2 h-96 md:h-full relative overflow-hidden bg-ojo-cream">
+            <div className="w-full md:w-1/2 h-96 md:h-full relative overflow-hidden bg-ojo-cream flex-shrink-0">
               <img 
-                src={images[0] || "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=2670&auto=format&fit=crop"} 
-                className="w-full h-full object-cover grayscale transition-transform duration-[4s] hover:scale-105" 
+                src={images[0] || (product as any).image || "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=2670&auto=format&fit=crop"} 
+                className="w-full h-full object-cover transition-transform duration-[4s] hover:scale-105" 
                 alt={product.name} 
                 referrerPolicy="no-referrer"
               />
@@ -71,12 +76,12 @@ export function QuickViewModal({ product, isOpen, onClose, onAddToCart }: QuickV
             </div>
 
             {/* Right: Content Section */}
-            <div className="w-full md:w-1/2 p-12 md:p-20 overflow-y-auto relative flex flex-col justify-between bg-white">
-              <div className="absolute top-0 right-0 opacity-[0.04] pointer-events-none p-10 h-full w-full">
+            <div className="w-full md:w-1/2 p-12 md:p-20 overflow-y-auto relative bg-white flex flex-col">
+              <div className="absolute top-0 right-0 opacity-[0.04] pointer-events-none p-10 h-64 w-full">
                 <MotifSystem type="jaali" scale={1.5} />
               </div>
               
-              <div className="relative z-10 space-y-12">
+              <div className="relative z-10 flex-1 space-y-12">
                 <div className="space-y-6">
                   <div className="flex items-center gap-4">
                     <span className="ojo-badge !bg-ojo-mustard/10 !text-ojo-mustard !border-ojo-mustard/20">
@@ -84,7 +89,7 @@ export function QuickViewModal({ product, isOpen, onClose, onAddToCart }: QuickV
                     </span>
                     <div className="h-px w-8 bg-ojo-stone/20" />
                     <span className="text-[11px] font-black uppercase tracking-[0.4em] text-ojo-charcoal/40">
-                       {product.origin}
+                       {product.origin.replace('_', ' ')}
                     </span>
                   </div>
                   <h2 className="text-6xl font-serif italic text-ojo-charcoal leading-none tracking-tight">
@@ -95,13 +100,20 @@ export function QuickViewModal({ product, isOpen, onClose, onAddToCart }: QuickV
                   </p>
                 </div>
 
-                <div className="text-5xl font-mono text-ojo-charcoal">
-                  ₹{product.price?.toLocaleString()}
+                <div className="flex items-center justify-between">
+                  <div className="text-5xl font-mono text-ojo-charcoal">
+                    ₹{product.price?.toLocaleString()}
+                  </div>
+                  {product.gi_tag && (
+                    <div className="ojo-badge !bg-ojo-cream !text-ojo-mustard !border-ojo-mustard/30">
+                       GI-Certified
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-6">
                    <p className="text-xl text-ojo-charcoal/60 leading-relaxed font-light italic">
-                      {product.description || "Each artifact is hand-crafted using traditional heritage methods passed down through generations, ensuring GI-certified authenticity and sovereign trust."}
+                      {product.description || (product as any).short_description || "Each artifact is hand-crafted using traditional heritage methods passed down through generations, ensuring GI-certified authenticity and sovereign trust."}
                    </p>
                 </div>
 
@@ -115,6 +127,17 @@ export function QuickViewModal({ product, isOpen, onClose, onAddToCart }: QuickV
                       <span className="text-[11px] font-black uppercase tracking-widest text-ojo-charcoal/60">Global Cluster Track</span>
                    </div>
                 </div>
+
+                {/* Tags */}
+                {product.tags && (
+                  <div className="flex flex-wrap gap-3">
+                    {product.tags.map(tag => (
+                      <span key={tag} className="px-5 py-2 bg-ojo-cream border border-ojo-mustard/10 rounded-full text-[10px] font-black uppercase tracking-widest text-ojo-mustard/70">
+                         #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="pt-12 relative z-10 space-y-6">
@@ -134,6 +157,19 @@ export function QuickViewModal({ product, isOpen, onClose, onAddToCart }: QuickV
                    <div className="h-px flex-1 bg-ojo-charcoal" />
                 </div>
               </div>
+
+              {/* Recommendations Section */}
+              <Recommendations 
+                currentProductId={product.id} 
+                onProductClick={(p) => {
+                  if (onProductUpdate) {
+                    onProductUpdate(p);
+                    // Scroll container to top
+                    const container = document.querySelector('.overflow-y-auto');
+                    if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }} 
+              />
             </div>
           </motion.div>
         </>
