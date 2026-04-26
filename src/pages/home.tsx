@@ -202,6 +202,10 @@ export function HomePage() {
             <div className="absolute inset-0 bg-ojo-charcoal/60" />
          </div>
          
+         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+            <MotifSystem type="jaali" scale={2} />
+         </div>
+
          <div className="relative z-10 max-w-7xl mx-auto px-8 w-full">
             <motion.div 
               initial={{ opacity: 0, x: -50 }}
@@ -226,6 +230,9 @@ export function HomePage() {
 
       {/* 4. PRODUCT DISCOVERY: ASYMMETRICAL CURATION */}
       <section className="py-60 px-6 md:px-20 bg-ojo-cream relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+           <MotifSystem type="jaali" scale={1.5} />
+        </div>
         <div className="max-w-[1800px] mx-auto space-y-40 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end gap-16 border-b border-ojo-charcoal/10 pb-20">
             <div className="space-y-8">
@@ -245,8 +252,9 @@ export function HomePage() {
                  whileInView={{ opacity: 1, scale: 1 }}
                  viewport={{ once: true }}
                  onClick={() => setQuickViewProduct(products[0])}
-                 className="md:col-span-8 group cursor-pointer relative aspect-[14/10] overflow-hidden rounded-[4rem] shadow-premium hover:shadow-deep transition-all duration-1000"
+                 className="md:col-span-8 group cursor-pointer relative aspect-[14/10] overflow-hidden rounded-[4rem] shadow-premium hover:shadow-deep transition-all duration-1000 border border-ojo-charcoal/5"
                >
+                  <MotifSystem type="ajrakh" opacity={0.04} className="z-10 mix-blend-multiply" />
                   <img 
                     src={JSON.parse(products[0].images)[0]} 
                     className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-105" 
@@ -282,7 +290,8 @@ export function HomePage() {
                     onClick={() => setQuickViewProduct(p)}
                     className="group cursor-pointer space-y-8"
                   >
-                     <div className="aspect-square relative overflow-hidden rounded-[3rem] shadow-premium group-hover:shadow-deep transition-all duration-700">
+                     <div className="aspect-square relative overflow-hidden rounded-[3rem] shadow-premium group-hover:shadow-deep transition-all duration-700 border border-ojo-charcoal/5">
+                        <MotifSystem type="ajrakh" opacity={0.04} className="z-10 mix-blend-multiply" />
                         <img 
                           src={JSON.parse(p.images)[0]} 
                           className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" 
@@ -374,8 +383,11 @@ export function HomePage() {
       </section>
 
       {/* 6. RECOMMENDATIONS: INTELLIGENT CURATION */}
-      <section className="py-60 md:py-80 bg-ojo-cream overflow-hidden">
-        <div className="max-w-[1800px] mx-auto space-y-32">
+      <section className="py-60 md:py-80 bg-ojo-cream overflow-hidden relative">
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+           <MotifSystem type="jaali" scale={2} />
+        </div>
+        <div className="max-w-[1800px] mx-auto space-y-32 relative z-10">
           <div className="px-6 md:px-20 flex justify-between items-end border-b border-ojo-charcoal/10 pb-16">
              <div className="space-y-4">
                 <span className="ojo-badge !bg-ojo-mustard !text-ojo-charcoal !border-none text-[9px]">Sovereign Picks</span>

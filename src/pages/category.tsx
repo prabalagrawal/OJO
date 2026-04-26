@@ -168,7 +168,7 @@ export function CategoryPage() {
 
       {/* Header Section */}
       <header className="pt-40 md:pt-48 pb-20 px-8 md:px-20 bg-white border-b border-ojo-stone/10 relative overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-full opacity-10 pointer-events-none">
+        <div className="absolute inset-x-0 top-0 h-full opacity-[0.03] pointer-events-none">
            <MotifSystem type="jaali" scale={1} opacity={1} />
         </div>
         
@@ -260,7 +260,10 @@ export function CategoryPage() {
       </header>
 
       {/* Product Discovery Grid */}
-      <main className="py-24 px-8 md:px-20 max-w-[1800px] mx-auto min-h-[60vh]">
+      <main className="py-24 px-8 md:px-20 max-w-[1800px] mx-auto min-h-[60vh] relative">
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+             <MotifSystem type="jaali" scale={2} />
+          </div>
           {loading ? (
              <div className="flex flex-col items-center justify-center py-64 gap-12">
                 <div className="relative">
@@ -293,35 +296,39 @@ export function CategoryPage() {
                      key={p.id}
                      initial={{ opacity: 0, y: 40 }}
                      whileInView={{ opacity: 1, y: 0 }}
+                     whileHover={{ y: -12 }}
                      viewport={{ once: true }}
-                     transition={{ delay: (idx % 4) * 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                     className="group flex flex-col ojo-card-product overflow-hidden cursor-pointer"
+                     transition={{ 
+                       duration: 1, 
+                       ease: [0.16, 1, 0.3, 1]
+                     }}
+                     className="group flex flex-col ojo-card-product overflow-hidden cursor-pointer bg-white border border-ojo-stone/10 p-6 rounded-[4rem] hover:shadow-deep hover:border-ojo-mustard/20 transition-all duration-700"
                      onClick={() => setQuickViewProduct(p)}
                    >
-                     <div className="relative aspect-[4/5] rounded-[3.5rem] overflow-hidden bg-ojo-cream mb-10 group-hover:shadow-deep transition-all duration-700">
+                     <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden bg-ojo-cream mb-8 border border-ojo-stone/5">
                        <div className="absolute inset-0 bg-ojo-charcoal/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10" />
-                       <img src={images[0]} className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" alt="" referrerPolicy="no-referrer" />
+                       <img src={images[0]} className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-[1.5s]" alt="" referrerPolicy="no-referrer" />
                        
-                       <div className="absolute top-10 left-10 z-20 flex flex-col gap-3">
-                          <div className="ojo-badge !bg-white/90 backdrop-blur-3xl shadow-premium !px-6 !py-3">
-                             <ShieldCheck size={14} className="inline mr-3 text-ojo-mustard" />
-                             <span className="text-[10px] font-bold tracking-widest">{p.origin}</span>
+                       <div className="absolute top-8 left-8 z-20 flex flex-col gap-3">
+                          <div className="ojo-badge !bg-white/95 backdrop-blur-3xl shadow-premium !px-5 !py-3 border-ojo-mustard/10">
+                             <ShieldCheck size={12} className="inline mr-2 text-ojo-mustard" />
+                             <span className="text-[9px] font-bold tracking-widest">{p.origin}</span>
                           </div>
                           {idx % 5 === 0 && (
-                            <div className="ojo-badge !bg-ojo-mustard text-white shadow-xl !px-6">
-                              <Zap size={12} className="inline mr-2" /> AUDIT PICK
+                            <div className="ojo-badge !bg-ojo-mustard text-white shadow-xl !px-5">
+                              <Award size={10} className="inline mr-2" /> AUDIT PICK
                             </div>
                           )}
                        </div>
                        
-                       <div className="absolute bottom-10 right-10 z-20 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                          <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-ojo-charcoal shadow-deep">
-                             <TrendingUp size={24} />
+                       <div className="absolute bottom-8 right-8 z-20 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-700">
+                          <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center text-ojo-charcoal shadow-deep border border-ojo-stone/10">
+                             <ChevronRight size={20} />
                           </div>
                        </div>
                      </div>
 
-                     <div className="space-y-6 px-6 relative z-10">
+                     <div className="space-y-4 px-4 relative z-10">
                         <div className="space-y-3">
                            <div className="flex justify-between items-baseline">
                               <h3 className="text-3xl font-serif text-ojo-charcoal italic tracking-tight">{p.name}</h3>
