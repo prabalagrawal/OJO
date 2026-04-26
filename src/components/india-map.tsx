@@ -237,111 +237,105 @@ export function StateDrawer({ state, isOpen, onClose, products }: { state: any |
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-ojo-charcoal/60 backdrop-blur-md z-[150]"
+            className="fixed inset-0 bg-ojo-charcoal/80 backdrop-blur-xl z-[150]"
           />
           <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed top-0 right-0 h-full w-full max-w-4xl bg-white shadow-deep z-[160] overflow-y-auto selection:bg-ojo-mustard selection:text-white"
+            initial={{ x: '100%', opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: '100%', opacity: 0 }}
+            transition={{ type: 'spring', damping: 35, stiffness: 200 }}
+            className="fixed top-0 right-0 h-full w-full max-w-5xl bg-ojo-cream shadow-deep z-[160] overflow-y-auto selection:bg-ojo-mustard selection:text-white"
           >
-            <div className="relative h-[40vh] md:h-1/2">
-               <img src={state.img || "https://images.unsplash.com/photo-1599661046289-e31897846e41?q=80&w=2670&auto=format&fit=crop"} className="w-full h-full object-cover" alt="" />
-               <div className="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent" />
+            <div className="relative h-[50vh] overflow-hidden">
+               <img 
+                 src={state.img || "https://images.unsplash.com/photo-1599661046289-e31897846e41?q=80&w=2670&auto=format&fit=crop"} 
+                 className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-1000" 
+                 alt={state.name} 
+                 referrerPolicy="no-referrer"
+               />
+               <div className="absolute inset-0 bg-gradient-to-t from-ojo-cream via-transparent to-ojo-charcoal/20" />
+               
                <button 
                  onClick={onClose}
-                 className="absolute top-10 right-10 w-16 h-16 rounded-full bg-white/20 backdrop-blur-3xl flex items-center justify-center shadow-2xl border border-white/20 hover:bg-white transition-all group"
+                 className="absolute top-12 right-12 w-16 h-16 rounded-full bg-white/10 backdrop-blur-3xl flex items-center justify-center border border-white/20 hover:bg-ojo-mustard hover:text-ojo-charcoal transition-all group z-20 shadow-premium"
                >
-                 <X size={28} className="text-ojo-charcoal group-hover:rotate-90 transition-transform duration-500" />
+                 <X size={28} className="group-hover:rotate-90 transition-transform duration-500" />
                </button>
                
-               <div className="absolute bottom-12 left-12">
-                  <div className="ojo-badge ojo-badge-verified !px-8">GI certified Cluster</div>
+               <div className="absolute bottom-12 left-12 space-y-4">
+                  <div className="ojo-badge !bg-ojo-mustard !text-ojo-charcoal !border-none px-8 font-black uppercase tracking-[0.4em]">Node Verified</div>
+                  <h2 className="text-7xl md:text-[120px] font-serif italic text-ojo-charcoal tracking-tighter leading-none select-none">{state.name}</h2>
                </div>
             </div>
 
-            <div className="p-12 md:p-24 -mt-24 relative z-10 space-y-16">
-               <div className="grid md:grid-cols-3 gap-16 items-start">
-                  <div className="md:col-span-2 space-y-10">
-                    <div className="space-y-6">
-                      <div className="flex items-center gap-4">
-                        <div className="ojo-label bg-ojo-mustard text-white">Registry ID: {state.id}</div>
-                        <div className="h-px w-20 bg-ojo-mustard/20" />
-                      </div>
-                      <h2 className="text-7xl md:text-8xl font-serif italic text-ojo-charcoal tracking-tighter leading-none">{state.name}</h2>
-                    </div>
-                    <p className="text-2xl text-ojo-charcoal/60 leading-relaxed font-light italic">
-                      {state.description || "A regional cluster preserving centuries of artisanal command through strictly verified hand-crafted techniques."}
-                    </p>
+            <div className="p-12 md:p-24 space-y-32">
+               <div className="grid md:grid-cols-12 gap-24">
+                  <div className="md:col-span-8 space-y-12">
+                     <div className="flex items-center gap-6">
+                        <div className="h-[1px] w-24 bg-ojo-mustard" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.8em] text-ojo-charcoal/40">Geographic Dossier</span>
+                     </div>
+                     <p className="text-3xl md:text-5xl text-ojo-charcoal leading-[1.1] font-light italic tracking-tight">
+                        {state.description || "A regional cluster preserving centuries of artisanal command through strictly verified hand-crafted techniques."}
+                     </p>
                   </div>
                   
-                  <div className="space-y-8 p-10 bg-ojo-cream rounded-[3rem] border border-ojo-mustard/10 relative overflow-hidden">
-                     <MotifSystem type={state.pattern || 'jaali'} opacity={0.05} scale={1.2} />
-                     <div className="relative z-10">
-                        <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-ojo-mustard mb-6 flex items-center gap-3">
-                           <ShieldCheck size={16} /> Heritage Audit
-                        </h4>
-                        <div className="space-y-6">
-                           <p className="text-xs font-bold text-ojo-charcoal uppercase tracking-widest leading-relaxed">Most Popular Techniques:</p>
-                           <ul className="space-y-4">
-                              {(state.famous || []).map((f: string) => (
-                                <li key={f} className="flex items-center gap-4 text-sm text-ojo-charcoal/70">
-                                  <div className="w-1.5 h-1.5 rounded-full bg-ojo-mustard" />
-                                  <span className="font-medium italic">{f}</span>
-                                </li>
-                              ))}
-                           </ul>
-                        </div>
-                     </div>
+                  <div className="md:col-span-4 space-y-10 p-10 bg-white rounded-[3rem] border border-ojo-charcoal/5 shadow-premium">
+                     <h4 className="text-[11px] font-black uppercase tracking-[0.5em] text-ojo-mustard border-b border-ojo-mustard/10 pb-4">Specialties</h4>
+                     <ul className="space-y-6">
+                        {(state.famous || []).map((f: string) => (
+                          <li key={f} className="flex items-center gap-4 text-xl text-ojo-charcoal italic font-light">
+                            <div className="w-2 h-2 rounded-full bg-ojo-mustard shadow-[0_0_10px_rgba(176,126,30,0.5)]" />
+                            {f}
+                          </li>
+                        ))}
+                     </ul>
                   </div>
                </div>
 
-               <div className="space-y-12 pb-20">
-                  <div className="flex items-center justify-between border-b border-ojo-stone/10 pb-8">
-                    <h3 className="text-4xl font-serif italic text-ojo-charcoal">Verified Provenance Catalog</h3>
-                    <div className="flex items-center gap-3">
-                       <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40">Showing top results from Node {state.id}</span>
-                       <Info size={14} className="text-ojo-mustard" />
-                    </div>
+               <div className="space-y-20">
+                  <div className="flex items-baseline justify-between border-b border-ojo-charcoal/10 pb-12">
+                     <h3 className="text-5xl font-serif italic text-ojo-charcoal tracking-tighter">Verified Records</h3>
+                     <button onClick={() => navigate(`/category?origin=${state.id}`)} className="text-[11px] font-black uppercase tracking-widest text-ojo-mustard hover:text-ojo-charcoal transition-colors">Access Registry</button>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
                     {products.length === 0 ? (
                        <div className="py-20 text-center col-span-2 italic text-ojo-charcoal/30">No products found for this region in the registry.</div>
                     ) : (
-                      products.map((p, idx) => (
-                        <div 
+                      products.map((p) => (
+                        <motion.div 
                           key={p.id} 
-                          className="ojo-card-product flex gap-8 group cursor-pointer hover:ojo-texture-heritage border border-ojo-stone/5 p-6 rounded-[2.5rem] bg-ojo-cream/20"
+                          whileHover={{ y: -10 }}
+                          className="group cursor-pointer space-y-8"
                           onClick={() => navigate(`/product/${p.id}`)}
                         >
-                          <div className="w-32 h-40 bg-white rounded-2xl overflow-hidden shadow-premium group-hover:shadow-deep transition-all shrink-0">
+                          <div className="aspect-square bg-white rounded-[3rem] overflow-hidden shadow-premium group-hover:shadow-deep transition-all duration-700">
                              <img 
                               src={JSON.parse(p.images || "[]")[0]} 
-                              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" 
-                              alt="" 
+                              className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-1000" 
+                              alt={p.name} 
                              />
                           </div>
-                          <div className="flex flex-col justify-center gap-2">
-                             <div className="ojo-badge ojo-badge-verified !text-[8px] !px-3">GI Certified</div>
-                             <h4 className="text-xl font-serif italic text-ojo-charcoal line-clamp-1">{p.name}</h4>
-                             <p className="text-lg font-mono text-ojo-mustard font-bold italic">₹{p.price.toLocaleString()}</p>
+                          <div className="px-4 space-y-2">
+                             <h4 className="text-3xl font-serif italic text-ojo-charcoal group-hover:text-ojo-mustard transition-colors leading-tight">{p.name}</h4>
+                             <p className="text-2xl font-mono text-ojo-mustard font-black italic">₹{p.price.toLocaleString()}</p>
                           </div>
-                        </div>
+                        </motion.div>
                       ))
                     )}
                   </div>
+               </div>
 
+               <div className="pt-20">
                   <button 
                     onClick={() => navigate(`/category?origin=${state.id}`)}
-                    className="ojo-btn-primary w-full py-10 !text-[12px] group relative overflow-hidden"
+                    className="ojo-btn-primary w-full py-12 !text-[14px] !bg-ojo-charcoal !text-white group hover:!bg-ojo-mustard hover:!text-ojo-charcoal transition-all"
                   >
-                     <span className="relative z-10 flex items-center justify-center gap-4">
-                        Audit Complete {state.id} Collection
-                        <ArrowRight size={18} className="translate-all group-hover:translate-x-4" />
+                     <span className="flex items-center justify-center gap-6">
+                        Explore All Records from {state.name}
+                        <ArrowRight size={24} className="group-hover:translate-x-6 transition-transform" />
                      </span>
-                     <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[1.5s]" />
                   </button>
                </div>
             </div>

@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 
-export function OjoLogo({ size = "md", dark = false }: { size?: "sm" | "md" | "lg", dark?: boolean }) {
+export function OjoLogo({ size = "md", dark = false, className = "" }: { size?: "sm" | "md" | "lg", dark?: boolean, className?: string }) {
   const heights = {
     sm: 28,
     md: 44,
@@ -13,7 +13,7 @@ export function OjoLogo({ size = "md", dark = false }: { size?: "sm" | "md" | "l
   const gold = "#E6A519"; // Vibrant golden-yellow for the leaves
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className={`flex flex-col items-center justify-center ${className}`}>
       {/* Logo Mark - Precise recreation of the uploaded design */}
       <svg 
         height={h} 
