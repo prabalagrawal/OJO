@@ -13,94 +13,55 @@ export function OjoLogo({ size = "md", dark = false, className = "" }: { size?: 
   const gold = "#E6A519"; // Vibrant golden-yellow for the leaves
 
   return (
-    <div className={`flex flex-col items-center justify-center ${className}`}>
-      {/* Logo Mark - Precise recreation of the uploaded design */}
-      <svg 
-        height={h} 
-        viewBox="0 0 500 250" 
-        fill="none" 
-        xmlns="http://www.w3.org/2000/svg"
-        className="overflow-visible"
-      >
-        {/* Tilak Ornament - strictly above the J */}
-        <g transform="translate(250, 65)">
-          {/* Three golden leaves */}
-          <motion.path 
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-            d="M0 -22 C-7 -35 -7 -55 0 -68 C7 -55 7 -35 0 -22 Z" 
-            fill={gold} 
-          />
-          <motion.path 
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
-            d="M-12 -15 C-25 -20 -45 -22 -58 -18 C-45 -10 -25 -8 -12 -15 Z" 
-            fill={gold} 
-            transform="rotate(-25, -12, -15)"
-          />
-          <motion.path 
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4 }}
-            d="M12 -15 C25 -20 45 -22 58 -18 C45 -10 25 -8 12 -15 Z" 
-            fill={gold} 
-            transform="rotate(25, 12, -15)"
-          />
-          {/* Red Bindu */}
-          <circle cx="0" cy="0" r="14" fill={red} />
-        </g>
+    <div className={`flex flex-col ${className}`}>
+      {/* Brand Identity: Symbol + Typography */}
+      <div className="flex flex-col items-start gap-1">
+        {/* Tilak/Bindi Symbol */}
+        <div className="flex flex-col items-center ml-[2.4em]">
+          <div className="flex gap-0.5 justify-center">
+            <div className="w-[0.25em] h-[0.6em] bg-ojo-mustard rounded-full translate-y-[0.1em]" />
+            <div className="w-[0.3em] h-[0.8em] bg-ojo-mustard rounded-full" />
+            <div className="w-[0.25em] h-[0.6em] bg-ojo-mustard rounded-full translate-y-[0.1em]" />
+          </div>
+          <div className="w-[0.5em] h-[0.5em] bg-ojo-terracotta rounded-full -mt-[0.2em]" />
+        </div>
 
-        {/* Eye Left (O) */}
-        <g transform="translate(145, 145)">
-          <circle cx="0" cy="0" r="82" stroke={charcoal} strokeWidth="32" />
-          {/* Pupil */}
-          <circle cx="0" cy="0" r="42" fill={charcoal} />
-          {/* Reflection */}
-          <circle cx="12" cy="-12" r="9" fill="white" />
-          {/* Inner Red ring - visible in some versions but keeping it subtle or matching original */}
-          <circle cx="0" cy="0" r="66" stroke={red} strokeWidth="2" opacity="0.4" />
-        </g>
+        {/* Eye-based Typography */}
+        <div className="flex items-center -mt-[0.2em]">
+          {/* Eye O */}
+          <div className="relative flex items-center justify-center">
+            <div className="w-[1.8em] h-[1.8em] rounded-full border-[0.35em] border-ojo-charcoal" />
+            <div className="absolute w-[0.8em] h-[0.8em] bg-ojo-charcoal rounded-full" />
+            <div className="absolute top-[0.4em] right-[0.4em] w-[0.2em] h-[0.2em] bg-white rounded-full" />
+          </div>
 
-        {/* The 'j' character */}
-        <g transform="translate(250, 145)">
-          <path 
-            d="M-5 -45 L-5 45 C-5 75 -25 95 -60 95" 
-            stroke={charcoal} 
-            strokeWidth="32" 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            fill="none"
-          />
-        </g>
+          {/* Stylized J */}
+          <div className="w-[1.2em] h-[2.2em] -mx-[0.1em] relative overflow-hidden -mt-[1.2em]">
+             <div className="absolute top-0 right-0 w-[0.35em] h-[2.2em] bg-ojo-charcoal rounded-full" />
+             <div className="absolute bottom-0 right-0 w-[1.2em] h-[0.8em] border-b-[0.35em] border-l-[0.35em] border-ojo-charcoal rounded-bl-full" />
+          </div>
 
-        {/* Eye Right (O) */}
-        <g transform="translate(355, 145)">
-          <circle cx="0" cy="0" r="82" stroke={charcoal} strokeWidth="32" />
-          {/* Pupil */}
-          <circle cx="0" cy="0" r="42" fill={charcoal} />
-          {/* Reflection */}
-          <circle cx="12" cy="-12" r="9" fill="white" />
-          {/* Inner Red ring */}
-          <circle cx="0" cy="0" r="66" stroke={red} strokeWidth="2" opacity="0.4" />
-        </g>
-      </svg>
+          {/* Eye O */}
+          <div className="relative flex items-center justify-center">
+            <div className="w-[1.8em] h-[1.8em] rounded-full border-[0.35em] border-ojo-charcoal" />
+            <div className="absolute w-[0.8em] h-[0.8em] bg-ojo-charcoal rounded-full" />
+            <div className="absolute top-[0.4em] right-[0.4em] w-[0.2em] h-[0.2em] bg-white rounded-full" />
+          </div>
+        </div>
+      </div>
 
-      {/* Brand Ethos */}
+      {/* Brand Subtext */}
       {size !== "sm" && (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-4 flex items-center gap-4 font-sans font-black tracking-[0.3em] uppercase text-ojo-stone/40"
-          style={{ fontSize: h * 0.2 }}
+        <div 
+          className="mt-1 flex items-center gap-2 font-sans font-black tracking-[0.2em] uppercase text-ojo-stone/60"
+          style={{ fontSize: h * 0.16 }}
         >
           <span>See</span>
-          <div className="w-1.5 h-1.5 rounded-full bg-ojo-mustard" />
+          <span className="text-ojo-mustard opacity-50">.</span>
           <span>Verify</span>
-          <div className="w-1.5 h-1.5 rounded-full bg-ojo-mustard" />
-          <span className="text-ojo-mustard">OJO</span>
-        </motion.div>
+          <span className="text-ojo-mustard opacity-50">.</span>
+          <span>Trust</span>
+        </div>
       )}
     </div>
   );

@@ -22,7 +22,15 @@ import {
   Map as MapIcon,
   Home,
   ShoppingBag,
-  User
+  User,
+  BadgeCheck,
+  Diamond,
+  Heart,
+  Mail,
+  Instagram,
+  Facebook,
+  X,
+  Youtube
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { MotifSystem, PatternDivider } from "../components/motifs.tsx";
@@ -39,14 +47,11 @@ export function HomePage() {
   const navigate = useNavigate();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedState, setSelectedState] = useState<any | null>(null);
   const [quickViewProduct, setQuickViewProduct] = useState<any | null>(null);
-  const [recommendedProducts, setRecommendedProducts] = useState<any[]>([]);
   
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: heroRef });
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
 
   const addItem = (product: any) => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -75,11 +80,9 @@ export function HomePage() {
           description: p.short_description,
           images: JSON.stringify([p.image]),
           artisanName: "Master Artisan",
-          decisionTag: DECISION_TAGS[i % DECISION_TAGS.length],
           story: "Each piece is hand-crafted using heritage methods passed down through generations."
         })) as any;
         setProducts(items);
-        setRecommendedProducts([...PRODUCT_DATASET].sort(() => 0.5 - Math.random()).slice(0, 6));
       } catch (err) {
         toast.error("Failed to load cultural archives.");
       } finally {
@@ -89,408 +92,487 @@ export function HomePage() {
     fetchProducts();
   }, []);
 
+  const crafts = [
+    { name: "Banarasi", image: "https://images.unsplash.com/photo-1610116303244-1235689a813a?q=80&w=2670&auto=format&fit=crop" },
+    { name: "Channapatna", image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=2670&auto=format&fit=crop" },
+    { name: "Kalamkari", image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?q=80&w=2670&auto=format&fit=crop" },
+    { name: "Hand Block Print", image: "https://images.unsplash.com/photo-1606294022064-0708f5aae0cb?q=80&w=2670&auto=format&fit=crop" },
+    { name: "Dhokra", image: "https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?q=80&w=2670&auto=format&fit=crop" },
+  ];
+
+  const revealVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-ojo-cream selection:bg-ojo-mustard selection:text-white overflow-x-hidden">
-      {/* 1. HERO: CINEMATIC ENTRY */}
-      <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden bg-ojo-charcoal">
-        {/* Background Layering */}
+    <div className="min-h-screen bg-ojo-cream overflow-x-hidden">
+      {/* HERO SECTION */}
+      <section ref={heroRef} className="relative h-[85vh] flex items-center overflow-hidden bg-ojo-charcoal">
         <motion.div 
           style={{ scale: heroScale }}
           className="absolute inset-0 z-0"
         >
           <img 
-            src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=2670&auto=format&fit=crop" 
-            alt="Editorial Heritage" 
-            className="w-full h-full object-cover grayscale-[0.5] brightness-[0.7]"
+            src="https://images.unsplash.com/photo-1590736962031-2aa23696022e?q=80&w=2670&auto=format&fit=crop" 
+            alt="Artisan Weaving" 
+            className="w-full h-full object-cover brightness-[0.7] contrast-[1.1] grayscale-[0.2]"
             referrerPolicy="no-referrer"
           />
-          {/* Motif Texture Layer */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 2.5, delay: 0.5 }}
-            className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay"
-          >
-             <MotifSystem type="ajrakh" scale={2} opacity={0.04} />
-          </motion.div>
-          {/* cinematic overlays */}
-          <div className="absolute inset-0 z-20 bg-ojo-charcoal/40" />
-          <div className="absolute inset-0 z-30 bg-gradient-to-t from-ojo-charcoal via-ojo-charcoal/20 to-ojo-charcoal/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-ojo-charcoal/80 via-ojo-charcoal/40 to-transparent" />
         </motion.div>
 
-        <div className="relative z-40 text-center space-y-8 md:space-y-10 px-6 max-w-6xl w-full">
+        <div className="relative z-10 max-w-[1440px] mx-auto px-6 w-full">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
-            style={{ opacity: heroOpacity }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="max-w-2xl space-y-6 md:space-y-8"
           >
-            <OjoLogo size="lg" className="mx-auto mb-8 md:mb-10 scale-75 md:scale-100 opacity-90 brightness-[5] filter" />
-            <h1 className="text-4xl md:text-[84px] font-serif text-white leading-[1.1] md:leading-[0.95] tracking-tighter italic">
-              India’s Authentic <br className="hidden md:block" />
-              Products. Verified.
-            </h1>
-            <p className="mt-6 md:mt-10 text-base md:text-2xl text-white/70 max-w-2xl mx-auto font-light italic leading-relaxed">
-              Discover India’s authentic products by origin.
-            </p>
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 1 }}
-              className="mt-8 md:mt-10 flex items-center justify-center gap-4 md:gap-6 text-white/40"
-            >
-               <div className="h-px w-8 md:w-12 bg-white/20" />
-               <div className="flex items-center gap-2 md:gap-3">
-                  <ShieldCheck size={16} className="text-ojo-mustard" />
-                  <span className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-center">Verified at source</span>
-               </div>
-               <div className="h-px w-8 md:w-12 bg-white/20" />
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 1 }}
-            className="pt-8 md:pt-12 w-full"
-          >
+            <div className="space-y-4">
+              <h1 className="text-5xl md:text-8xl font-serif text-white leading-[1.05] font-semibold tracking-tight">
+                India’s <br /> 
+                Authentic Products. <br />
+                <span className="text-ojo-mustard italic">Verified.</span>
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 font-serif italic border-l-2 border-ojo-mustard pl-6">
+                Discover India’s authentic products by origin.
+              </p>
+              <p className="text-sm md:text-base text-white/70 max-w-lg leading-relaxed">
+                OJO connects you to India’s authentic heritage through verified products.
+              </p>
+            </div>
+            
             <button 
-              onClick={() => document.getElementById('explorer')?.scrollIntoView({ behavior: 'smooth' })}
-              className="ojo-btn-primary w-full md:w-auto !px-8 md:!px-24 !py-5 md:!py-8 !bg-white !text-ojo-charcoal hover:!bg-ojo-mustard group transition-all duration-500 shadow-2xl relative overflow-hidden text-sm md:text-base font-black tracking-widest"
+              onClick={() => navigate("/category")}
+              className="ojo-btn-primary !rounded-md !px-12 !py-4 hover:!bg-ojo-white hover:!text-ojo-charcoal group shadow-2xl"
             >
-              <span className="relative z-10 flex items-center justify-center gap-3">
-                 Explore India ↓
-              </span>
+              Explore Collection
+              <ArrowRight size={20} className="ml-3 group-hover:translate-x-1 transition-transform" />
             </button>
           </motion.div>
         </div>
-
-        <div className="absolute bottom-12 left-12 flex items-center gap-4 opacity-40">
-          <div className="w-12 h-[1px] bg-white" />
-          <span className="text-[9px] font-black uppercase tracking-[1em] text-white">Sovereign Protocol 2026</span>
-        </div>
       </section>
 
-      {/* 2. INDIA EXPLORER: MOBILE-OPTIMIZED */}
-      <section id="explorer" className="min-h-screen py-16 md:py-20 flex flex-col justify-center bg-ojo-cream relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.02] pointer-events-none">
-           <MotifSystem type="jaali" scale={4} opacity={1} />
-        </div>
-        <div className="w-full px-6 md:px-0 space-y-10 md:space-y-12 relative z-10">
-          <div className="text-center space-y-4">
-             <span className="ojo-badge ojo-badge-verified !text-[8px] md:!text-[10px]">SIGNATURE EXPERIENCE</span>
-             <h3 className="text-4xl md:text-7xl font-serif italic text-ojo-charcoal tracking-tighter leading-none">Discover by Origin.</h3>
-             <p className="text-ojo-charcoal/40 font-light italic text-base md:text-lg max-w-xl mx-auto">Select a state to audit its verified cultural records.</p>
-          </div>
-          
-          {/* Mobile State List - Refined Card List */}
-          <div className="md:hidden space-y-6">
-             <div className="flex flex-col gap-3">
-                {["Rajasthan", "Gujarat", "Kashmir", "Bengal", "Kerala", "Assam"].map((stateName) => (
-                  <motion.button 
-                    key={stateName}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => setSelectedState({ id: stateName.toLowerCase(), name: stateName })}
-                    className="flex items-center justify-between p-6 bg-white border border-ojo-stone/10 rounded-2xl active:bg-ojo-cream transition-colors group"
-                  >
-                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-ojo-cream rounded-full flex items-center justify-center text-ojo-mustard">
-                           <MapPin size={18} />
-                        </div>
-                        <span className="text-base font-serif italic text-ojo-charcoal">{stateName}</span>
-                     </div>
-                     <ChevronRight size={16} className="text-ojo-stone/30 group-hover:text-ojo-mustard transition-colors" />
-                  </motion.button>
-                ))}
-             </div>
-          </div>
-
-          <div className="relative w-full max-w-[1920px] mx-auto hidden md:block">
-            <IndiaExplorer onStateClick={(state) => setSelectedState(state)} />
-          </div>
-        </div>
-      </section>
-
-      <PatternDivider type="warli" />
-
-      {/* 3. FEATURED CULTURAL STORY: MOBILE-FIRST */}
-      <section className="relative min-h-[70vh] md:h-[80vh] flex items-center overflow-hidden bg-ojo-charcoal">
-         <div className="absolute inset-0 opacity-20 group">
-            <img 
-              src="https://images.unsplash.com/photo-1599661046289-e31897846e41?q=80&w=2670&auto=format&fit=crop" 
-              className="w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110" 
-              alt="Artisan Story"
-              referrerPolicy="no-referrer"
-            />
-            <div className="absolute inset-0 bg-ojo-charcoal/60" />
-         </div>
-         
-         <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
-            <MotifSystem type="jaali" scale={2} />
-         </div>
-
-         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-8 w-full">
-            <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="max-w-2xl space-y-8 md:space-y-12"
-            >
-               <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-ojo-mustard">The Sovereign Narrative</span>
-               <h2 className="text-5xl md:text-8xl font-serif italic text-white leading-none tracking-tighter">
-                  From the deserts <br className="hidden md:block" />
-                  of Rajasthan...
-               </h2>
-               <p className="text-lg md:text-2xl text-white/60 font-light italic leading-snug line-clamp-3 md:line-clamp-none">
-                  "Every artifact is a travelogue of technique. We trace the lineage from the shifting sands to the high mountain looms."
-               </p>
-               <button onClick={() => navigate("/category")} className="ojo-btn-primary w-full md:w-auto !px-12 md:!px-16 !py-5 md:!py-6 !bg-white !text-ojo-charcoal hover:!bg-ojo-mustard font-black tracking-widest text-xs">Explore Collection</button>
-            </motion.div>
-         </div>
-      </section>
-
-      <PatternDivider type="ajrakh" />
-
-      {/* 4. PRODUCT DISCOVERY: ASYMMETRICAL CURATION */}
-      <section className="py-60 px-6 md:px-20 bg-ojo-cream relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
-           <MotifSystem type="jaali" scale={1.5} />
-        </div>
-        <div className="max-w-[1800px] mx-auto space-y-40 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-16 border-b border-ojo-charcoal/10 pb-20">
-            <div className="space-y-8">
-              <span className="ojo-badge ojo-badge-verified !border-ojo-mustard/30">Curation Registry</span>
-              <h2 className="text-6xl md:text-8xl font-serif text-ojo-charcoal tracking-tighter leading-none italic">Verified Artifacts.</h2>
+      {/* NEW ARRIVALS */}
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={revealVariants}
+        className="py-20 md:py-32"
+      >
+        <div className="max-w-[1440px] mx-auto px-6 space-y-12">
+          <div className="flex items-end justify-between">
+            <div className="space-y-2">
+              <span className="text-[12px] font-semibold text-ojo-mustard uppercase tracking-widest">Fresh Acquisitions</span>
+              <h2 className="text-3xl md:text-5xl font-serif">New Arrivals</h2>
             </div>
-            <p className="max-w-md text-xl text-ojo-charcoal/60 italic font-light leading-relaxed">
-              Objects prioritized by rarity and cluster-purity. Selection based on the Autumn 2026 Sovereign Audit.
-            </p>
+            <button onClick={() => navigate("/category")} className="text-sm font-medium border-b border-ojo-charcoal text-ojo-charcoal pb-1 hover:text-ojo-mustard hover:border-ojo-mustard transition-all">
+              View All
+            </button>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-12 gap-3 md:gap-24">
-             {/* Large Feature Card - Takes full width on mobile, 8 cols on desktop */}
-             {products.length > 0 && (
-               <motion.div 
-                 initial={{ opacity: 0, scale: 0.95 }}
-                 whileInView={{ opacity: 1, scale: 1 }}
-                 viewport={{ once: true }}
-                 onClick={() => setQuickViewProduct(products[0])}
-                 className="col-span-2 md:col-span-8 group cursor-pointer relative aspect-[14/10] overflow-hidden rounded-2xl md:rounded-[4rem] shadow-premium hover:shadow-deep transition-all duration-1000 border border-ojo-charcoal/5"
-               >
-                  <img 
-                    src={JSON.parse(products[0].images)[0]} 
-                    className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-105" 
-                    alt={products[0].name} 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ojo-charcoal via-ojo-charcoal/40 to-transparent" />
-                  <div className="absolute bottom-4 md:bottom-12 left-4 md:left-12 right-4 md:right-12 space-y-2 md:space-y-6">
-                     <div className="ojo-badge !bg-ojo-mustard !text-ojo-charcoal !border-none text-[7px] md:text-[10px]">MASTERPIECE ARCHIVE</div>
-                     <h3 className="text-xl md:text-7xl font-serif text-white italic leading-tight">{products[0].name}</h3>
-                     <div className="flex justify-between items-end gap-4">
-                        <div className="space-y-1 md:space-y-4">
-                           <p className="text-[10px] md:text-xl text-white/50 italic font-light max-w-lg line-clamp-1 md:line-clamp-none">{products[0].short_description}</p>
-                           <div className="flex gap-1 md:gap-3">
-                              <span className="ojo-badge !border-white/20 !text-white text-[7px] md:text-[9px]">Verified {products[0].origin}</span>
-                           </div>
-                        </div>
-                        <div className="text-lg md:text-4xl font-mono text-ojo-mustard italic font-black">₹{products[0].price.toLocaleString()}</div>
-                     </div>
-                  </div>
-               </motion.div>
-             )}
-
-             {/* Smaller Cards - 2 column grid on mobile */}
-             {products.slice(1, 7).map((p, i) => (
-                <motion.div 
-                  key={p.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  onClick={() => setQuickViewProduct(p)}
-                  className="col-span-1 md:col-span-4 space-y-3 md:space-y-8 group cursor-pointer"
+          <div className="flex gap-6 overflow-x-auto pb-10 scrollbar-hide snap-x">
+             {products.slice(0, 6).map((product) => (
+                <div 
+                  key={product.id} 
+                  className="min-w-[280px] md:min-w-[340px] snap-start group cursor-pointer"
+                  onClick={() => setQuickViewProduct(product)}
                 >
-                   <div className="aspect-square relative overflow-hidden rounded-xl md:rounded-[3rem] shadow-sm md:shadow-premium group-hover:shadow-deep transition-all duration-700 border border-ojo-charcoal/5">
+                   <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-ojo-cream mb-4">
                       <img 
-                        src={JSON.parse(p.images)[0]} 
-                        className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" 
-                        alt={p.name}
+                        src={JSON.parse(product.images)[0]} 
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                        alt={product.name} 
                       />
-                      <div className="absolute top-2 md:top-4 left-2 md:left-4 flex flex-col gap-1 md:gap-2 scale-75 origin-top-left md:scale-100">
-                         <div className="ojo-badge !bg-ojo-mustard !text-ojo-charcoal !border-none text-[6px] md:text-[8px] font-black tracking-widest shadow-lg uppercase">{p.decisionTag || 'PREMIUM'}</div>
+                      <div className="absolute top-4 left-4">
+                         <span className="ojo-badge ojo-badge-new">NEW</span>
                       </div>
                    </div>
-                   <div className="space-y-1 md:space-y-3 px-1 md:px-4">
-                      <div className="flex flex-col md:flex-row justify-between items-start md:items-baseline gap-1">
-                         <h4 className="text-sm md:text-3xl font-serif italic text-ojo-charcoal group-hover:text-ojo-mustard transition-colors leading-tight truncate w-full">{p.name}</h4>
-                         <span className="text-xs md:text-xl font-mono text-ojo-mustard font-bold">₹{p.price.toLocaleString()}</span>
+                   <div className="space-y-2 px-2">
+                      <div className="flex justify-between items-start gap-4">
+                         <h3 className="text-lg font-medium text-ojo-charcoal group-hover:text-ojo-mustard transition-colors truncate">{product.name}</h3>
+                         <span className="font-mono text-ojo-charcoal">₹{product.price.toLocaleString()}</span>
                       </div>
-                      <div className="flex items-center gap-1.5 md:gap-2">
-                         <span className="text-[7px] md:text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/30 truncate">{p.origin}</span>
-                         <ShieldCheck size={8} className="text-ojo-mustard md:w-[10px] md:h-[10px]" />
+                      <div className="flex items-center gap-2">
+                         <p className="text-sm text-ojo-charcoal/50 font-medium uppercase tracking-wider">{product.origin}</p>
+                         <ShieldCheck size={12} className="text-ojo-mustard" />
                       </div>
                    </div>
-                </motion.div>
+                </div>
              ))}
           </div>
+        </div>
+      </motion.section>
 
-          <div className="text-center pt-20">
-             <button onClick={() => navigate("/category")} className="ojo-btn-outline !px-24 !py-10 group border-ojo-charcoal/20 hover:border-ojo-mustard">
-                Access Complete Registry <ArrowRight size={18} className="ml-4 transition-transform group-hover:translate-x-4" />
+      {/* SHOP BY CRAFT */}
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={revealVariants}
+        className="py-20 md:py-32 bg-ojo-white border-y border-ojo-stone/10"
+      >
+        <div className="max-w-[1440px] mx-auto px-6 space-y-12">
+          <div className="text-center space-y-4">
+             <h2 className="text-4xl md:text-5xl font-serif text-ojo-charcoal">Shop by Craft</h2>
+             <span className="text-[10px] md:text-[12px] font-medium tracking-[0.3em] uppercase text-ojo-mustard block">
+               Explore India's rich heritage through its timeless crafts.
+             </span>
+             <div className="flex items-center justify-center gap-2">
+               <div className="h-px w-8 bg-ojo-mustard/20" />
+               <span className="text-[10px] text-ojo-mustard">◈</span>
+               <div className="h-px w-8 bg-ojo-mustard/20" />
+             </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+             {crafts.map((craft) => (
+               <div 
+                key={craft.name}
+                onClick={() => navigate(`/category?craft=${craft.name}`)}
+                className="group cursor-pointer bg-ojo-cream/40 p-1.5 rounded-2xl transition-all duration-500 hover:bg-white hover:shadow-premium border border-transparent hover:border-ojo-stone/20"
+               >
+                  <div className="aspect-square overflow-hidden rounded-xl bg-ojo-stone/10 relative">
+                     <img 
+                       src={craft.image} 
+                       className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                       alt={craft.name} 
+                     />
+                     <div className="absolute inset-0 bg-ojo-charcoal/5 group-hover:bg-transparent transition-colors" />
+                  </div>
+                  <div className="mt-4 flex items-center justify-between px-2 pb-1.5">
+                    <div className="space-y-0.5">
+                      <h4 className="font-serif text-lg font-medium text-ojo-charcoal group-hover:text-ojo-mustard transition-colors leading-none">{craft.name}</h4>
+                      <p className="text-[9px] uppercase tracking-widest text-ojo-charcoal/40 font-bold">Handcrafted</p>
+                    </div>
+                    <div className="w-6 h-6 rounded-full bg-ojo-mustard/10 flex items-center justify-center text-ojo-mustard group-hover:bg-ojo-mustard group-hover:text-white transition-all transform group-hover:rotate-[-45deg]">
+                      <ArrowRight size={12} />
+                    </div>
+                  </div>
+               </div>
+             ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* NEW ARRIVALS (SECONDARY) */}
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={revealVariants}
+        className="py-20 md:py-32 bg-ojo-cream/30"
+      >
+        <div className="max-w-[1440px] mx-auto px-6 space-y-12">
+          <div className="flex justify-between items-end">
+             <div className="space-y-4">
+                <h2 className="text-3xl md:text-5xl font-serif text-ojo-charcoal">New Arrivals</h2>
+                <div className="flex items-center gap-2">
+                  <div className="h-[2px] w-12 bg-ojo-mustard" />
+                  <span className="text-ojo-mustard">◈</span>
+                </div>
+             </div>
+             <button onClick={() => navigate("/category")} className="text-[11px] font-bold uppercase tracking-[0.2em] text-ojo-charcoal/40 hover:text-ojo-mustard flex items-center gap-2">
+                View All <ArrowRight size={14} />
              </button>
           </div>
-        </div>
-      </section>
 
-      {/* 5. TRUST: MOBILE-FIRST STACK */}
-      <section className="py-24 md:py-60 bg-ojo-charcoal text-white relative overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-ojo-cream to-transparent opacity-10" />
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-           <MotifSystem type="jaali" scale={3} />
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-6 md:px-8 relative z-10 text-center space-y-20 md:space-y-32">
-            <div className="space-y-8 md:space-y-12">
-               <span className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.5em] md:tracking-[1em] text-ojo-mustard">Identity & Trust Registry</span>
-               <h2 className="text-5xl md:text-[120px] font-serif italic text-white leading-none tracking-tighter">
-                  Verified from <br className="hidden md:block" />
-                  <span className="text-ojo-mustard">Origin.</span>
-               </h2>
-               <p className="max-w-2xl mx-auto text-lg md:text-2xl text-white/70 font-light italic leading-snug">
-                 Every product is sourced directly from its place of origin.
-               </p>
-            </div>
-
-            <div className="flex flex-col md:grid md:grid-cols-3 gap-8 md:gap-16">
-               {[
-                 { title: "GI Tagged", detail: "Government certified geographical indications." },
-                 { title: "Verified Source", detail: "Direct cluster audits ensure master-level command." },
-                 { title: "Quality Check", detail: "Rigorous three-tier audit for every artifact." }
-               ].map((item, i) => (
-                 <motion.div 
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    className="flex flex-col items-center space-y-4 md:space-y-8 text-center p-8 md:p-12 bg-white/5 border border-white/10 rounded-3xl"
-                 >
-                    <ShieldCheck size={32} className="text-ojo-mustard mb-2" />
-                    <h4 className="text-2xl md:text-4xl font-serif italic text-ojo-mustard leading-tight">{item.title}</h4>
-                    <p className="text-base md:text-lg text-white/50 font-light italic">{item.detail}</p>
-                 </motion.div>
-               ))}
-            </div>
-
-            <div className="pt-10">
-               <p className="text-ojo-mustard/40 font-black uppercase tracking-[0.4em] text-[10px]">Trusted by thousands of collectors worldwide</p>
-            </div>
-        </div>
-      </section>
-
-      {/* 6. RECOMMENDATIONS: INTELLIGENT CURATION */}
-      <section className="py-60 md:py-80 bg-ojo-cream overflow-hidden relative">
-        <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
-           <MotifSystem type="jaali" scale={2} />
-        </div>
-        <div className="max-w-[1800px] mx-auto space-y-32 relative z-10">
-          <div className="px-6 md:px-20 flex justify-between items-end border-b border-ojo-charcoal/10 pb-16">
-             <div className="space-y-4">
-                <span className="ojo-badge !bg-ojo-mustard !text-ojo-charcoal !border-none text-[9px]">Sovereign Picks</span>
-                <h3 className="text-5xl md:text-7xl font-serif italic text-ojo-charcoal tracking-tighter leading-none">You may also like</h3>
-             </div>
-             <button onClick={() => navigate("/category")} className="text-[11px] font-black uppercase tracking-[0.5em] text-ojo-charcoal/40 hover:text-ojo-mustard transition-colors hidden md:block">See Complete Context</button>
-          </div>
-          
-          <div className="relative">
-            <div className="flex gap-8 md:gap-20 overflow-x-auto px-6 md:px-20 pb-16 md:pb-20 scrollbar-hide snap-x snap-mandatory">
-               {recommendedProducts.map((p, i) => (
-                  <motion.div 
-                    key={p.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.15, duration: 0.8 }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -20 }}
-                    onClick={() => setQuickViewProduct(p)}
-                    className="min-w-[280px] md:min-w-[500px] space-y-6 md:space-y-10 group cursor-pointer snap-start"
+          <div className="relative group/scroll">
+            <div className="flex gap-8 overflow-x-auto pb-12 scrollbar-hide snap-x snap-mandatory">
+               {products.slice(0, 6).map((product, i) => (
+                  <div 
+                    key={product.id} 
+                    className="min-w-[280px] md:min-w-[320px] snap-start group cursor-pointer"
+                    onClick={() => setQuickViewProduct(product)}
                   >
-                     <div className="aspect-[3/4] relative overflow-hidden rounded-[2.5rem] md:rounded-[4rem] shadow-premium group-hover:shadow-deep transition-all duration-1000 bg-white">
+                     <div className="aspect-[4/5] relative overflow-hidden rounded-xl bg-ojo-white mb-6 border border-ojo-stone/10 shadow-sm transition-all duration-500 group-hover:shadow-premium">
                         <img 
-                          src={p.image} 
-                          className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-[2s] scale-[1.05] group-hover:scale-100" 
-                          alt={p.name}
+                          src={JSON.parse(product.images)[0]} 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                          alt={product.name} 
                         />
-                        <div className="absolute inset-0 bg-ojo-charcoal/5 group-hover:bg-transparent transition-colors duration-1000" />
-                        
-                        {/* Premium Status Tags */}
-                        <div className="absolute top-6 md:top-10 left-6 md:left-10 flex flex-col gap-2 md:gap-3">
-                           <div className="ojo-badge !bg-white/95 !text-ojo-charcoal !border-none text-[7px] md:text-[8px] font-bold tracking-[0.1em] md:tracking-[0.2em] shadow-xl backdrop-blur-sm flex items-center gap-1 md:gap-2 px-3 md:px-4 py-1.5 md:py-2">
-                              <ShieldCheck size={10} className="text-ojo-mustard" /> GI CERTIFIED
-                           </div>
+                        <div className="absolute top-4 left-4">
+                           <span className="bg-ojo-terracotta text-white text-[9px] font-bold px-3 py-1 uppercase tracking-widest rounded-sm">NEW</span>
                         </div>
                      </div>
-                     <div className="px-4 md:px-6 space-y-2 md:space-y-4">
-                        <div className="flex flex-col md:flex-row justify-between items-start md:items-start gap-1 md:gap-4">
-                           <h4 className="text-2xl md:text-4xl font-serif italic text-ojo-charcoal group-hover:text-ojo-mustard transition-colors duration-500 leading-tight">{p.name}</h4>
-                           <span className="text-xl md:text-2xl font-mono text-ojo-mustard font-black">₹{p.price.toLocaleString()}</span>
+                     <div className="space-y-4">
+                        <div className="space-y-1">
+                           <h3 className="text-xl font-serif text-ojo-charcoal group-hover:text-ojo-mustard transition-colors leading-tight">{product.name}</h3>
+                           <p className="text-xs text-ojo-charcoal/40 font-medium uppercase tracking-widest">{product.origin}</p>
                         </div>
-                        <div className="flex items-center gap-3 text-ojo-charcoal/40">
-                           <div className="h-px w-6 md:w-8 bg-ojo-mustard/30" />
-                           <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] italic truncate">{p.origin}</span>
-                        </div>
+                        <div className="text-xl font-mono text-ojo-mustard font-bold">₹{product.price.toLocaleString()}</div>
                      </div>
-                  </motion.div>
+                  </div>
                ))}
                <div className="min-w-[40px] md:min-w-[100px] h-1" />
             </div>
+            {/* Scroll buttons would go here but native scroll is fine for now */}
           </div>
+        </div>
+      </motion.section>
+
+      {/* MOST LOVED PRODUCTS */}
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={revealVariants}
+        className="py-20 md:py-32 bg-ojo-cream"
+      >
+        <div className="max-w-[1440px] mx-auto px-6 space-y-16">
+          <div className="flex justify-between items-end">
+             <div className="space-y-4">
+                <h2 className="text-3xl md:text-5xl font-serif text-ojo-charcoal">Most Loved Products</h2>
+                <div className="flex items-center gap-2">
+                  <div className="h-[2px] w-12 bg-ojo-mustard" />
+                  <span className="text-ojo-mustard">◈</span>
+                </div>
+             </div>
+             <button onClick={() => navigate("/category")} className="text-[11px] font-bold uppercase tracking-[0.2em] text-ojo-charcoal/40 hover:text-ojo-mustard flex items-center gap-2">
+                View All <ArrowRight size={14} />
+             </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16">
+             {products.slice(2, 6).map((product) => (
+                <div 
+                  key={product.id} 
+                  className="group cursor-pointer"
+                  onClick={() => setQuickViewProduct(product)}
+                >
+                   <div className="aspect-[4/5] relative overflow-hidden rounded-xl bg-ojo-white mb-6 border border-ojo-stone/10 transition-all duration-500 group-hover:shadow-premium">
+                      <img 
+                        src={JSON.parse(product.images)[0]} 
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                        alt={product.name} 
+                      />
+                      <div className="absolute top-4 left-4">
+                         <span className="bg-ojo-white/90 backdrop-blur-sm text-ojo-charcoal text-[9px] font-bold px-3 py-1 uppercase tracking-widest rounded-sm shadow-sm border border-ojo-stone/20">BEST SELLER</span>
+                      </div>
+                      <div className="absolute top-4 right-4">
+                        <button className="w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-ojo-charcoal/40 hover:text-ojo-terracotta transition-colors shadow-sm">
+                           <Heart size={16} />
+                        </button>
+                      </div>
+                   </div>
+                   <div className="space-y-4">
+                      <div className="space-y-1">
+                         <h3 className="text-xl font-serif text-ojo-charcoal group-hover:text-ojo-mustard transition-colors leading-tight font-medium">Banarasi Silk Saree</h3>
+                         <p className="text-xs text-ojo-charcoal/40 font-medium tracking-widest uppercase">Varanasi, UP</p>
+                      </div>
+                      <div className="flex justify-between items-center">
+                         <div className="text-xl font-mono text-ojo-mustard font-bold">₹8,499</div>
+                         <div className="flex items-center gap-1.5 ">
+                            <div className="flex gap-0.5 text-ojo-mustard">
+                               {[...Array(5)].map((_, i) => <Star key={i} size={10} fill="currentColor" stroke="none" />)}
+                            </div>
+                            <span className="text-[10px] text-ojo-charcoal/40 font-bold tracking-tighter">(120)</span>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* OJO VERIFIED (CORE SECTION) */}
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={revealVariants}
+        className="py-20 md:py-32 bg-ojo-charcoal text-white relative overflow-hidden"
+      >
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay">
+           <MotifSystem type="jaali" scale={2} />
+        </div>
+        
+        <div className="max-w-[1240px] mx-auto px-6 flex flex-col md:flex-row items-center gap-16 md:gap-24 relative z-10">
+          {/* Large Badge Badge */}
+          <div className="shrink-0">
+             <div className="relative group">
+                {/* Circular glowing effect */}
+                <div className="absolute -inset-8 bg-ojo-mustard/20 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity" />
+                
+                <div className="w-56 h-56 md:w-80 md:h-80 rounded-full border-2 border-ojo-mustard/30 p-2 flex items-center justify-center animate-[spin_60s_linear_infinite]">
+                   <div className="w-full h-full rounded-full border border-dashed border-ojo-mustard/50" />
+                </div>
+
+                <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-48 h-48 md:w-64 md:h-64 rounded-full bg-ojo-mustard flex flex-col items-center justify-center text-center p-6 shadow-[0_0_50px_rgba(176,126,30,0.3)]">
+                       <span className="text-ojo-charcoal font-serif italic text-2xl font-bold leading-none mb-1">ojo</span>
+                       <div className="w-full h-px bg-ojo-charcoal/20 my-2" />
+                       <h4 className="text-ojo-charcoal font-black text-xl md:text-2xl uppercase tracking-[0.2em] leading-tight">Verified</h4>
+                       <p className="text-ojo-charcoal/60 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.3em] mt-2">Authentic & Trusted</p>
+                    </div>
+                </div>
+             </div>
+          </div>
+
+          <div className="flex-1 space-y-12">
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <p className="text-ojo-mustard font-bold uppercase tracking-[0.4em] text-xs">Ojo Verified</p>
+                <h2 className="text-4xl md:text-6xl font-serif leading-[1.1]">Authentic by Origin. <br /> Trusted by OJO.</h2>
+              </div>
+              <p className="text-lg text-white/50 font-light leading-relaxed max-w-xl">
+                Every product goes through a strict verification process to ensure authenticity, quality and fair practices.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-12">
+               {[
+                 { title: "Verified Source", icon: <ShieldCheck size={18} /> },
+                 { title: "Quality Checked", icon: <BadgeCheck size={18} /> },
+                 { title: "Origin Tracked", icon: <MapPin size={18} /> },
+                 { title: "Authentic Always", icon: <Diamond size={18} /> },
+                 { title: "Safe Delivery", icon: <Truck size={18} /> }
+               ].map((point) => (
+                 <div key={point.title} className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 rounded-full border border-ojo-mustard/30 flex items-center justify-center text-ojo-mustard group-hover:bg-ojo-mustard group-hover:text-ojo-charcoal transition-all duration-500">
+                       {point.icon}
+                    </div>
+                    <span className="text-sm font-semibold tracking-wide text-white/80">{point.title}</span>
+                 </div>
+               ))}
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* STORY SECTION */}
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={revealVariants}
+        className="py-20 md:py-32 bg-ojo-white"
+      >
+        <div className="max-w-[1440px] mx-auto grid md:grid-cols-2 items-stretch">
+          <div className="relative h-[400px] md:h-auto overflow-hidden">
+             <img 
+               src="https://images.unsplash.com/photo-1599661046289-e31897846e41?q=80&w=2670&auto=format&fit=crop" 
+               className="w-full h-full object-cover" 
+               alt="Cultural Story"
+               referrerPolicy="no-referrer"
+             />
+             <div className="absolute inset-0 bg-ojo-charcoal/20" />
+          </div>
+          <div className="bg-ojo-cream p-12 md:p-24 flex flex-col justify-center space-y-10 relative">
+             <div className="absolute top-12 right-12 opacity-5 text-ojo-charcoal">
+                <MotifSystem type="kalamkari" scale={2} />
+             </div>
+             
+             <div className="space-y-6">
+                <div className="space-y-2">
+                   <p className="text-ojo-mustard font-bold uppercase tracking-[0.4em] text-[10px]">Our Story</p>
+                   <h2 className="text-4xl md:text-5xl font-serif leading-tight">Inspired by the values <br /> that see everything.</h2>
+                </div>
+                <p className="text-lg text-ojo-charcoal/70 font-light leading-relaxed">
+                   OJO is inspired by the watchful values of India's heritage — a symbol of truth, protection and inclusivity.
+                </p>
+             </div>
+             <button onClick={() => navigate("/about")} className="ojo-btn-outline group self-start border-ojo-charcoal/20 hover:border-ojo-mustard">
+                Know More About OJO <ArrowRight size={18} className="ml-3 group-hover:translate-x-2 transition-transform" />
+             </button>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* EMAIL CAPTURE */}
+      <section className="py-20 md:py-32 bg-ojo-terracotta relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 blur-sm pointer-events-none">
+           <MotifSystem type="jaali" scale={3} />
+        </div>
+
+        <div className="max-w-[1440px] mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center gap-12">
+           <div className="flex-1 flex items-center gap-8 text-white">
+              <div className="w-16 h-16 md:w-24 md:h-24 rounded-full border border-white/20 flex items-center justify-center shrink-0">
+                 <Mail size={32} className="text-white/80" />
+              </div>
+              <div className="space-y-2">
+                 <h2 className="text-2xl md:text-4xl font-serif">Stay connected with the world of <br /> authentic Indian crafts.</h2>
+                 <p className="text-white/60 text-sm md:text-base font-light">New collections, stories & special offers straight to your inbox.</p>
+              </div>
+           </div>
+
+           <form className="w-full md:w-auto flex flex-col md:flex-row gap-4 flex-1 max-w-2xl" onSubmit={(e) => { e.preventDefault(); toast.success("Subscribed to the archive."); }}>
+              <input 
+                type="email" 
+                placeholder="Enter your email" 
+                className="flex-1 bg-ojo-cream/95 text-ojo-charcoal border-none rounded-sm px-8 py-5 text-sm focus:outline-none focus:ring-2 focus:ring-ojo-mustard transition-all"
+                required
+              />
+              <button type="submit" className="ojo-btn-primary !bg-ojo-mustard !text-white !rounded-sm !px-12 hover:!bg-ojo-charcoal transition-colors">Subscribe</button>
+           </form>
         </div>
       </section>
 
-      {/* 7. FOOTER: MOBILE-OPTIMIZED */}
-      <footer className="py-24 md:py-48 bg-ojo-charcoal text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.04] pointer-events-none">
-           <MotifSystem type="kalamkari" scale={2} />
-        </div>
-        <div className="max-w-[1800px] mx-auto px-8 flex flex-col md:grid md:grid-cols-4 gap-16 md:gap-24 relative z-10">
-           <div className="md:col-span-2 space-y-8 md:space-y-12">
-              <OjoLogo size="md" className="scale-75 origin-left md:scale-100" />
-              <p className="text-2xl md:text-3xl text-white/40 font-light italic max-w-md leading-tight">
-                 Establishing the definitive <br className="hidden md:block" />
-                 Indian cultural exchange.
-              </p>
-           </div>
-           
-           <div className="space-y-8 md:space-y-12">
-              <h4 className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.5em] md:tracking-[0.6em] text-ojo-mustard">Registry Nodes</h4>
-              <ul className="space-y-4 md:space-y-6">
-                 {["Artisan Directory", "Origin Logs", "GI Certificates", "Trust Protocol"].map(item => (
-                   <li key={item}><button className="text-2xl md:text-3xl font-serif italic text-white/50 hover:text-white transition-colors">{item}</button></li>
-                 ))}
-              </ul>
-           </div>
+      {/* FOOTER */}
+      <footer className="py-20 md:py-32 bg-ojo-charcoal text-white">
+        <div className="max-w-[1440px] mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-24 pb-20 border-b border-white/10">
+             <div className="space-y-8">
+                <OjoLogo size="sm" dark className="!items-start" />
+                <p className="text-white/40 text-sm leading-relaxed max-w-xs">
+                  OJO brings you the most authentic products from India's heritage, verified with trust.
+                </p>
+                <div className="flex gap-4">
+                   {[Instagram, Facebook, X, Youtube].map((Icon, i) => (
+                     <button key={i} className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/60 hover:text-ojo-mustard hover:border-ojo-mustard transition-all">
+                       <Icon size={18} />
+                     </button>
+                   ))}
+                </div>
+             </div>
+             
+             <div className="space-y-8">
+                <h4 className="text-[12px] font-bold text-white uppercase tracking-[0.3em]">Explore</h4>
+                <ul className="space-y-3 text-white/40 text-sm font-light">
+                   <li><button onClick={() => navigate("/")} className="hover:text-white transition-colors">Home</button></li>
+                   <li><button onClick={() => navigate("/category")} className="hover:text-white transition-colors">New In</button></li>
+                   <li><button onClick={() => navigate("/category")} className="hover:text-white transition-colors">Collections</button></li>
+                   <li><button onClick={() => navigate("/category")} className="hover:text-white transition-colors">Shop by Craft</button></li>
+                   <li><button onClick={() => navigate("/category")} className="hover:text-white transition-colors">Best Sellers</button></li>
+                   <li><button onClick={() => navigate("/category")} className="hover:text-white transition-colors">OJO Verified</button></li>
+                </ul>
+             </div>
 
-           <div className="space-y-8 md:space-y-12 md:text-right">
-              <h4 className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.5em] md:tracking-[0.6em] text-ojo-mustard">OJO Headquarters</h4>
-              <p className="text-lg md:text-xl text-white/40 font-mono italic leading-relaxed">
-                 Vault 001, Heritage District <br />
-                 IND / 110001
-              </p>
-              <div className="flex md:justify-end gap-6 md:gap-8 pt-4 md:pt-8">
-                 <Globe className="text-ojo-mustard opacity-50" size={20} />
-                 <Lock className="text-ojo-mustard opacity-50" size={20} />
-                 <ShieldCheck className="text-ojo-mustard opacity-50" size={20} />
-              </div>
-           </div>
-        </div>
+             <div className="space-y-8">
+                <h4 className="text-[12px] font-bold text-white uppercase tracking-[0.3em]">About</h4>
+                <ul className="space-y-3 text-white/40 text-sm font-light">
+                   <li><button onClick={() => navigate("/about")} className="hover:text-white transition-colors">Our Story</button></li>
+                   <li><button onClick={() => navigate("/about")} className="hover:text-white transition-colors">Founder</button></li>
+                   <li><button onClick={() => navigate("/about")} className="hover:text-white transition-colors">Vision & Mission</button></li>
+                   <li><button onClick={() => navigate("/about")} className="hover:text-white transition-colors">Blog</button></li>
+                </ul>
+             </div>
 
-        <div className="max-w-[1800px] mx-auto px-8 mt-24 md:mt-48 pt-12 md:pt-16 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8">
-           <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.5em] md:tracking-[0.8em] text-white/20 text-center md:text-left">© 2026 OJO SOVEREIGN TRUST. Records Audited.</p>
-           <div className="flex gap-8 md:gap-12">
-              {["Vault Terms", "Provenance"].map(item => (
-                <button key={item} className="text-[8px] md:text-[10px] uppercase font-black tracking-widest text-white/20 hover:text-white transition-colors">{item}</button>
-              ))}
-           </div>
+             <div className="space-y-8">
+                <h4 className="text-[12px] font-bold text-white uppercase tracking-[0.3em]">Support</h4>
+                <ul className="space-y-3 text-white/40 text-sm font-light">
+                   <li><button className="hover:text-white transition-colors">Track Order</button></li>
+                   <li><button className="hover:text-white transition-colors">Request Return</button></li>
+                   <li><button className="hover:text-white transition-colors">Refund Policy</button></li>
+                   <li><button className="hover:text-white transition-colors">Shipping Policy</button></li>
+                   <li><button className="hover:text-white transition-colors">FAQ</button></li>
+                </ul>
+             </div>
+          </div>
+
+          <div className="pt-12 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-bold text-white/20 uppercase tracking-[0.4em]">
+             <p>© 2026 OJO Culture. All rights reserved.</p>
+             <div className="flex items-center gap-2">
+                <span className="text-ojo-mustard">◈</span>
+             </div>
+          </div>
         </div>
       </footer>
 
@@ -500,95 +582,21 @@ export function HomePage() {
             <Home size={20} />
             <span className="text-[8px] font-black uppercase tracking-widest">Home</span>
          </button>
-         <button onClick={() => document.getElementById('explorer')?.scrollIntoView({ behavior: 'smooth' })} className="text-white/40 flex flex-col items-center gap-1">
-            <MapIcon size={20} />
-            <span className="text-[8px] font-black uppercase tracking-widest">Explore</span>
+         <button onClick={() => navigate("/category")} className="text-white/40 flex flex-col items-center gap-1">
+            <Search size={20} />
+            <span className="text-[8px] font-black uppercase tracking-widest">Search</span>
          </button>
          <button onClick={() => navigate("/cart")} className="text-white/40 flex flex-col items-center gap-1">
             <ShoppingBag size={20} />
-            <span className="text-[8px] font-black uppercase tracking-widest">Vault</span>
+            <span className="text-[8px] font-black uppercase tracking-widest">Cart</span>
          </button>
-         <button onClick={() => navigate("/admin")} className="text-white/40 flex flex-col items-center gap-1">
+         <button onClick={() => navigate("/profile")} className="text-white/40 flex flex-col items-center gap-1">
             <User size={20} />
-            <span className="text-[8px] font-black uppercase tracking-widest">Node</span>
+            <span className="text-[8px] font-black uppercase tracking-widest">Profile</span>
          </button>
       </nav>
 
-      {/* MOBILE BOTTOM SHEET FOR STATE EXPLORATION */}
-      <BottomSheet 
-        isOpen={!!selectedState && window.innerWidth < 768} 
-        onClose={() => setSelectedState(null)} 
-        title={selectedState?.name}
-      >
-        <div className="space-y-10 pb-10">
-          <div className="space-y-4">
-            <p className="text-xl text-ojo-charcoal/80 italic font-light leading-relaxed">
-               Heritage cluster records for {selectedState?.name}. Authenticity guaranteed under Sovereign Protocol.
-            </p>
-            <div className="flex gap-3">
-               <div className="ojo-badge ojo-badge-verified text-[8px] !px-4 !py-2">
-                  <ShieldCheck size={10} className="mr-1" /> GI TAGGED
-               </div>
-               <div className="ojo-badge !bg-ojo-cream !text-ojo-mustard !border-ojo-mustard/20 text-[8px] !px-4 !py-2">
-                  <ShieldCheck size={10} className="mr-1" /> VERIFIED SOURCES
-               </div>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-             <div className="flex justify-between items-baseline">
-                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-ojo-mustard">SIGNATURE ARTIFACTS</h4>
-                <button 
-                  onClick={() => navigate(`/category?state=${selectedState?.id}`)}
-                  className="text-[9px] font-bold text-ojo-charcoal/40 uppercase tracking-widest"
-                >
-                  View All
-                </button>
-             </div>
-             <div className="grid grid-cols-2 gap-4">
-                {PRODUCT_DATASET.filter(p => p.origin === selectedState?.id).slice(0, 4).map(p => (
-                   <div 
-                    key={p.id} 
-                    onClick={() => {
-                       setSelectedState(null);
-                       setQuickViewProduct({...p, images: JSON.stringify([p.image])});
-                    }}
-                    className="space-y-4 group"
-                   >
-                      <div className="aspect-[4/5] bg-ojo-cream rounded-2xl overflow-hidden shadow-sm border border-ojo-stone/5">
-                         <img src={p.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-black uppercase tracking-tight truncate text-ojo-charcoal">{p.name}</p>
-                        <p className="text-xs font-mono text-ojo-mustard">₹{p.price.toLocaleString()}</p>
-                      </div>
-                   </div>
-                ))}
-             </div>
-          </div>
-
-          <button 
-             onClick={() => {
-                setSelectedState(null);
-                navigate(`/category?state=${selectedState?.id}`);
-             }}
-             className="w-full py-6 bg-ojo-charcoal text-ojo-mustard font-black uppercase tracking-[0.4em] text-[10px] rounded-2xl shadow-xl active:scale-95 transition-all"
-          >
-             EXPLORE FULL REGISTRY
-          </button>
-        </div>
-      </BottomSheet>
-
-      <StateDrawer 
-        state={selectedState} 
-        isOpen={!!selectedState && window.innerWidth >= 768} 
-        onClose={() => setSelectedState(null)} 
-        products={PRODUCT_DATASET.filter(p => p.origin === selectedState?.id).map(p => ({
-          ...p,
-          images: JSON.stringify([p.image])
-        }))}
-      />
-
+      {/* QUICK VIEW MODAL */}
       <QuickViewModal 
         product={quickViewProduct}
         isOpen={!!quickViewProduct}
@@ -596,8 +604,8 @@ export function HomePage() {
         onProductUpdate={(p) => setQuickViewProduct(p)}
         onAddToCart={(p) => {
           addItem(p);
-          toast.success("Record Secured", {
-            description: `${p.name} has been added to your vault repository.`
+          toast.success("Added to cart", {
+            description: `${p.name} has been added to your vault.`
           });
         }}
       />

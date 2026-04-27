@@ -1,11 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-ojo-charcoal: #382C23;
-  --color-ojo-cream: #FDFBF7; /* Slightly cleaner off-white */
-  --color-ojo-terracotta: #9C5D3C;
+  --color-ojo-cream: #F5F2E9;
+  --color-ojo-charcoal: #1C1C1C;
   --color-ojo-mustard: #B07E1E;
+  --color-ojo-terracotta: #C1440E;
+  --color-ojo-brown: #2A1F1A;
   --color-ojo-stone: #E5DFD3;
   --color-ojo-white: #FFFFFF;
 
@@ -13,87 +14,63 @@
   --font-sans: "Inter", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  --shadow-premium: 0 20px 40px -10px rgba(56, 44, 35, 0.08);
-  --shadow-deep: 0 30px 60px -15px rgba(56, 44, 35, 0.12);
-
-  @keyframes motifFade {
-    from { opacity: 0; transform: scale(0.98); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  @keyframes borderGold {
-    0% { border-color: rgba(176, 126, 30, 0.05); }
-    100% { border-color: rgba(176, 126, 30, 0.2); }
-  }
+  --shadow-premium: 0 20px 40px -10px rgba(28, 28, 28, 0.08);
+  --shadow-deep: 0 30px 60px -15px rgba(28, 28, 28, 0.12);
 }
 
 @layer base {
   body {
-    /* Increased font size by 15% (15px * 1.15 ≈ 17px) */
-    @apply bg-ojo-cream text-ojo-charcoal font-sans text-[17px] leading-relaxed antialiased selection:bg-ojo-mustard selection:text-white;
+    @apply bg-ojo-cream text-ojo-charcoal font-sans text-[16px] leading-relaxed antialiased selection:bg-ojo-mustard selection:text-white;
   }
 
   h1, h2, h3, h4, .font-serif {
-    @apply font-serif font-bold text-ojo-charcoal tracking-tight;
+    @apply font-serif font-semibold text-ojo-charcoal tracking-[-0.01em];
   }
 }
 
 @layer components {
-  /* Refined Button System */
+  /* Premium Button System */
   .ojo-btn-primary {
-    @apply bg-ojo-mustard text-white px-8 py-4 text-[11px] font-black uppercase tracking-[0.4em] transition-all duration-500 shadow-premium active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden flex items-center justify-center gap-3;
-    border-radius: 1.2rem 0.4rem 1.2rem 0.4rem; /* Modern Indian Arch Shape */
+    @apply bg-ojo-mustard text-ojo-white px-8 py-3.5 text-[12px] font-medium uppercase tracking-[0.2em] transition-all duration-500 shadow-premium active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 rounded-full;
   }
 
   .ojo-btn-primary:hover {
-    @apply bg-ojo-charcoal shadow-deep -translate-y-1 scale-[1.02];
+    @apply bg-ojo-charcoal shadow-deep -translate-y-0.5;
   }
 
   .ojo-btn-outline {
-    @apply border border-ojo-charcoal/10 text-ojo-charcoal px-8 py-4 text-[11px] font-black uppercase tracking-[0.4em] transition-all duration-500 flex items-center justify-center gap-3 bg-white/20 backdrop-blur-sm;
-    border-radius: 0.4rem 1.2rem 0.4rem 1.2rem;
+    @apply border border-ojo-charcoal/20 text-ojo-charcoal px-8 py-3.5 text-[12px] font-medium uppercase tracking-[0.2em] transition-all duration-500 flex items-center justify-center gap-3 bg-transparent rounded-full;
   }
 
   .ojo-btn-outline:hover {
-    @apply border-ojo-mustard text-ojo-mustard scale-[1.02] shadow-premium;
+    @apply border-ojo-charcoal bg-ojo-charcoal text-ojo-white shadow-premium;
   }
 
-  /* Architectural Elements */
-  .ojo-arch-header {
-    border-radius: 0 0 4rem 4rem;
-    @apply border-b border-ojo-mustard/10 shadow-sm relative overflow-hidden;
-  }
-
+  /* Premium Cards */
   .ojo-card-product {
-    @apply bg-white border border-ojo-stone/30 p-6 transition-all duration-700 relative flex flex-col gap-6;
-    border-radius: 3rem 0.8rem 0.8rem 0.8rem; /* Refined Arch Top */
+    @apply bg-white border border-ojo-stone/20 p-4 transition-all duration-500 relative flex flex-col gap-4 rounded-xl;
   }
 
   .ojo-card-product:hover {
-    @apply shadow-deep scale-[1.01];
+    @apply shadow-deep -translate-y-1;
   }
 
-  /* Heritage Motifs & Textures */
-  .ojo-texture-heritage {
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 L100 50 L50 100 L0 50 Z' fill='%23B07E1E' fill-opacity='0.03'/%3E%3C/svg%3E");
-  }
-
-  .ojo-warli-divider {
-    @apply h-px w-full bg-ojo-mustard/10 relative overflow-visible;
-  }
-
-  .ojo-warli-divider::after {
-    content: "◈ ◈ ◈";
-    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-ojo-cream px-6 text-[10px] text-ojo-mustard/40 tracking-[1em];
+  /* Heritage Motifs (Subtle) */
+  .ojo-texture-jaali {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30 Z' fill='%23B07E1E' fill-opacity='0.03'/%3E%3C/svg%3E");
   }
 
   /* Labels & UI Accents */
   .ojo-badge {
-    @apply text-[9px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-full border backdrop-blur-md;
+    @apply text-[10px] font-semibold uppercase tracking-wider px-3 py-1 rounded-sm border;
   }
 
   .ojo-badge-verified {
-    @apply bg-white/50 text-ojo-mustard border-ojo-mustard/20 shadow-sm;
+    @apply bg-ojo-mustard/5 text-ojo-mustard border-ojo-mustard/20;
+  }
+  
+  .ojo-badge-new {
+    @apply bg-ojo-terracotta text-white border-ojo-terracotta;
   }
 }
 

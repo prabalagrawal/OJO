@@ -185,109 +185,100 @@ export function Layout({ children, user, onLogout }: LayoutProps) {
     };
   }, [lastScrollY]);
 
+  const navLinks = [
+    { label: "Home", path: "/" },
+    { label: "New In", path: "/category?new=true" },
+    { label: "Collections", path: "/category?collections=true" },
+    { label: "Best Sellers", path: "/category?bestsellers=true" },
+    { label: "Shop by Craft", path: "/category" },
+    { label: "About OJO", path: "/about" },
+    { label: "Contact", path: "/contact" },
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col bg-ojo-cream font-sans pb-24 md:pb-0">
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 px-4 md:px-12 ${scrolled ? 'py-2 md:py-4' : 'py-6 md:py-8'} ${navVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
-        <div className={`max-w-[1800px] mx-auto transition-all duration-1000 flex items-center justify-between px-6 md:px-10 relative overflow-hidden ${
-          scrolled 
-            ? 'bg-white/95 backdrop-blur-3xl shadow-premium py-3 md:py-4 border-b border-ojo-mustard/10 rounded-2xl md:rounded-[2rem]' 
-            : 'bg-transparent py-4 md:py-6 border-b border-ojo-charcoal/5'
-        }`}>
-          {/* Subtle Jaali Overlay when scrolled */}
-          {scrolled && (
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-              <MotifSystem type="jaali" scale={0.4} />
-            </div>
-          )}
-          
-          <div className="flex items-center gap-6 md:gap-20 relative z-10 w-full justify-between">
-            {/* Logo Section */}
+    <div className="min-h-screen flex flex-col bg-ojo-cream font-sans">
+      {/* Announcement Bar */}
+      <div className="bg-ojo-terracotta text-[10px] md:text-[11px] font-medium py-2 px-6 flex justify-between items-center text-white tracking-[0.15em] uppercase border-b border-white/10 shrink-0">
+        <div className="hidden md:block">Rooted in India. Built on Trust.</div>
+        <div className="flex items-center gap-2">
+           <span>◈</span>
+           <span>See it. Verify it. Trust it. Only on OJO.</span>
+        </div>
+        <div className="hidden md:block">Free Insured Shipping Pan-India</div>
+      </div>
+
+      <header className={`fixed md:relative top-0 left-0 right-0 z-50 transition-all duration-500 bg-white border-b border-ojo-stone/20 ${navVisible ? 'translate-y-0' : 'md:translate-y-0 -translate-y-full shadow-lg'}`}>
+        {/* Main Header */}
+        <div className="max-w-[1440px] mx-auto px-6 py-4 flex items-center justify-between gap-8 md:gap-16">
+          {/* Logo Section */}
+          <div className="flex flex-col shrink-0">
             <button 
               onClick={() => navigate("/")} 
-              className="hover:opacity-80 transition-all group shrink-0"
+              className="hover:opacity-80 transition-all text-left"
             >
-               <OjoLogo size="sm" className="scale-75 md:scale-100 origin-left" />
+               <OjoLogo size="sm" className="!items-start" />
             </button>
+          </div>
 
-            {/* Navigation - Desktop Only */}
-            <nav className="hidden lg:flex items-center gap-16">
-              {[
-                { label: "The Vault", path: "/category" },
-                { label: "Provenance", path: "/category?verified=true" },
-                { label: "Clusters", path: "/category" }
-              ].map((item) => (
-                <button 
-                   key={item.label} 
-                   onClick={() => navigate(item.path)}
-                   className="relative text-[11px] font-black uppercase tracking-[0.5em] text-ojo-charcoal/60 hover:text-ojo-mustard transition-all group py-1"
-                >
-                  {item.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-ojo-mustard transition-all duration-500 group-hover:w-full opacity-50" />
-                </button>
-              ))}
-            </nav>
+          {/* Search Bar */}
+          <div className="flex-1 max-w-2xl relative hidden md:block">
+            <input 
+              type="text"
+              placeholder="Search crafts, products, or regions"
+              className="w-full bg-ojo-cream/50 border border-ojo-stone/30 rounded-full py-2.5 px-6 pr-12 text-sm focus:outline-none focus:border-ojo-mustard transition-colors"
+            />
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 text-ojo-charcoal/30">
+               <MapIcon size={18} />
+            </div>
+          </div>
 
-            {/* Controls */}
-            <div className="flex items-center gap-4 md:gap-10">
-               <button 
-                onClick={() => setIsMiniCartOpen(true)}
-                className="relative group p-2 md:p-4 hover:bg-white rounded-full transition-all"
-               >
-                  <ShoppingBag size={20} className="text-ojo-charcoal group-hover:text-ojo-mustard transition-colors duration-500" />
+          {/* Icons */}
+          <div className="flex items-center gap-8 shrink-0">
+             <button 
+               onClick={() => navigate(user ? "/dashboard" : "/login")}
+               className="flex items-center gap-2.5 text-ojo-charcoal hover:text-ojo-mustard transition-colors group"
+             >
+                <User size={20} />
+                <span className="text-[11px] font-bold uppercase tracking-widest hidden lg:block">Account</span>
+             </button>
+             <button 
+              onClick={() => setIsMiniCartOpen(true)}
+              className="flex items-center gap-2.5 text-ojo-charcoal hover:text-ojo-mustard transition-colors group relative"
+             >
+                <div className="relative">
+                  <ShoppingBag size={20} />
                   {cartCount > 0 && (
-                    <span className="absolute top-1 md:top-2 right-1 md:right-2 w-4 md:w-5 h-4 md:h-5 rounded-full bg-ojo-mustard text-[8px] md:text-[10px] font-black text-white flex items-center justify-center shadow-lg border border-ojo-cream">
+                    <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-ojo-terracotta text-[9px] font-bold text-white flex items-center justify-center shadow-sm">
                       {cartCount}
                     </span>
                   )}
-               </button>
-               
-               <div className="w-px h-6 bg-ojo-mustard/20 hidden md:block" />
-
-               <div className="hidden md:flex items-center gap-8">
-                  {user ? (
-                    <div className="flex items-center gap-8">
-                      {user.role?.toLowerCase() === 'admin' && (
-                        <button 
-                          onClick={() => navigate('/admin')}
-                          className="ojo-btn-primary !px-6 !py-3 !text-[9px]"
-                        >
-                          <Lock size={12} />
-                          <span>Panel</span>
-                        </button>
-                      )}
-                      <button 
-                        onClick={() => navigate('/dashboard')}
-                        className="ojo-btn-outline !px-4 !py-3 !rounded-full"
-                      >
-                         <span className="text-[12px]">{user.name?.[0].toUpperCase() || "P"}</span>
-                      </button>
-                      <button onClick={onLogout} className="text-[10px] font-black uppercase tracking-widest text-ojo-terracotta hover:text-ojo-mustard transition-colors">
-                        Logout
-                      </button>
-                    </div>
-                  ) : (
-                    <button 
-                      onClick={() => navigate("/login")}
-                      className="ojo-btn-primary !px-10 !py-4 shadow-ojo-mustard/10 flex items-center gap-3 group"
-                    >
-                      <span className="relative z-10 text-[10px]">Identify Identity</span>
-                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                    </button>
-                  )}
-               </div>
-
-               {/* Mobile Menu Trigger for Login/Profile if not using bottom nav for it */}
-               {!user && (
-                 <button onClick={() => navigate("/login")} className="md:hidden p-2 text-ojo-mustard">
-                    <User size={20} />
-                 </button>
-               )}
-            </div>
+                </div>
+                <span className="text-[11px] font-bold uppercase tracking-widest hidden lg:block">Cart</span>
+             </button>
+             {/* Mobile Menu */}
+             <button className="md:hidden p-2 text-ojo-charcoal">
+                <Menu size={22} />
+             </button>
           </div>
+        </div>
+
+        <div className="border-t border-ojo-stone/10 hidden md:block bg-white sticky top-0 z-40">
+          <nav className="max-w-[1440px] mx-auto px-6 flex justify-center items-center gap-10 py-3.5">
+            {navLinks.map((item) => (
+              <button 
+                key={item.label}
+                onClick={() => navigate(item.path)}
+                className="text-[11px] font-bold uppercase tracking-[0.25em] text-ojo-charcoal/60 hover:text-ojo-mustard transition-all relative group"
+              >
+                {item.label}
+                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-ojo-mustard transition-all duration-300 group-hover:w-full" />
+              </button>
+            ))}
+          </nav>
         </div>
       </header>
 
-      <main className="flex-grow pt-4 md:pt-8 overflow-x-hidden">
+      <main className="flex-grow pt-[140px] md:pt-0">
         {children}
       </main>
 
