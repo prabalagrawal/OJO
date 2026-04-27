@@ -2,16 +2,18 @@ import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 type MotifType = 
-  | "bagru" 
   | "ajrakh" 
-  | "warli" 
-  | "gond" 
-  | "kolam" 
   | "kalamkari" 
-  | "patola" 
   | "jaali" 
-  | "sozni" 
-  | "paisley";
+  | "mandala"
+  | "paisley"
+  | "patola"
+  | "sozni"
+  | "bagru"
+  | "warli"
+  | "gond"
+  | "kolam"
+  | "floral";
 
 interface MotifProps {
   type: MotifType;
@@ -19,9 +21,36 @@ interface MotifProps {
   className?: string;
 }
 
-export const MotifSystem: React.FC<MotifProps & { scale?: number }> = ({ type, opacity = 0.05, className = "", scale = 1 }) => {
+export const MotifSystem: React.FC<MotifProps & { scale?: number; variant?: "pattern" | "single" }> = ({ 
+  type, 
+  opacity = 0.04, 
+  className = "", 
+  scale = 1,
+  variant = "pattern"
+}) => {
   const patternId = React.useId().replace(/:/g, "");
+  const hasTextColor = className.includes("text-");
   
+  const motifElements: Record<string, any> = {
+    mandala: (
+      <g transform={`scale(${2 * scale}) translate(0, 0)`}>
+        <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" strokeWidth="0.5" strokeOpacity={opacity} />
+        <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor" strokeWidth="0.2" strokeOpacity={opacity} strokeDasharray="2 2" />
+        {[...Array(12)].map((_, i) => (
+          <path
+            key={i}
+            d="M100 20 Q110 40 100 60 Q90 40 100 20"
+            fill="currentColor"
+            fillOpacity={opacity * 0.5}
+            transform={`rotate(${i * 30} 100 100)`}
+          />
+        ))}
+        <circle cx="100" cy="100" r="10" fill="currentColor" fillOpacity={opacity} />
+      </g>
+    ),
+    // ... we can add others if needed as single elements
+  };
+
   const patterns: Record<string, any> = {
     jaali: (
       <pattern id={`pattern-${patternId}`} x="0" y="0" width={120 * scale} height={120 * scale} patternUnits="userSpaceOnUse">
@@ -30,43 +59,26 @@ export const MotifSystem: React.FC<MotifProps & { scale?: number }> = ({ type, o
         <circle cx="60" cy="60" r="4" fill="currentColor" fillOpacity={opacity} />
       </pattern>
     ),
-    bagru: (
-      <pattern id={`pattern-${patternId}`} x="0" y="0" width={80 * scale} height={80 * scale} patternUnits="userSpaceOnUse">
-        <path d="M40 10 Q50 30 40 50 Q30 30 40 10 M20 40 Q40 50 60 40 Q40 30 20 40" fill="currentColor" fillOpacity={opacity} />
-        <circle cx="40" cy="40" r="3" fill="currentColor" fillOpacity={opacity * 0.8} />
-        <path d="M0 0 L80 80 M80 0 L0 80" stroke="currentColor" strokeWidth="0.5" strokeOpacity={opacity * 0.2} />
-      </pattern>
-    ),
-    warli: (
-      <pattern id={`pattern-${patternId}`} x="0" y="0" width={100 * scale} height={100 * scale} patternUnits="userSpaceOnUse">
-        <path d="M30 40 L40 55 L20 55 Z M30 70 L40 55 L20 55 Z" fill="currentColor" fillOpacity={opacity} />
-        <circle cx="30" cy="35" r="4" fill="currentColor" fillOpacity={opacity} />
-        <path d="M70 30 L80 45 L60 45 Z M70 60 L80 45 L60 45 Z" fill="currentColor" fillOpacity={opacity * 0.7} />
-        <circle cx="70" cy="25" r="4" fill="currentColor" fillOpacity={opacity * 0.7} />
-      </pattern>
-    ),
-    gond: (
-      <pattern id={`pattern-${patternId}`} x="0" y="0" width={100 * scale} height={100 * scale} patternUnits="userSpaceOnUse">
-        <path d="M20 20 Q40 10 60 20 Q80 30 60 50 Q40 70 20 50 Z" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" strokeOpacity={opacity} />
-        <circle cx="40" cy="35" r="1.5" fill="currentColor" fillOpacity={opacity} />
-        <circle cx="50" cy="35" r="1.5" fill="currentColor" fillOpacity={opacity} />
-        <circle cx="45" cy="45" r="1.5" fill="currentColor" fillOpacity={opacity} />
-      </pattern>
-    ),
-    kolam: (
-      <pattern id={`pattern-${patternId}`} x="0" y="0" width={80 * scale} height={80 * scale} patternUnits="userSpaceOnUse">
-        <circle cx="40" cy="40" r="2" fill="currentColor" fillOpacity={opacity} />
-        <circle cx="20" cy="20" r="1.5" fill="currentColor" fillOpacity={opacity * 0.5} />
-        <circle cx="60" cy="60" r="1.5" fill="currentColor" fillOpacity={opacity * 0.5} />
-        <path d="M40 10 Q60 10 70 40 Q60 70 40 70 Q20 70 10 40 Q20 10 40 10" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity={opacity} />
+    mandala: (
+      <pattern id={`pattern-${patternId}`} x="100" y="100" width={400 * scale} height={400 * scale} patternUnits="userSpaceOnUse">
+        {motifElements.mandala}
       </pattern>
     ),
     ajrakh: (
-      <pattern id={`pattern-${patternId}`} x="0" y="0" width={120 * scale} height={120 * scale} patternUnits="userSpaceOnUse">
-        <rect x="10" y="10" width="100" height="100" fill="none" stroke="currentColor" strokeWidth="0.5" strokeOpacity={opacity} />
-        <path d="M60 10 L110 60 L60 110 L10 60 Z" fill="currentColor" fillOpacity={opacity * 0.3} />
-        <circle cx="60" cy="60" r="15" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity={opacity} />
-        <path d="M60 45 L65 55 L75 60 L65 65 L60 75 L55 65 L45 60 L55 55 Z" fill="currentColor" fillOpacity={opacity} />
+      <pattern id={`pattern-${patternId}`} x="0" y="0" width={80 * scale} height={80 * scale} patternUnits="userSpaceOnUse">
+        <rect x="0" y="0" width="80" height="80" fill="none" stroke="currentColor" strokeWidth="0.2" strokeOpacity={opacity} />
+        <path d="M40 10 L70 40 L40 70 L10 40 Z" fill="none" stroke="currentColor" strokeWidth="0.5" strokeOpacity={opacity} />
+        <circle cx="40" cy="40" r="12" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity={opacity} />
+        <path d="M40 30 L45 38 L50 40 L45 42 L40 50 L35 42 L30 40 L35 38 Z" fill="currentColor" fillOpacity={opacity} />
+      </pattern>
+    ),
+    floral: (
+      <pattern id={`pattern-${patternId}`} x="0" y="0" width={200 * scale} height={60 * scale} patternUnits="userSpaceOnUse">
+        <path d="M0 30 Q50 10 100 30 T200 30" fill="none" stroke="currentColor" strokeWidth="0.5" strokeOpacity={opacity} />
+        <circle cx="50" cy="20" r="5" fill="none" stroke="currentColor" strokeWidth="0.5" strokeOpacity={opacity} />
+        <path d="M45 20 Q50 10 55 20 Q50 30 45 20" fill="currentColor" fillOpacity={opacity * 0.5} />
+        <circle cx="150" cy="40" r="5" fill="none" stroke="currentColor" strokeWidth="0.5" strokeOpacity={opacity} />
+        <path d="M145 40 Q150 30 155 40 Q150 50 145 40" fill="currentColor" fillOpacity={opacity * 0.5} />
       </pattern>
     ),
     kalamkari: (
@@ -98,30 +110,47 @@ export const MotifSystem: React.FC<MotifProps & { scale?: number }> = ({ type, o
   };
 
   return (
-    <div className={`absolute inset-0 pointer-events-none z-0 overflow-hidden ${className}`}>
-      <svg width="100%" height="100%" className="text-ojo-charcoal">
-        <defs>
-          {patterns[type] || patterns.jaali}
-        </defs>
-        <rect width="100%" height="100%" fill={`url(#pattern-${patternId})`} />
+    <div className={`absolute inset-0 pointer-events-none z-0 overflow-hidden ${!hasTextColor ? "text-ojo-charcoal" : ""} ${className}`}>
+      <svg width="100%" height="100%" viewBox={variant === "single" ? "0 0 400 400" : undefined}>
+        {variant === "pattern" ? (
+          <>
+            <defs>
+              {patterns[type] || patterns.jaali}
+            </defs>
+            <rect width="100%" height="100%" fill={`url(#pattern-${patternId})`} />
+          </>
+        ) : (
+          <g transform="translate(100, 100)">
+            {motifElements[type] || motifElements.mandala}
+          </g>
+        )}
       </svg>
     </div>
   );
 };
 
-export function PatternDivider({ type = "jaali", className = "" }: { type?: MotifType; className?: string }) {
+export function MandalaHalo({ className = "", scale = 1, opacity = 0.1 }: { className?: string; scale?: number; opacity?: number }) {
   return (
-    <div className={`w-full py-32 flex items-center justify-center relative overflow-hidden ${className}`}>
-      <div className="pattern-divider" />
+    <motion.div 
+      animate={{ rotate: 360 }}
+      transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
+      className={`absolute inset-0 flex items-center justify-center pointer-events-none ${className}`}
+    >
+      <MotifSystem type="mandala" variant="single" scale={scale} opacity={opacity} />
+    </motion.div>
+  );
+}
+
+export function PatternDivider({ type = "floral", className = "" }: { type?: MotifType; className?: string }) {
+  return (
+    <div className={`w-full py-16 relative overflow-hidden flex items-center ${className}`}>
+      <div className="absolute inset-x-0 h-10 opacity-[0.15] text-ojo-mustard/40">
+        <MotifSystem type={type} scale={0.6} opacity={1} />
+      </div>
       <div className="absolute inset-0 bg-gradient-to-r from-ojo-cream via-transparent to-ojo-cream z-10" />
-      <div className="relative z-20 flex items-center gap-12">
-        <div className="h-px w-32 md:w-48 bg-ojo-mustard/30" />
-        <div className="w-16 h-16 rounded-2xl bg-white border border-ojo-mustard/20 flex items-center justify-center rotate-45 transform shadow-xl">
-           <div className="w-8 h-8 border-2 border-ojo-mustard/10 rounded-lg -rotate-45 flex items-center justify-center">
-              <div className="w-2 h-2 bg-ojo-mustard/40 rounded-full" />
-           </div>
-        </div>
-        <div className="h-px w-32 md:w-48 bg-ojo-mustard/30" />
+      <div className="w-full h-px bg-ojo-mustard/20 relative z-20" />
+      <div className="absolute left-1/2 -translate-x-1/2 z-30 bg-ojo-cream px-8">
+        <div className="w-1.5 h-1.5 bg-ojo-mustard rotate-45" />
       </div>
     </div>
   );

@@ -21,15 +21,16 @@ import {
 import { toast } from "sonner";
 import { QuickViewModal } from "../components/quick-view-modal.tsx";
 import { MotifSystem } from "../components/motifs.tsx";
+import { ProductCard } from "../components/ProductCard.tsx";
 import { PRODUCT_DATASET } from "../data/product-dataset";
 
 const MOTIF_MAP: Record<string, any> = {
-  "Kashmir": "sozni",
-  "Rajasthan": "bagru",
-  "Gujarat": "patola",
-  "Tamil Nadu": "kolam",
-  "Maharashtra": "warli",
-  "Assam": "gond"
+  "Kashmir": "ajrakh",
+  "Rajasthan": "ajrakh",
+  "Gujarat": "ajrakh",
+  "Tamil Nadu": "mandala",
+  "Maharashtra": "mandala",
+  "Assam": "kalamkari"
 };
 
 export function CategoryPage() {
@@ -161,14 +162,14 @@ export function CategoryPage() {
             transition={{ duration: 1.5 }}
             className="fixed inset-0 pointer-events-none z-0"
           >
-            <MotifSystem type={MOTIF_MAP[originFilter]} opacity={0.05} scale={1.5} />
+            <MotifSystem type={MOTIF_MAP[originFilter]} opacity={0.08} scale={1.5} className="text-ojo-mustard" />
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Header Section */}
       <header className="pt-32 md:pt-48 pb-12 md:pb-20 px-6 md:px-20 bg-white border-b border-ojo-stone/10 relative overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-full opacity-[0.015] pointer-events-none">
+        <div className="absolute inset-x-0 top-0 h-full opacity-[0.03] pointer-events-none">
            <MotifSystem type="jaali" scale={1} opacity={1} />
         </div>
         
@@ -258,14 +259,16 @@ export function CategoryPage() {
 
       {/* Product Discovery Grid */}
       <main className="py-24 px-8 md:px-20 max-w-[1800px] mx-auto min-h-[60vh] relative">
-          <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
+          <div className="absolute inset-0 opacity-[0.02] pointer-events-none">
              <MotifSystem type="jaali" scale={2} />
           </div>
           {loading ? (
              <div className="flex flex-col items-center justify-center py-64 gap-12">
                 <div className="relative">
-                  <Loader2 className="animate-spin text-ojo-mustard" size={64} strokeWidth={1} />
-                  <MotifSystem type="kolam" opacity={0.1} scale={0.5} />
+                   <Loader2 className="animate-spin text-ojo-mustard" size={64} strokeWidth={1} />
+                   <div className="absolute inset-x-0 -bottom-4 opacity-30 text-ojo-mustard">
+                      <MotifSystem type="mandala" scale={0.4} />
+                   </div>
                 </div>
                 <div className="text-center space-y-4">
                    <p className="text-[12px] font-black uppercase tracking-[0.8em] text-ojo-charcoal/40 animate-pulse">Syncing with Regional Vaults</p>
@@ -286,104 +289,13 @@ export function CategoryPage() {
             </div>
           ) : (
             <div className={`${viewMode === "grid" ? "grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-12 gap-y-8 md:gap-y-24" : "flex flex-col gap-12"}`}>
-               {paginatedProducts.map((p, idx) => {
-                 const images = Array.isArray(p.images) ? p.images : JSON.parse(p.images || "[]");
-                 return viewMode === "grid" ? (
-                   <motion.div 
-                     key={p.id}
-                     initial={{ opacity: 0, y: 20 }}
-                     whileInView={{ opacity: 1, y: 0 }}
-                     viewport={{ once: true }}
-                     transition={{ duration: 0.8 }}
-                     className="group flex flex-col ojo-card-product overflow-hidden cursor-pointer bg-white border border-ojo-stone/10 p-3 md:p-6 rounded-2xl md:rounded-[4rem] hover:shadow-deep transition-all duration-700"
-                     onClick={() => setQuickViewProduct(p)}
-                   >
-                     <div className="relative aspect-[4/5] rounded-xl md:rounded-[3rem] overflow-hidden bg-ojo-cream mb-4 md:mb-8 border border-ojo-stone/5">
-                       <div className="absolute inset-0 bg-ojo-charcoal/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10" />
-                       <img src={images[0]} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-[1.5s]" alt="" referrerPolicy="no-referrer" />
-                       
-                       <div className="absolute top-4 md:top-8 left-4 md:left-8 z-20 flex flex-col gap-2 md:gap-3 scale-75 origin-top-left md:scale-100">
-                          <div className="ojo-badge !bg-white/95 backdrop-blur-3xl shadow-premium !px-4 md:!px-5 !py-2 md:!py-3 border-ojo-mustard/10">
-                             <ShieldCheck size={10} className="inline mr-1 md:mr-2 text-ojo-mustard" />
-                             <span className="text-[8px] md:text-[9px] font-bold tracking-widest">{p.origin}</span>
-                          </div>
-                       </div>
-                       
-                     </div>
-
-                     <div className="space-y-2 md:space-y-4 px-1 md:px-4 relative z-10">
-                        <div className="space-y-1 md:space-y-3">
-                           <div className="flex flex-col md:flex-row justify-between items-start md:items-baseline gap-1 md:gap-4">
-                              <h3 className="text-[13px] md:text-3xl font-serif text-ojo-charcoal italic tracking-tight truncate w-full">{p.name}</h3>
-                              <div className="text-xs md:text-xl font-mono text-ojo-mustard font-black">₹{p.price?.toLocaleString()}</div>
-                           </div>
-                           <p className="text-[9px] md:text-sm text-ojo-charcoal/40 italic font-light line-clamp-1 md:line-clamp-2 leading-relaxed">"{p.story || p.description}"</p>
-                        </div>
-                        
-                        <div className="pt-3 md:pt-6 border-t border-ojo-mustard/10 flex items-center justify-between">
-                           <div className="flex items-center gap-1.5 md:gap-3">
-                              <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-ojo-cream border border-ojo-mustard/20 flex items-center justify-center text-ojo-mustard italic font-serif text-[8px] md:text-xs">
-                                 {p.artisanName?.charAt(0) || "H"}
-                              </div>
-                              <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/30 truncate max-w-[60px] md:max-w-none">{p.artisanName || "Guild"}</span>
-                           </div>
-                        </div>
-                     </div>
-                   </motion.div>
-                 ) : (
-                    <motion.div 
-                      key={p.id}
-                      initial={{ opacity: 0, x: -40 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      className="ojo-card flex flex-col md:flex-row gap-16 p-10 items-center group cursor-pointer hover:ojo-texture-heritage transition-all duration-700"
-                      onClick={() => setQuickViewProduct(p)}
-                    >
-                       <div className="w-64 h-80 rounded-[3rem] overflow-hidden bg-ojo-cream shrink-0 shadow-premium group-hover:shadow-deep transition-all">
-                          <img src={images[0]} className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-[1.5s]" alt="" />
-                       </div>
-                       <div className="flex-1 space-y-10">
-                          <div className="flex flex-col md:flex-row justify-between items-start gap-8">
-                             <div className="space-y-6">
-                                <div className="flex items-center gap-6">
-                                   <div className="ojo-badge ojo-badge-verified !px-8">{p.origin}</div>
-                                   <div className="ojo-badge shadow-none border border-ojo-stone/10">{p.category}</div>
-                                </div>
-                                <h3 className="text-5xl font-serif text-ojo-charcoal italic tracking-tighter">{p.name}</h3>
-                                <p className="text-xl text-ojo-charcoal/50 leading-relaxed font-sans font-light italic max-w-3xl">"{p.description}"</p>
-                             </div>
-                             <div className="text-right space-y-8 min-w-[200px]">
-                                <div className="text-5xl font-mono text-ojo-charcoal tracking-tighter font-black italic">₹{p.price?.toLocaleString()}</div>
-                                <button 
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    addToCart(p);
-                                  }}
-                                  className="ojo-btn-primary w-full py-6 group overflow-hidden relative"
-                                >
-                                   <span className="relative z-10 flex items-center justify-center gap-4">
-                                      Acquire Artifact <Award size={18} className="translate-all group-hover:rotate-12" />
-                                   </span>
-                                   <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[2s]" />
-                                </button>
-                             </div>
-                          </div>
-                          <div className="flex gap-12 pt-10 border-t border-ojo-mustard/10 items-center">
-                             <div className="flex items-center gap-4">
-                                <ShieldCheck size={20} className="text-ojo-mustard" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-charcoal/40">Verified Registry Entry</span>
-                             </div>
-                             <div className="flex items-center gap-4">
-                                <Star size={20} className="text-ojo-mustard" fill="currentColor" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-charcoal/40">Heritage Score: 9.8</span>
-                             </div>
-                             <div className="flex items-center gap-4 ml-auto">
-                                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-charcoal/20">Audit Reference: #OJO-{p.id.slice(0,6).toUpperCase()}</span>
-                             </div>
-                          </div>
-                       </div>
-                    </motion.div>
-                 );
-               })}
+               {paginatedProducts.map((p) => (
+                 <ProductCard 
+                   key={p.id} 
+                   product={p as any} 
+                   onClick={() => setQuickViewProduct(p)}
+                 />
+               ))}
             </div>
           )}
 

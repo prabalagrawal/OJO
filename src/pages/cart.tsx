@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Trash2, ShoppingCart, ShieldCheck, Truck, Plus, Minus, ArrowRight, Shield } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
+import { MotifSystem, MandalaHalo } from "../components/motifs.tsx";
 
 export function Cart() {
   const [items, setItems] = useState<any[]>([]);
@@ -54,17 +55,20 @@ export function Cart() {
   const total = subtotal + auditingFee;
 
   if (items.length === 0) return (
-    <div className="min-h-screen bg-ojo-cream flex flex-col items-center justify-center p-8 space-y-12">
-      <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-3xl border border-ojo-stone/10 relative">
-        <div className="absolute inset-0 pattern-lotus opacity-10 animate-spin-slow" />
-        <ShoppingCart size={48} className="text-ojo-mustard relative z-10" />
+    <div className="min-h-screen bg-ojo-cream flex flex-col items-center justify-center p-8 space-y-12 relative overflow-hidden">
+      <div className="absolute inset-0 z-0 opacity-10 flex items-center justify-center pointer-events-none">
+        <MandalaHalo className="text-ojo-mustard opacity-20 scale-[2.5]" scale={2.5} />
       </div>
-      <div className="text-center space-y-6">
+      <div className="w-40 h-40 bg-white rounded-full flex items-center justify-center shadow-3xl border border-ojo-stone/10 relative z-10 transition-transform duration-700 hover:scale-110">
+        <div className="absolute inset-4 border border-ojo-mustard/20 rounded-full animate-spin-slow opacity-20" />
+        <ShoppingCart size={56} className="text-ojo-mustard relative z-10" />
+      </div>
+      <div className="text-center space-y-6 relative z-10">
         <h2 className="text-5xl font-serif text-ojo-charcoal tracking-tighter leading-tight">Your Registry Bag <br/> <span className="italic text-ojo-stone">is Waiting.</span></h2>
         <p className="text-sm text-ojo-charcoal/40 max-w-sm mx-auto font-light leading-relaxed">The ledger of Indian heritage and verified provenance expects your selection.</p>
       </div>
-      <button onClick={() => navigate("/")} className="ojo-btn-primary !bg-ojo-mustard !text-ojo-charcoal flex items-center gap-4">
-        Explore Heritage <ArrowRight size={16} />
+      <button onClick={() => navigate("/")} className="ojo-btn-primary !bg-ojo-mustard !text-ojo-charcoal flex items-center gap-4 relative z-10 hover:shadow-warm transition-all group">
+        Explore Heritage <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
       </button>
     </div>
   );

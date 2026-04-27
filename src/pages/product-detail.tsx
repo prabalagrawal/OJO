@@ -21,7 +21,8 @@ import {
   UserCheck
 } from "lucide-react";
 import { toast } from "sonner";
-import { MotifSystem } from "../components/motifs.tsx";
+import { MotifSystem, PatternDivider, MandalaHalo } from "../components/motifs.tsx";
+import { ProductCard } from "../components/ProductCard.tsx";
 import { handleFirestoreError, OperationType } from "../lib/firestore-errors";
 
 export function ProductDetailPage() {
@@ -157,14 +158,15 @@ export function ProductDetailPage() {
       {/* LEVEL 1: Visual & Core Info */}
       <div className="max-w-7xl mx-auto px-6 pt-32 grid md:grid-cols-2 gap-20">
         <div className="space-y-8">
-          <div className="relative aspect-square rounded-[4rem] overflow-hidden shadow-4xl group">
+          <div className="relative aspect-square rounded-[4rem] overflow-hidden shadow-premium group bg-ojo-cream/50">
+             <MandalaHalo className="text-ojo-mustard opacity-20 scale-150" scale={1.5} />
              <img 
                src={images[activeImage]} 
                alt={product.name} 
-               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 relative z-10"
                referrerPolicy="no-referrer"
              />
-             <div className="absolute top-10 left-10">
+             <div className="absolute top-10 left-10 z-20">
                <span className="ojo-label ojo-label-verified bg-white/90 backdrop-blur-md shadow-2xl">
                  <ShieldCheck size={12} className="inline mr-2" /> Verified Authenticity
                </span>
@@ -183,8 +185,11 @@ export function ProductDetailPage() {
           </div>
         </div>
 
-        <div className="flex flex-col justify-center space-y-12">
-          <div className="space-y-6">
+        <div className="flex flex-col justify-center space-y-12 relative">
+          <div className="absolute -top-10 -right-20 opacity-[0.05] text-ojo-mustard w-64 h-64 pointer-events-none">
+             <MotifSystem type="mandala" variant="single" scale={1.2} />
+          </div>
+          <div className="space-y-6 relative z-10">
             <div className="flex items-center gap-4 text-ojo-terracotta">
               <MapPin size={16} />
               <span className="text-xs font-bold uppercase tracking-widest">{product.origin} Cluster</span>
@@ -234,6 +239,8 @@ export function ProductDetailPage() {
           </div>
         </div>
       </div>
+      
+      <PatternDivider />
 
       {/* LEVEL 2: Layered Details */}
       <div className="max-w-4xl mx-auto px-6 mt-40">
@@ -263,30 +270,21 @@ export function ProductDetailPage() {
         </div>
       </div>
 
+      <PatternDivider />
+
       {/* Related Products */}
       {relatedProducts.length > 0 && (
         <section className="py-40 px-6">
           <div className="max-w-7xl mx-auto space-y-16">
             <h2 className="text-4xl font-serif italic text-center">Related Artifacts</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
-              {relatedProducts.map((p) => {
-                const pImages = Array.isArray(p.images) ? p.images : JSON.parse(p.images || "[]");
-                return (
-                  <motion.div 
-                    key={p.id} 
-                    onClick={() => navigate(`/product/${p.id}`)}
-                    className="group cursor-pointer space-y-6"
-                  >
-                    <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-xl bg-ojo-cream group-hover:shadow-4xl transition-all duration-700 hover:-translate-y-2">
-                       <img src={pImages[0]} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100" />
-                    </div>
-                    <div className="text-center space-y-1">
-                      <h3 className="text-xl font-serif text-ojo-charcoal leading-tight">{p.name}</h3>
-                      <div className="text-sm font-mono text-ojo-terracotta">₹{p.price?.toLocaleString()}</div>
-                    </div>
-                  </motion.div>
-                );
-              })}
+              {relatedProducts.map((p) => (
+                <ProductCard 
+                  key={p.id} 
+                  product={p as any} 
+                  onClick={() => navigate(`/product/${p.id}`)}
+                />
+              ))}
             </div>
           </div>
         </section>

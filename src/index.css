@@ -14,17 +14,18 @@
   --font-sans: "Inter", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  --shadow-premium: 0 20px 40px -10px rgba(28, 28, 28, 0.08);
-  --shadow-deep: 0 30px 60px -15px rgba(28, 28, 28, 0.12);
+  --shadow-premium: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-warm: 0 12px 30px rgba(176, 126, 30, 0.18);
+  --shadow-deep: 0 24px 60px rgba(176, 126, 30, 0.18);
 }
 
 @layer base {
   body {
-    @apply bg-ojo-cream text-ojo-charcoal font-sans text-[16px] leading-relaxed antialiased selection:bg-ojo-mustard selection:text-white;
+    @apply bg-ojo-cream text-ojo-charcoal font-sans text-[16px] leading-[1.6] antialiased selection:bg-ojo-mustard selection:text-white;
   }
 
   h1, h2, h3, h4, .font-serif {
-    @apply font-serif font-semibold text-ojo-charcoal tracking-[-0.01em];
+    @apply font-serif font-medium text-ojo-charcoal tracking-[-0.02em] leading-[1.3];
   }
 }
 
@@ -35,7 +36,7 @@
   }
 
   .ojo-btn-primary:hover {
-    @apply bg-ojo-charcoal shadow-deep -translate-y-0.5;
+    @apply bg-ojo-charcoal shadow-warm -translate-y-1;
   }
 
   .ojo-btn-outline {
@@ -48,11 +49,11 @@
 
   /* Premium Cards */
   .ojo-card-product {
-    @apply bg-white border border-ojo-stone/20 p-4 transition-all duration-500 relative flex flex-col gap-4 rounded-xl;
+    @apply bg-ojo-cream border border-ojo-stone/30 p-3 transition-all duration-500 relative flex flex-col gap-4 rounded-xl overflow-hidden shadow-premium;
   }
 
   .ojo-card-product:hover {
-    @apply shadow-deep -translate-y-1;
+    @apply shadow-warm -translate-y-1.5;
   }
 
   /* Heritage Motifs (Subtle) */

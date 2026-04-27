@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { api } from "../lib/api.ts";
 import { toast } from "sonner";
+import { MotifSystem } from "../components/motifs.tsx";
 
 export function OrderTracking() {
   const { id } = useParams();
@@ -69,8 +70,11 @@ export function OrderTracking() {
   return (
     <div className="min-h-screen bg-ojo-cream p-8 md:p-16">
       <div className="max-w-7xl mx-auto space-y-16">
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-          <div className="space-y-4">
+        <header className="flex flex-col md:flex-row md:items-center justify-between gap-8 relative overflow-hidden bg-white/40 backdrop-blur-md p-10 rounded-[40px] border border-ojo-stone/10 shadow-xl">
+          <div className="absolute top-0 right-0 w-80 h-80 opacity-10 text-ojo-mustard -mr-20 -mt-20 pointer-events-none">
+             <MotifSystem type="mandala" variant="single" scale={1.5} />
+          </div>
+          <div className="space-y-4 relative z-10">
             <button 
               onClick={() => navigate(-1)}
               className="flex items-center gap-2 text-ojo-stone hover:text-ojo-terracotta transition-colors group"
