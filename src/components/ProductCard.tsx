@@ -59,21 +59,38 @@ export function ProductCard({ product, isLarge = false, onClick }: ProductCardPr
            </h3>
         </div>
 
-        <div className="flex items-end justify-between pt-6 border-t border-ojo-charcoal/10">
-          <div className="space-y-1">
-             <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40">Valuation</span>
-             <div className={`font-mono text-ojo-charcoal font-bold ${isLarge ? 'text-3xl' : 'text-xl'}`}>
-               ₹{product.price.toLocaleString()}
-             </div>
+        <div className="flex flex-col gap-4 pt-6 border-t border-ojo-charcoal/10">
+          <div className="flex items-end justify-between">
+            <div className="space-y-1">
+               <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40">Valuation</span>
+               <div className={`font-mono text-ojo-charcoal font-bold ${isLarge ? 'text-3xl' : 'text-xl'}`}>
+                 ₹{product.price.toLocaleString()}
+               </div>
+            </div>
           </div>
-          <motion.div 
-            whileHover={{ x: 10 }}
-            className="w-12 h-12 rounded-full border border-ojo-charcoal/10 flex items-center justify-center text-ojo-charcoal group-hover:border-ojo-gold group-hover:text-ojo-gold transition-all"
+          
+          <motion.button 
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full relative overflow-hidden group/btn border border-ojo-terracotta/40 py-3 transition-all duration-500 overflow-hidden"
           >
-             <ArrowRight size={20} />
-          </motion.div>
+            <div className="flex items-center justify-center gap-2 text-ojo-gold group-hover/btn:-translate-y-full transition-transform duration-500">
+              <span className="text-[10px] font-black uppercase tracking-[0.3em]">Explore Piece</span>
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center gap-2 bg-ojo-terracotta text-ojo-beige translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500">
+              <EyeIcon size={14} />
+              <span className="text-[10px] font-black uppercase tracking-[0.3em]">Quick View</span>
+            </div>
+          </motion.button>
         </div>
       </div>
     </motion.div>
   );
 }
+
+const EyeIcon = ({ size = 20 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);

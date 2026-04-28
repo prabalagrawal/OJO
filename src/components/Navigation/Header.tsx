@@ -175,24 +175,24 @@ export const Header = ({ onCartClick, onAccountClick }: { onCartClick?: () => vo
       <GopuramTrim />
 
       {/* LAYER 1: Announcement Bar */}
-      <div className="bg-ojo-red py-2.5 overflow-hidden relative border-b-6 border-transparent">
+      <div className="bg-ojo-charcoal py-2.5 overflow-hidden relative border-b-6 border-transparent">
         <PietraDuraBorder />
         <div className="flex justify-center items-center gap-12 whitespace-nowrap animate-marquee md:animate-none">
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ojo-beige flex items-center gap-3">
-            🪔 Free shipping above ₹999 <span className="text-ojo-gold">✦</span> Authentic & Handmade <span className="text-ojo-gold">✦</span> OJO Verified Products <span className="text-ojo-gold">✦</span> Ships Worldwide
+            <span className="text-ojo-gold">✦</span> Free shipping above ₹999 <span className="text-ojo-gold">✦</span> Authentic & Handmade <span className="text-ojo-gold">✦</span> OJO Verified Products <span className="text-ojo-gold">✦</span> Ships Worldwide
           </span>
         </div>
       </div>
 
       {/* LAYER 2: Main Header */}
       <div 
-        className={`relative transition-all duration-700 bg-ojo-charcoal border-b border-ojo-gold/10 ${
+        className={`relative transition-all duration-700 bg-ojo-beige border-b border-ojo-charcoal/5 ${
           isScrolled ? 'py-3' : 'py-6'
         }`}
         onMouseLeave={() => setIsShopHovered(false)}
       >
-        {/* Subtle Jali Background */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none text-ojo-gold">
+        {/* Subtle Motif Background */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none text-ojo-terracotta">
           <svg width="100%" height="100%">
             <rect width="100%" height="100%" fill="url(#jali-pattern)" />
           </svg>
@@ -202,10 +202,10 @@ export const Header = ({ onCartClick, onAccountClick }: { onCartClick?: () => vo
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between relative z-10">
           {/* LEFT: Logo */}
           <Link to="/" className="flex flex-col items-center group/logo hover:scale-105 transition-transform duration-500">
-            <OjoLogo dark size={isScrolled ? "sm" : "md"} />
+            <OjoLogo size={isScrolled ? "sm" : "md"} />
             <div className="h-4 flex items-center mt-2">
               <TemplePillar />
-              <span className="text-[8px] font-black uppercase tracking-[0.5em] text-ojo-gold mx-4">SEE. VERIFY. TRUST.</span>
+              <span className="text-[8px] font-black uppercase tracking-[0.5em] text-ojo-charcoal/60 mx-4">SEE. VERIFY. TRUST.</span>
               <TemplePillar />
             </div>
           </Link>
@@ -221,7 +221,7 @@ export const Header = ({ onCartClick, onAccountClick }: { onCartClick?: () => vo
                   <Link 
                     to={link.path}
                     className={`text-[11px] font-black uppercase tracking-[0.3em] transition-all duration-300 ${
-                      location.pathname === link.path ? 'text-ojo-gold' : 'text-ojo-beige hover:text-ojo-gold'
+                      location.pathname === link.path ? 'text-ojo-terracotta' : 'text-ojo-charcoal/80 hover:text-ojo-terracotta'
                     }`}
                   >
                     {link.name}
@@ -230,7 +230,9 @@ export const Header = ({ onCartClick, onAccountClick }: { onCartClick?: () => vo
                     <KolamUnderline />
                   )}
                 </div>
-                {idx < navLinks.length - 1 && <TemplePillar />}
+                <div className="opacity-20">
+                  <TemplePillar />
+                </div>
               </React.Fragment>
             ))}
           </nav>
@@ -242,7 +244,7 @@ export const Header = ({ onCartClick, onAccountClick }: { onCartClick?: () => vo
                 {isSearchOpen && (
                   <motion.form 
                     initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: 200, opacity: 1 }}
+                    animate={{ width: 220, opacity: 1 }}
                     exit={{ width: 0, opacity: 0 }}
                     onSubmit={handleSearch}
                     className="absolute right-full mr-2 overflow-hidden"
@@ -253,39 +255,39 @@ export const Header = ({ onCartClick, onAccountClick }: { onCartClick?: () => vo
                       placeholder="Search heritage..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="bg-white/10 border border-ojo-gold/30 rounded-full px-4 py-1.5 text-[10px] text-ojo-beige placeholder:text-ojo-beige/40 focus:outline-none focus:border-ojo-gold w-full"
+                      className="bg-ojo-charcoal/5 border border-ojo-charcoal/10 rounded-full px-4 py-2 text-[11px] text-ojo-charcoal placeholder:text-ojo-charcoal/30 focus:outline-none focus:border-ojo-terracotta w-full"
                     />
                   </motion.form>
                 )}
               </AnimatePresence>
               <button 
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="text-ojo-beige hover:text-ojo-gold transition-colors p-2 rounded-full hover:bg-white/5"
+                className="text-ojo-charcoal hover:text-ojo-terracotta transition-colors p-2 rounded-full hover:bg-ojo-charcoal/5"
               >
                 {isSearchOpen ? <X size={20} /> : <Search size={22} />}
               </button>
             </div>
-            <Link to="/dashboard" className="hidden sm:block text-ojo-beige hover:text-ojo-gold transition-colors p-2 rounded-full hover:bg-white/5">
+            <Link to="/dashboard" className="hidden sm:block text-ojo-charcoal hover:text-ojo-terracotta transition-colors p-2 rounded-full hover:bg-ojo-charcoal/5">
               <Heart size={20} />
             </Link>
             <button 
               onClick={onCartClick}
-              className="relative text-ojo-beige hover:text-ojo-gold transition-colors p-2 rounded-full hover:bg-white/5"
+              className="relative text-ojo-charcoal hover:text-ojo-terracotta transition-colors p-2 rounded-full hover:bg-ojo-charcoal/5"
             >
               <ShoppingBag size={20} />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-ojo-gold text-ojo-charcoal text-[9px] font-black rounded-full flex items-center justify-center shadow-lg">
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-ojo-red text-ojo-beige text-[9px] font-black rounded-full flex items-center justify-center shadow-lg">
                   {cartCount}
                 </span>
               )}
             </button>
-            <div className="hidden md:flex items-center gap-3 pl-4 border-l border-white/10">
-              <button className="w-10 h-10 rounded-full border border-ojo-gold/30 text-ojo-gold text-[9px] font-black hover:bg-ojo-gold hover:text-ojo-charcoal transition-all">
+            <div className="hidden md:flex items-center gap-3 pl-4 border-l border-ojo-charcoal/10">
+              <button className="w-10 h-10 rounded-full border border-ojo-terracotta/30 text-ojo-terracotta text-[9px] font-black hover:bg-ojo-terracotta hover:text-ojo-beige transition-all">
                 ₹
               </button>
               <button 
                 onClick={onAccountClick}
-                className="text-ojo-beige hover:text-ojo-gold transition-colors"
+                className="text-ojo-charcoal hover:text-ojo-terracotta transition-colors"
               >
                 <User size={20} />
               </button>
@@ -294,7 +296,7 @@ export const Header = ({ onCartClick, onAccountClick }: { onCartClick?: () => vo
             {/* Mobile Hamburger */}
             <button 
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden text-ojo-gold p-2 hover:bg-ojo-gold/10 rounded-lg transition-colors"
+              className="lg:hidden text-ojo-terracotta p-2 hover:bg-ojo-terracotta/10 rounded-lg transition-colors"
             >
               <HamburgerIcon />
             </button>
