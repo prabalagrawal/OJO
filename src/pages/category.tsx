@@ -65,7 +65,7 @@ export function CategoryPage() {
           images: JSON.stringify([p.image]),
           verificationStatus: "VERIFIED",
           artisanName: "Master Artisan",
-          story: "Heritage artifact verified by OJO Geographic nodes."
+          story: "A genuine handcrafted piece, verified for authenticity."
         })));
       }
     } catch (err) {
@@ -76,9 +76,9 @@ export function CategoryPage() {
         images: JSON.stringify([p.image]),
         verificationStatus: "VERIFIED",
         artisanName: "Master Artisan",
-        story: "Heritage artifact verified by OJO Geographic nodes."
+        story: "A genuine handcrafted piece, verified for authenticity."
       })));
-      toast.error("Registry connection lost. Using local archives.");
+      toast.error("Failed to load products. Using local data.");
     } finally {
       setLoading(false);
     }
@@ -147,7 +147,7 @@ export function CategoryPage() {
     }
     localStorage.setItem("cart", JSON.stringify(cart));
     window.dispatchEvent(new Event("storage"));
-    toast.success(`${product.name} Added to Vault`);
+    toast.success(`${product.name} Added to Cart`);
   };
 
   return (
@@ -177,13 +177,13 @@ export function CategoryPage() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-12">
             <div className="space-y-4 md:space-y-6">
               <div className="flex items-center gap-3 md:gap-4">
-                 <div className="ojo-badge ojo-badge-verified !px-4 md:!px-6 text-[8px] md:text-[10px]">Sovereign Registry</div>
+                 <div className="ojo-badge ojo-badge-verified !px-4 md:!px-6 text-[8px] md:text-[10px]">OJO Verified</div>
                  <div className="h-px w-12 md:w-20 bg-ojo-mustard/20" />
-                 <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-ojo-mustard">Origin Nodes: {origins.length}</span>
+                 <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-ojo-mustard">Regions: {origins.length}</span>
               </div>
               <h1 className="text-4xl md:text-8xl font-serif text-ojo-charcoal leading-none tracking-tighter">
-                Geographic <br className="hidden md:block" />
-                <span className="text-ojo-mustard italic">Provenances.</span>
+                Shop by <br className="hidden md:block" />
+                <span className="text-ojo-mustard italic">Region.</span>
               </h1>
             </div>
             
@@ -192,7 +192,7 @@ export function CategoryPage() {
                 <Search className="absolute left-6 md:left-8 top-1/2 -translate-y-1/2 text-ojo-stone/40 group-focus-within:text-ojo-mustard" size={18} />
                 <input 
                   type="text" 
-                  placeholder="Search the Archive..."
+                  placeholder="Search item..."
                   value={queryText}
                   onChange={(e) => updateFilters("q", e.target.value)}
                   className="w-full md:w-[500px] border-none bg-ojo-cream/80 backdrop-blur-xl pl-16 md:pl-20 pr-8 py-5 md:py-6 text-sm md:text-base italic outline-none"
@@ -217,7 +217,7 @@ export function CategoryPage() {
                   onClick={() => setSearchParams(new URLSearchParams())}
                   className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-ojo-charcoal/30 hover:text-ojo-charcoal flex items-center gap-2 group"
                 >
-                  <X size={12} className="group-hover:rotate-90 transition-transform" /> Clear Audit
+                  <X size={12} className="group-hover:rotate-90 transition-transform" /> Clear Filters
                 </button>
               </div>
             </div>
@@ -240,7 +240,7 @@ export function CategoryPage() {
             </div>
             
             <div className="flex flex-col md:flex-row md:items-center gap-4">
-              <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-ojo-mustard/40">Territories</span>
+              <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-ojo-mustard/40">Regions</span>
               <div className="flex gap-2.5 overflow-x-auto pb-4 md:pb-0 scrollbar-hide">
                 {origins.map(origin => (
                   <button 
@@ -271,8 +271,8 @@ export function CategoryPage() {
                    </div>
                 </div>
                 <div className="text-center space-y-4">
-                   <p className="text-[12px] font-black uppercase tracking-[0.8em] text-ojo-charcoal/40 animate-pulse">Syncing with Regional Vaults</p>
-                   <p className="text-sm italic text-ojo-mustard">Verifying provenance hash...</p>
+                   <p className="text-[12px] font-black uppercase tracking-[0.8em] text-ojo-charcoal/40 animate-pulse">Finding the finest products</p>
+                   <p className="text-sm italic text-ojo-mustard">Checking authenticity...</p>
                 </div>
              </div>
           ) : paginatedProducts.length === 0 ? (
@@ -282,10 +282,10 @@ export function CategoryPage() {
                  <MotifSystem type="jaali" scale={0.4} opacity={0.1} />
                </div>
                <div className="space-y-4">
-                 <h3 className="text-5xl font-serif text-ojo-charcoal italic tracking-tighter">No Provenance Match.</h3>
-                 <p className="text-lg text-ojo-charcoal/40 italic">Try relaxing your audit parameters or browsing all origins.</p>
+                 <h3 className="text-5xl font-serif text-ojo-charcoal italic tracking-tighter">No items found.</h3>
+                 <p className="text-lg text-ojo-charcoal/40 italic">Try relaxing your filters or browsing all regions.</p>
                </div>
-               <button onClick={() => setSearchParams(new URLSearchParams())} className="ojo-btn-primary !px-20 ring-4 ring-ojo-mustard/10">Reset Discovery</button>
+               <button onClick={() => setSearchParams(new URLSearchParams())} className="ojo-btn-primary !px-20 ring-4 ring-ojo-mustard/10">Clear All Filters</button>
             </div>
           ) : (
             <div className={`${viewMode === "grid" ? "grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-12 gap-y-8 md:gap-y-24" : "flex flex-col gap-12"}`}>

@@ -154,19 +154,19 @@ export function AdminDashboard() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 relative z-10">
             <div>
               <div className="flex items-center gap-4 mb-4">
-                <span className="ojo-label-verified ojo-label !px-6 shadow-sm !bg-ojo-charcoal text-white border-none">Master Registry Access v2.2</span>
+                <span className="ojo-label-verified ojo-label !px-6 shadow-sm !bg-ojo-charcoal text-white border-none">Admin Access v2.2</span>
                 <div className="h-px w-10 bg-ojo-mustard/30" />
               </div>
-              <h1 className="text-4xl font-serif italic text-ojo-charcoal tracking-tighter">Registry Command.</h1>
-              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-mustard mt-3">Authorized Sovereign Control Node</p>
+              <h1 className="text-4xl font-serif italic text-ojo-charcoal tracking-tighter">Admin Panel.</h1>
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-mustard mt-3">Secured Administrator Portal</p>
             </div>
             
             <div className="flex flex-wrap gap-4">
               <div className="flex bg-ojo-cream/60 p-1.5 rounded-[2rem] border border-ojo-stone/10">
                 {[
                   { id: 'overview', label: 'Overview' },
-                  { id: 'products', label: 'Artifacts' },
-                  { id: 'vendors', label: 'Guilds' }
+                  { id: 'products', label: 'Products' },
+                  { id: 'vendors', label: 'Vendors' }
                 ].map((tab) => (
                   <button 
                     key={tab.id}
@@ -182,7 +182,7 @@ export function AdminDashboard() {
                 onClick={() => setShowAddProduct(true)}
                 className="ojo-btn-primary !px-10 !py-4 shadow-2xl shadow-ojo-mustard/20 flex items-center gap-3"
               >
-                <Plus size={16} /> <span className="mt-0.5">Add Artifact</span>
+                <Plus size={16} /> <span className="mt-0.5">Add Product</span>
               </button>
             </div>
           </div>
@@ -193,10 +193,10 @@ export function AdminDashboard() {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {[
-                { label: "Orders Dispatched", value: stats.orders, icon: <ShoppingBag />, color: "text-ojo-mustard", sub: "Global heritage flow" },
-                { label: "Master Artisans", value: stats.vendors, icon: <Users />, color: "text-ojo-terracotta", sub: "Guild members active" },
-                { label: "Revenue Archive", value: `₹${stats.revenue.toLocaleString()}`, icon: <TrendingUp />, color: "text-ojo-charcoal", sub: "Secured transactions" },
-                { label: "Inventory Registry", value: stats.products, icon: <Activity />, color: "text-green-600", sub: "Verified artifacts" }
+                { label: "Orders Dispatched", value: stats.orders, icon: <ShoppingBag />, color: "text-ojo-mustard", sub: "Global order volume" },
+                { label: "Verified Artisans", value: stats.vendors, icon: <Users />, color: "text-ojo-terracotta", sub: "Active vendors" },
+                { label: "Total Revenue", value: `₹${stats.revenue.toLocaleString()}`, icon: <TrendingUp />, color: "text-ojo-charcoal", sub: "Completed transactions" },
+                { label: "Product Inventory", value: stats.products, icon: <Activity />, color: "text-green-600", sub: "Verified products" }
               ].map((stat, i) => (
                 <motion.div 
                   key={i}
@@ -223,14 +223,14 @@ export function AdminDashboard() {
               {/* Recent Transactions */}
               <div className="bg-white rounded-[4rem] border border-ojo-stone/10 shadow-sm overflow-hidden h-fit">
                 <div className="p-10 border-b border-ojo-stone/10 flex justify-between items-center">
-                  <h3 className="text-xl font-serif italic text-ojo-charcoal">Registry Movements</h3>
+                  <h3 className="text-xl font-serif italic text-ojo-charcoal">Recent Sales</h3>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left">
                     <thead className="bg-ojo-cream/50 text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40">
                       <tr>
-                        <th className="px-10 py-6">Identity</th>
-                        <th className="px-10 py-6">Value</th>
+                        <th className="px-10 py-6">Customer</th>
+                        <th className="px-10 py-6">Price</th>
                         <th className="px-10 py-6">Status</th>
                       </tr>
                     </thead>
@@ -260,7 +260,7 @@ export function AdminDashboard() {
               {/* Pending Verifications */}
               <div className="bg-white rounded-[4rem] border border-ojo-stone/10 shadow-sm overflow-hidden h-fit">
                 <div className="p-10 border-b border-ojo-stone/10 flex justify-between items-center">
-                  <h3 className="text-xl font-serif italic text-ojo-charcoal">Authentication Queue</h3>
+                  <h3 className="text-xl font-serif italic text-ojo-charcoal">Verification Queue</h3>
                 </div>
                 <div className="p-10 space-y-6">
                   {products.filter(p => p.status === 'pending' || !p.status || p.status === 'PENDING').slice(0, 3).map(prod => (
@@ -285,7 +285,7 @@ export function AdminDashboard() {
                     </div>
                   ))}
                   {products.filter(p => p.status === 'pending' || !p.status || p.status === 'PENDING').length === 0 && (
-                    <div className="text-center py-10 text-ojo-charcoal/40 italic">Registry is unified. No pending artifacts.</div>
+                    <div className="text-center py-10 text-ojo-charcoal/40 italic">All products are verified.</div>
                   )}
                 </div>
               </div>
@@ -296,19 +296,19 @@ export function AdminDashboard() {
         {activeTab === 'products' && (
           <div className="bg-white rounded-[4rem] border border-ojo-stone/10 shadow-sm overflow-hidden">
             <div className="p-10 border-b border-ojo-stone/10 flex justify-between items-center">
-              <h3 className="text-xl font-serif italic text-ojo-charcoal">Inventory Registry</h3>
+              <h3 className="text-xl font-serif italic text-ojo-charcoal">Product Inventory</h3>
               <div className="relative">
                 <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-ojo-stone" />
-                <input placeholder="Search artifacts..." className="bg-ojo-cream/50 rounded-full pl-12 pr-6 py-2 text-xs outline-none focus:ring-1 ring-ojo-mustard transition-all" />
+                <input placeholder="Search products..." className="bg-ojo-cream/50 rounded-full pl-12 pr-6 py-2 text-xs outline-none focus:ring-1 ring-ojo-mustard transition-all" />
               </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead className="bg-ojo-cream/50 text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40">
                   <tr>
-                    <th className="px-10 py-6">Artifact</th>
-                    <th className="px-10 py-6">Provenance</th>
-                    <th className="px-10 py-6">Valuation</th>
+                    <th className="px-10 py-6">Product</th>
+                    <th className="px-10 py-6">Region</th>
+                    <th className="px-10 py-6">Price</th>
                     <th className="px-10 py-6">Status</th>
                     <th className="px-10 py-6">Actions</th>
                   </tr>
@@ -343,7 +343,7 @@ export function AdminDashboard() {
         {activeTab === 'vendors' && (
           <div className="bg-white rounded-[4rem] border border-ojo-stone/10 shadow-sm overflow-hidden">
             <div className="p-10 border-b border-ojo-stone/10">
-              <h3 className="text-xl font-serif italic text-ojo-charcoal">Guild Members (Artisans)</h3>
+              <h3 className="text-xl font-serif italic text-ojo-charcoal">Artisans & Vendors</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-10">
               {vendors.map(vendor => (
@@ -352,7 +352,7 @@ export function AdminDashboard() {
                     <div className="w-16 h-16 rounded-[1.5rem] bg-ojo-charcoal text-white flex items-center justify-center text-4xl shadow-2xl uppercase">
                       {vendor.email[0]}
                     </div>
-                    <span className="ojo-label-verified ojo-label">Verified Guild</span>
+                    <span className="ojo-label-verified ojo-label">Verified Vendor</span>
                   </div>
                   <div>
                     <h4 className="text-xl font-serif italic text-ojo-charcoal">{vendor.email.split('@')[0]}</h4>
@@ -364,7 +364,7 @@ export function AdminDashboard() {
                         <div key={i} className="w-8 h-8 rounded-full bg-white border border-ojo-cream shadow-sm" />
                       ))}
                     </div>
-                    <button className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">Access Portfolio</button>
+                    <button className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">View Products</button>
                   </div>
                 </div>
               ))}
@@ -380,7 +380,7 @@ export function AdminDashboard() {
            <div className="relative z-10 space-y-8">
               <div className="flex items-center gap-4">
                 <Activity size={24} className="text-ojo-mustard" />
-                <h3 className="text-xl font-serif italic">System Pulse Registry</h3>
+                <h3 className="text-xl font-serif italic">System Activity</h3>
               </div>
               <div className="space-y-8">
                  {activityLogs.map((log, i) => (
@@ -410,13 +410,13 @@ export function AdminDashboard() {
           >
             <div className="space-y-8">
               <div className="text-center space-y-2">
-                <h2 className="text-4xl font-serif italic text-ojo-charcoal">New Legacy Item</h2>
-                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-charcoal/40">Inscribe into the registry</p>
+                <h2 className="text-4xl font-serif italic text-ojo-charcoal">Add New Product</h2>
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-charcoal/40">Add to marketplace</p>
               </div>
 
               <form onSubmit={handleCreateProduct} className="grid grid-cols-2 gap-8">
                 <div className="col-span-2 space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Artifact Designation</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Product Name</label>
                   <input 
                     required 
                     className="w-full bg-white border border-ojo-stone/10 rounded-full px-8 py-4 outline-none focus:border-ojo-mustard transition-colors text-sm"
@@ -425,7 +425,7 @@ export function AdminDashboard() {
                   />
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Registry Group</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Category</label>
                   <select 
                     className="w-full bg-white border border-ojo-stone/10 rounded-full px-8 py-4 outline-none focus:border-ojo-mustard transition-colors text-sm"
                     value={newProduct.category}
@@ -437,7 +437,7 @@ export function AdminDashboard() {
                   </select>
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Provenance (Region)</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Region (Origin)</label>
                   <input 
                     required 
                     className="w-full bg-white border border-ojo-stone/10 rounded-full px-8 py-4 outline-none focus:border-ojo-mustard transition-colors text-sm"
@@ -446,7 +446,7 @@ export function AdminDashboard() {
                   />
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Valuation (₹)</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Price (₹)</label>
                   <input 
                     type="number" required 
                     className="w-full bg-white border border-ojo-stone/10 rounded-full px-8 py-4 outline-none focus:border-ojo-mustard transition-colors text-sm font-mono"
@@ -455,7 +455,7 @@ export function AdminDashboard() {
                   />
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Reservation (Stock)</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Stock Level</label>
                   <input 
                     type="number" required 
                     className="w-full bg-white border border-ojo-stone/10 rounded-full px-8 py-4 outline-none focus:border-ojo-mustard transition-colors text-sm font-mono"
@@ -464,7 +464,7 @@ export function AdminDashboard() {
                   />
                 </div>
                 <div className="col-span-2 space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Chronicle (Description)</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/60 ml-6">Description</label>
                   <textarea 
                     required rows={3}
                     className="w-full bg-white border border-ojo-stone/10 rounded-[2rem] px-8 py-6 outline-none focus:border-ojo-mustard transition-colors text-sm"
@@ -473,8 +473,8 @@ export function AdminDashboard() {
                   />
                 </div>
                 <div className="col-span-2 flex gap-4 pt-4">
-                  <button type="submit" className="ojo-btn-primary flex-1 py-4 !text-[11px]">Authorize Artifact</button>
-                  <button type="button" onClick={() => setShowAddProduct(false)} className="px-8 py-4 text-[10px] font-black uppercase tracking-widest hover:text-ojo-mustard">Rescind</button>
+                  <button type="submit" className="ojo-btn-primary flex-1 py-4 !text-[11px]">Add Product</button>
+                  <button type="button" onClick={() => setShowAddProduct(false)} className="px-8 py-4 text-[10px] font-black uppercase tracking-widest hover:text-ojo-mustard">Cancel</button>
                 </div>
               </form>
             </div>

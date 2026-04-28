@@ -58,7 +58,7 @@ export function ProductDetailPage() {
             .filter(d => d.id !== id)
           );
         } else {
-          toast.error("Artifact not found in registry");
+          toast.error("Product not found");
           navigate("/");
         }
       } catch (err) {
@@ -92,14 +92,14 @@ export function ProductDetailPage() {
     }
     localStorage.setItem("cart", JSON.stringify(cart));
     window.dispatchEvent(new Event("storage"));
-    toast.success("Artifact Added to Collection Vault");
+    toast.success("Added to Cart");
   };
 
   if (loading) return (
     <div className="h-screen flex items-center justify-center bg-white">
       <div className="space-y-6 text-center">
         <div className="w-16 h-16 border-4 border-ojo-stone/20 border-t-ojo-mustard rounded-full animate-spin mx-auto" />
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-stone">Auditing Provenance Keys...</p>
+        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-stone">Loading item details...</p>
       </div>
     </div>
   );
@@ -144,13 +144,13 @@ export function ProductDetailPage() {
       {/* Product Progress Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-ojo-stone/10 px-6 py-4 flex justify-between items-center">
         <button onClick={() => navigate(-1)} className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-widest text-ojo-charcoal/40 hover:text-ojo-charcoal transition-colors">
-          <ArrowLeft size={14} /> Return to Gallery
+          <ArrowLeft size={14} /> Back to Collection
         </button>
         <div className="flex items-center gap-6">
           <button className="p-2 hover:bg-ojo-charcoal/5 rounded-full"><Share2 size={18} /></button>
           <div className="h-6 w-px bg-ojo-stone/20" />
           <div className="text-[9px] font-black uppercase tracking-widest text-ojo-mustard flex items-center gap-2">
-            <Lock size={12} /> Encrypted Purchase
+            <Lock size={12} /> Secure Checkout
           </div>
         </div>
       </nav>
@@ -205,7 +205,7 @@ export function ProductDetailPage() {
           <div className="space-y-10">
             <div className="flex items-end gap-4">
               <span className="text-4xl font-mono font-medium text-ojo-charcoal">₹{product.price?.toLocaleString()}</span>
-              <span className="text-[10px] text-ojo-charcoal/30 uppercase font-black tracking-widest mb-2 font-sans">Inc. Heritage Premium</span>
+              <span className="text-[10px] text-ojo-charcoal/30 uppercase font-black tracking-widest mb-2 font-sans">Inclusive of all taxes</span>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-6">
@@ -213,7 +213,7 @@ export function ProductDetailPage() {
                 onClick={addToCart}
                 className="ojo-btn-primary flex-1 flex items-center justify-center gap-3 !py-6"
               >
-                <ShoppingCart size={18} /> Initiate Acquisition
+                <ShoppingCart size={18} /> Add to Cart
               </button>
               <button className="ojo-btn-outline !py-6">
                 Inquire
@@ -224,15 +224,15 @@ export function ProductDetailPage() {
               <div className="flex gap-4">
                 <Truck size={20} className="text-ojo-charcoal/40" />
                 <div>
-                  <p className="text-[9px] font-black uppercase tracking-widest">Insured Transit</p>
-                  <p className="text-[10px] text-ojo-charcoal/60">Museum-grade courier</p>
+                  <p className="text-[9px] font-black uppercase tracking-widest">Secure Shipping</p>
+                  <p className="text-[10px] text-ojo-charcoal/60">Handled with care</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <RotateCcw size={20} className="text-ojo-charcoal/40" />
                 <div>
-                  <p className="text-[9px] font-black uppercase tracking-widest">Exchange Trust</p>
-                  <p className="text-[10px] text-ojo-charcoal/60">7-day audit period</p>
+                  <p className="text-[9px] font-black uppercase tracking-widest">Easy Returns</p>
+                  <p className="text-[10px] text-ojo-charcoal/60">7-day return window</p>
                 </div>
               </div>
             </div>
@@ -245,27 +245,26 @@ export function ProductDetailPage() {
       {/* LEVEL 2: Layered Details */}
       <div className="max-w-4xl mx-auto px-6 mt-40">
         <div className="space-y-4 mb-20 text-center">
-          <span className="ojo-label ojo-label-verified">Artifact Intelligence</span>
-          <h2 className="text-4xl font-serif italic">Provenance & Custody</h2>
+          <span className="ojo-label ojo-label-verified">Product Details</span>
+          <h2 className="text-4xl font-serif italic">Origin & Story</h2>
         </div>
 
         <div className="space-y-2">
-          <AccordionItem id="provenance" title="Provenance Report" icon={FileText}>
-            This artifact's journey began in the {product.origin} region. Our field auditors have verified 
-            the raw material purity and established a direct custody link 
-            between the artisan cluster and our center. A digital certificate of ownership will be 
-            issued upon delivery.
+          <AccordionItem id="provenance" title="Origin & Authenticity" icon={FileText}>
+            This product was handcrafted in {product.origin}. We work directly 
+            with artisan clusters to ensure every piece is genuine and reflects 
+            the true heritage of the region.
           </AccordionItem>
-          <AccordionItem id="maker" title="The Master Hand" icon={UserCheck}>
-            Created by {product.artisanName || "a Master Artisan Guild"}. This maker represents the 
-            lineage of their craft heritage, specializing in techniques that pre-date modern machinery. 
+          <AccordionItem id="maker" title="About the Artisan" icon={UserCheck}>
+            Created by {product.artisanName || "a Master Artisan"}. They are part of a 
+            community that has preserved these traditional techniques for generations. 
           </AccordionItem>
-          <AccordionItem id="story" title="Cultural Context" icon={History}>
-            {product.story || "A tale of tradition and time. This artifact represents a movement in Indian history where craft was considered a form of prayer."}
+          <AccordionItem id="story" title="The Story" icon={History}>
+            {product.story || "A tale of tradition and time. This product represents the rich history of Indian craftsmanship and the soul of the community that created it."}
           </AccordionItem>
-          <AccordionItem id="logistics" title="Transit Protocol" icon={Truck}>
-            Artifacts of this grade require temperature-controlled handling. 
-            Arrival estimated within 12 business days under insured transit.
+          <AccordionItem id="logistics" title="Shipping Information" icon={Truck}>
+            Every item is packed with extreme care to ensure it reaches you safely. 
+            Delivery usually takes within 12 business days.
           </AccordionItem>
         </div>
       </div>
@@ -276,7 +275,7 @@ export function ProductDetailPage() {
       {relatedProducts.length > 0 && (
         <section className="py-40 px-6">
           <div className="max-w-7xl mx-auto space-y-16">
-            <h2 className="text-4xl font-serif italic text-center">Related Artifacts</h2>
+            <h2 className="text-4xl font-serif italic text-center">You May Also Like</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
               {relatedProducts.map((p) => (
                 <ProductCard 

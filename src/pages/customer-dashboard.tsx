@@ -83,7 +83,7 @@ export function CustomerDashboard() {
             className="w-full flex items-center gap-4 px-6 py-4 text-ojo-soft-cream/40 hover:text-ojo-terracotta transition-colors group"
           >
             <LogOut size={20} className="group-hover:-translate-x-2 transition-transform" />
-            <span className="text-[11px] font-black uppercase tracking-[0.2em]">Exit Vault</span>
+            <span className="text-[11px] font-black uppercase tracking-[0.2em]">Logout</span>
           </button>
         </div>
       </aside>
@@ -102,7 +102,7 @@ export function CustomerDashboard() {
                 <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-ojo-stone group-focus-within:text-ojo-terracotta transition-colors" />
                 <input 
                   type="text" 
-                  placeholder="Registry lookup..." 
+                  placeholder="Search..." 
                   className="bg-white/50 border border-ojo-stone/20 rounded-full pl-12 pr-6 py-2.5 text-[10px] font-black uppercase tracking-widest outline-none focus:border-ojo-mustard/40 transition-all w-64"
                 />
               </div>
@@ -135,9 +135,9 @@ function DashboardOverview() {
     <div className="space-y-16">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {[
-          { label: "Active Orders", val: "O2", icon: <Package />, color: "bg-ojo-terracotta" },
-          { label: "Verified Wishlist", val: "14", icon: <Heart />, color: "bg-ojo-mustard" },
-          { label: "Transit Status", val: "On Track", icon: <ShieldCheck />, color: "bg-ojo-charcoal" },
+          { label: "Active Orders", val: "2", icon: <Package />, color: "bg-ojo-terracotta" },
+          { label: "Saved Items", val: "14", icon: <Heart />, color: "bg-ojo-mustard" },
+          { label: "Shipment Status", val: "On Track", icon: <ShieldCheck />, color: "bg-ojo-charcoal" },
         ].map((stat) => (
           <div key={stat.label} className="bg-white p-8 rounded-[40px] shadow-xl border border-ojo-stone/10 relative overflow-hidden group">
             <div className={`absolute top-0 right-0 w-24 h-24 ${stat.color} opacity-5 -mr-8 -mt-8 rounded-full group-hover:scale-150 transition-transform duration-700`} />
@@ -156,9 +156,9 @@ function DashboardOverview() {
 
       <div className="space-y-8">
         <div className="flex items-center justify-between">
-           <h3 className="text-3xl font-serif text-ojo-charcoal">Recommended for <span className="italic text-ojo-terracotta">Your Gallery</span></h3>
+           <h3 className="text-3xl font-serif text-ojo-charcoal">Recommended for <span className="italic text-ojo-terracotta">You</span></h3>
            <Link to="/" className="text-[10px] font-black uppercase tracking-widest text-ojo-stone hover:text-ojo-mustard transition-colors flex items-center gap-2">
-             Registry Catalog <ChevronRight size={14} />
+             Shop All <ChevronRight size={14} />
            </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -185,7 +185,7 @@ function DashboardOverview() {
       <div className="space-y-8">
          <div className="flex items-center gap-4">
             <Clock size={20} className="text-ojo-mustard" />
-            <h3 className="text-2xl font-serif text-ojo-charcoal">Recently <span className="italic text-ojo-stone">Analyzed</span></h3>
+            <h3 className="text-2xl font-serif text-ojo-charcoal">Recently <span className="italic text-ojo-stone">Viewed</span></h3>
          </div>
          <div className="flex gap-8 overflow-x-auto pb-4 custom-scrollbar">
             {[5, 6, 7].map((i) => (
@@ -194,7 +194,7 @@ function DashboardOverview() {
                     <img src={`https://images.unsplash.com/photo-${1610 + i}?q=80&w=2670`} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
                  </div>
                  <div className="min-w-0">
-                    <h5 className="font-serif text-ojo-charcoal truncate">Artifact {i}02-B</h5>
+                    <h5 className="font-serif text-ojo-charcoal truncate">Product {i}02-B</h5>
                     <p className="text-[9px] font-black uppercase tracking-widest opacity-40">Viewed 2h ago</p>
                  </div>
               </div>
@@ -218,8 +218,8 @@ function OrdersPage() {
       className="space-y-10"
     >
       <div className="flex items-center justify-between border-b border-ojo-stone/10 pb-8">
-        <h3 className="text-4xl font-serif text-ojo-charcoal">Registry <span className="italic text-ojo-terracotta">Orders</span></h3>
-        <span className="text-[10px] font-black uppercase tracking-widest text-ojo-stone">{orders.length} Entries Found</span>
+        <h3 className="text-4xl font-serif text-ojo-charcoal">My <span className="italic text-ojo-terracotta">Orders</span></h3>
+        <span className="text-[10px] font-black uppercase tracking-widest text-ojo-stone">{orders.length} Orders Found</span>
       </div>
 
       <div className="space-y-6">
@@ -232,8 +232,8 @@ function OrdersPage() {
               <div className="flex-grow space-y-4 text-center md:text-left">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
-                    <h4 className="text-lg font-serif text-ojo-charcoal tracking-tighter">Order {order.id}</h4>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-ojo-stone">Validated on {order.date}</p>
+                    <h4 className="text-lg font-serif text-ojo-charcoal tracking-tighter">Order #{order.id}</h4>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-ojo-stone">Purchased on {order.date}</p>
                   </div>
                   <div className={`px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${order.status === 'SHIPPED' ? 'bg-ojo-terracotta/10 text-ojo-terracotta border border-ojo-terracotta/20' : 'bg-ojo-charcoal/10 text-ojo-charcoal opacity-50'}`}>
                     {order.status}
@@ -246,7 +246,7 @@ function OrdersPage() {
                    </div>
                    <div className="flex items-center gap-2">
                      <ShoppingBag size={12} />
-                     <span className="text-[10px] font-black uppercase tracking-widest">{order.items} Artifacts</span>
+                     <span className="text-[10px] font-black uppercase tracking-widest">{order.items} Items</span>
                    </div>
                 </div>
               </div>
@@ -256,7 +256,7 @@ function OrdersPage() {
                   onClick={() => window.location.href = `/order-tracking/${order.id}`}
                   className="px-6 py-3 bg-ojo-charcoal text-ojo-white rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-ojo-mustard transition-colors shadow-lg"
                 >
-                  Track Transit
+                  Track Order
                 </button>
               </div>
             </div>
@@ -275,9 +275,9 @@ function WishlistPage() {
       className="space-y-10"
     >
       <div className="flex items-center justify-between border-b border-ojo-stone/10 pb-8">
-        <h3 className="text-4xl font-serif text-ojo-charcoal">Provenance <span className="italic text-ojo-terracotta">Wishlist</span></h3>
+        <h3 className="text-4xl font-serif text-ojo-charcoal">My <span className="italic text-ojo-terracotta">Wishlist</span></h3>
         <button className="text-[10px] font-black uppercase tracking-widest text-ojo-terracotta hover:text-ojo-mustard transition-colors flex items-center gap-2 underline">
-          Share Registry
+          Share Wishlist
         </button>
       </div>
 
@@ -293,7 +293,7 @@ function WishlistPage() {
                <img src={`https://images.unsplash.com/photo-${1600 + i}?q=80&w=2670`} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-[1s]" />
                <div className="absolute inset-0 bg-ojo-charcoal/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-8">
                   <button className="w-full py-4 bg-ojo-white text-ojo-charcoal rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-ojo-mustard transition-colors">
-                    Move to Gallery
+                    Move to Cart
                   </button>
                </div>
             </div>
@@ -321,7 +321,7 @@ function AddressesPage() {
       className="space-y-10"
     >
       <div className="flex items-center justify-between border-b border-ojo-stone/10 pb-8">
-        <h3 className="text-4xl font-serif text-ojo-charcoal">Delivery <span className="italic text-ojo-terracotta">Endpoints</span></h3>
+        <h3 className="text-4xl font-serif text-ojo-charcoal">Saved <span className="italic text-ojo-terracotta">Addresses</span></h3>
         <button className="ojo-btn-primary !py-3 !px-8">
           <Plus size={16} /> New Address
         </button>
@@ -329,8 +329,8 @@ function AddressesPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {[
-          { label: "PRIMARY VAULT", address: "88 Haven Road, Indiranagar, Bangalore - 560038", icon: <ShieldCheck className="text-ojo-mustard" /> },
-          { label: "WORKSHOP GALLERY", address: "12 Creative Plaza, HSR Layout, Bangalore - 560102", icon: <ShoppingBag className="text-ojo-terracotta" /> },
+          { label: "HOME", address: "88 Haven Road, Indiranagar, Bangalore - 560038", icon: <ShieldCheck className="text-ojo-mustard" /> },
+          { label: "OFFICE", address: "12 Creative Plaza, HSR Layout, Bangalore - 560102", icon: <ShoppingBag className="text-ojo-terracotta" /> },
         ].map((item) => (
           <div key={item.label} className="bg-white rounded-[40px] p-10 shadow-xl border border-ojo-stone/10 group hover:border-ojo-mustard/40 transition-all space-y-6">
             <div className="flex items-center justify-between">
@@ -370,29 +370,29 @@ function ProfilePage() {
       className="max-w-2xl space-y-12"
     >
       <div className="border-b border-ojo-stone/10 pb-8">
-        <h3 className="text-4xl font-serif text-ojo-charcoal">Member <span className="italic text-ojo-terracotta">Identity</span></h3>
-        <p className="text-sm text-ojo-stone mt-2">Manage your verification status and personal profile.</p>
+        <h3 className="text-4xl font-serif text-ojo-charcoal">My <span className="italic text-ojo-terracotta">Profile</span></h3>
+        <p className="text-sm text-ojo-stone mt-2">Manage your account details and profile.</p>
       </div>
 
       <div className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">Legal Identity</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">Full Name</label>
             <div className="p-4 bg-white rounded-2xl border border-ojo-stone/10 shadow-inner font-medium text-ojo-charcoal">{user.name}</div>
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">Digital Handle</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">Username</label>
             <div className="p-4 bg-white rounded-2xl border border-ojo-stone/10 shadow-inner font-medium text-ojo-charcoal">@{user.name.split(' ')[0].toLowerCase()}</div>
           </div>
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">Email Protocol</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">Email Address</label>
           <div className="p-4 bg-white rounded-2xl border border-ojo-stone/10 shadow-inner font-medium text-ojo-charcoal">{user.email}</div>
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">Account Classification</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">Account Type</label>
           <div className="p-4 bg-ojo-charcoal text-ojo-white rounded-2xl border border-ojo-stone/10 shadow-xl flex items-center justify-between">
              <span className="font-black uppercase tracking-[0.2em] text-[10px]">{user.role}</span>
              <ShieldCheck size={16} className="text-ojo-mustard" />

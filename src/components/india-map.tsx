@@ -86,7 +86,7 @@ export function IndiaExplorer({ onStateClick }: { onStateClick?: (state: any) =>
        <div className="md:hidden w-full flex-1 overflow-y-auto bg-ojo-cream/30 p-6 overscroll-none">
           <div className="space-y-6">
              <div className="space-y-2">
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-mustard">Heritage Clusters</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-mustard">Regional Crafts</span>
                 <h3 className="text-3xl font-serif italic text-ojo-charcoal">Browse by Region</h3>
              </div>
              
@@ -135,23 +135,23 @@ export function IndiaExplorer({ onStateClick }: { onStateClick?: (state: any) =>
           
           <div className="space-y-8 md:space-y-12 relative z-10">
             <div className="space-y-4 md:space-y-6">
-              <span className="ojo-badge ojo-badge-verified">Provenance Registry 2.0</span>
-              <h3 className="text-4xl md:text-6xl font-serif text-ojo-charcoal leading-none tracking-tighter italic">OJO Registry Explorer.</h3>
+              <span className="ojo-badge ojo-badge-verified">Authenticity Registry 2.0</span>
+              <h3 className="text-4xl md:text-6xl font-serif text-ojo-charcoal leading-none tracking-tighter italic">OJO Craft Explorer.</h3>
               <p className="text-base md:text-lg text-ojo-charcoal/50 font-light italic leading-relaxed">
-                Interact with the political map. Use mouse wheel to zoom and drag to pan. Click states to audit heritage.
+                Explore the map. Use mouse wheel to zoom and drag to pan. Click states to explore local crafts.
               </p>
             </div>
 
             <div className="space-y-8 hidden md:block">
-               <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-ojo-mustard">Cluster Stats</h4>
+               <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-ojo-mustard">Regional Stats</h4>
                <div className="grid grid-cols-2 gap-6">
                   <div className="p-6 bg-ojo-cream rounded-2xl border border-ojo-mustard/10">
                      <span className="text-3xl font-mono text-ojo-charcoal">36</span>
-                     <p className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal/40">Verified Nodes</p>
+                     <p className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal/40">Regions Connected</p>
                   </div>
                   <div className="p-6 bg-ojo-cream rounded-2xl border border-ojo-mustard/10">
                      <span className="text-3xl font-mono text-ojo-charcoal">{products.length}+</span>
-                     <p className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal/40">Master Crafters</p>
+                     <p className="text-[9px] font-black uppercase tracking-widest text-ojo-charcoal/40">Verified Artisans</p>
                   </div>
                </div>
             </div>
@@ -253,7 +253,7 @@ export function StateDrawer({ state, isOpen, onClose, products }: { state: any |
                  alt={state.name} 
                  referrerPolicy="no-referrer"
                />
-               <div className="absolute inset-0 bg-gradient-to-t from-ojo-cream via-transparent to-ojo-charcoal/20" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ojo-cream via-transparent to-ojo-charcoal/20" />
                
                <button 
                  onClick={onClose}
@@ -263,7 +263,7 @@ export function StateDrawer({ state, isOpen, onClose, products }: { state: any |
                </button>
                
                <div className="absolute bottom-12 left-12 space-y-4">
-                  <div className="ojo-badge !bg-ojo-mustard !text-ojo-charcoal !border-none px-8 font-black uppercase tracking-[0.4em]">Node Verified</div>
+                  <div className="ojo-badge !bg-ojo-mustard !text-ojo-charcoal !border-none px-8 font-black uppercase tracking-[0.4em]">Region Verified</div>
                   <h2 className="text-7xl md:text-[120px] font-serif italic text-ojo-charcoal tracking-tighter leading-none select-none">{state.name}</h2>
                </div>
             </div>
@@ -273,15 +273,15 @@ export function StateDrawer({ state, isOpen, onClose, products }: { state: any |
                <div className="grid md:grid-cols-12 gap-24">
                   <div className="md:col-span-8 space-y-12">
                      <div className="space-y-6">
-                        <span className="text-[11px] font-black uppercase tracking-[0.8em] text-ojo-mustard">The Cultural Dossier</span>
+                        <span className="text-[11px] font-black uppercase tracking-[0.8em] text-ojo-mustard">The Story</span>
                         <h3 className="text-5xl md:text-7xl font-serif italic text-ojo-charcoal tracking-tighter">A Legacy of Origin.</h3>
                      </div>
                      <div className="prose prose-xl font-light italic text-ojo-charcoal/70 leading-relaxed max-w-4xl">
                         <p>
-                          {state.description || "Established through centuries of geographic mastery, this cluster represents the pinnacle of artisanal command. Each technique is a localized signature, verified at source to ensure permanent authenticity."}
+                          {state.description || "Established through centuries of tradition, this region represents the heights of artisanal craft. Each technique is a traditional signature, verified at source to ensure absolute authenticity."}
                         </p>
                         <p className="mt-8 text-xl">
-                          The provenance of {state.name} is anchored in its unique ecosystem, where materials and methods merge to create artifacts of sovereign quality.
+                          The origin of {state.name} is anchored in its unique ecosystem, where materials and methods merge to create products of exceptional quality.
                         </p>
                      </div>
                   </div>
@@ -300,14 +300,14 @@ export function StateDrawer({ state, isOpen, onClose, products }: { state: any |
                            </ul>
                         </div>
                      </div>
-
+ 
                      <div className="space-y-8 p-10 bg-ojo-charcoal text-white rounded-[3rem] shadow-deep">
                         <div className="flex items-center gap-4 text-ojo-mustard">
                            <ShieldCheck size={24} />
-                           <span className="text-[11px] font-black uppercase tracking-widest">Sovereign Audit</span>
+                           <span className="text-[11px] font-black uppercase tracking-widest">Expert Verification</span>
                         </div>
                         <p className="text-lg font-light italic opacity-70">
-                           All artifacts from this node are 100% GI Tagged and verified by OJO master cluster audits.
+                           All products from this region are GI (Geographical Indication) Tagged and verified through our extensive quality audits.
                         </p>
                      </div>
                   </div>
@@ -317,15 +317,15 @@ export function StateDrawer({ state, isOpen, onClose, products }: { state: any |
                <div className="space-y-20">
                   <div className="flex items-baseline justify-between border-b border-ojo-charcoal/10 pb-12">
                      <div className="space-y-4">
-                        <span className="ojo-badge ojo-badge-verified">Verification Registry</span>
-                        <h3 className="text-5xl font-serif italic text-ojo-charcoal tracking-tighter">Sovereign Artifacts.</h3>
+                        <span className="ojo-badge ojo-badge-verified">Verified Collection</span>
+                        <h3 className="text-5xl font-serif italic text-ojo-charcoal tracking-tighter">Authentic Products.</h3>
                      </div>
-                     <button onClick={() => navigate(`/category?origin=${state.id}`)} className="text-[11px] font-black uppercase tracking-widest text-ojo-mustard hover:text-ojo-charcoal transition-colors">Access Full Node</button>
+                     <button onClick={() => navigate(`/category?origin=${state.id}`)} className="text-[11px] font-black uppercase tracking-widest text-ojo-mustard hover:text-ojo-charcoal transition-colors">View All Products</button>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
                     {products.length === 0 ? (
-                       <div className="py-20 text-center col-span-2 italic text-ojo-charcoal/30">No products found for this region in the registry.</div>
+                       <div className="py-20 text-center col-span-2 italic text-ojo-charcoal/30">No products found for this region.</div>
                      ) : (
                        products.map((p, idx) => (
                          <motion.div 
@@ -342,7 +342,7 @@ export function StateDrawer({ state, isOpen, onClose, products }: { state: any |
                               />
                               <div className="absolute top-6 left-6 flex flex-col gap-2">
                                  {idx === 0 && <div className="ojo-badge !bg-ojo-mustard !text-ojo-charcoal !border-none text-[8px] font-black tracking-widest shadow-lg">MOST POPULAR</div>}
-                                 <div className="ojo-badge !bg-white/90 !text-ojo-charcoal !border-none text-[8px] font-black tracking-widest shadow-lg">GI CERTIFIED</div>
+                                 <div className="ojo-badge !bg-white/90 !text-ojo-charcoal !border-none text-[8px] font-black tracking-widest shadow-lg">GI TAGGED</div>
                               </div>
                            </div>
                            <div className="px-4 space-y-2">
@@ -361,7 +361,7 @@ export function StateDrawer({ state, isOpen, onClose, products }: { state: any |
                     className="ojo-btn-primary w-full py-12 !text-[14px] !bg-ojo-charcoal !text-white group hover:!bg-ojo-mustard hover:!text-ojo-charcoal transition-all"
                   >
                      <span className="flex items-center justify-center gap-6">
-                        Explore All Records from {state.name}
+                        Explore all products from {state.name}
                         <ArrowRight size={24} className="group-hover:translate-x-6 transition-transform" />
                      </span>
                   </button>

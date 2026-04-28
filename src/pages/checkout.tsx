@@ -40,15 +40,15 @@ export function Checkout() {
     try {
       const order = await api.post("/orders", { 
         items: cartItems,
-        address: "Primary Vault, Bangalore Hub", // Fallback for demo
+        address: "Home, Bangalore", // Fallback for demo
         paymentId: "PAY-" + Math.random().toString(36).substr(2, 9).toUpperCase()
       });
       
-      toast.success("Acquisition executed successfully.");
+      toast.success("Order placed successfully!");
       localStorage.removeItem("cart");
       navigate(`/order-tracking/${order.id}`);
     } catch (err) {
-      toast.error("Handshake with ledger failed.");
+      toast.error("Payment failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -90,7 +90,7 @@ export function Checkout() {
         
         <div className="relative z-10 space-y-12 h-full flex flex-col justify-between">
           <div className="space-y-10">
-            <h3 className="text-3xl font-serif text-ojo-mustard tracking-tighter">Acquisition Receipt</h3>
+            <h3 className="text-3xl font-serif text-ojo-mustard tracking-tighter">Order Summary</h3>
             
             <div className="space-y-6 max-h-[40vh] overflow-y-auto pr-4 custom-scrollbar">
               {cartItems.map((item, i) => (
@@ -100,7 +100,7 @@ export function Checkout() {
                    </div>
                    <div className="min-w-0 flex-grow">
                       <h4 className="font-serif text-lg truncate">{item.name}</h4>
-                      <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Qty: {item.quantity} • Origin: Verified</p>
+                      <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Qty: {item.quantity} • Region: Verified</p>
                    </div>
                    <span className="font-serif">₹{(item.price * item.quantity).toLocaleString()}</span>
                 </div>
@@ -111,27 +111,27 @@ export function Checkout() {
           <div className="space-y-8 border-t border-white/10 pt-10">
              <div className="space-y-4">
                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-40">
-                  <span>Artifact Subtotal</span>
+                  <span>Subtotal</span>
                   <span className="text-sm font-serif opacity-100">₹{total.toLocaleString()}</span>
                </div>
                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-40">
-                  <span>Global Logistics</span>
+                  <span>Shipping</span>
                   <span className="text-sm font-serif opacity-100">₹450</span>
                </div>
                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-ojo-mustard">
-                  <span>Sovereign Security</span>
+                  <span>Secure Delivery</span>
                   <span className="text-xs font-black px-2 py-1 bg-ojo-mustard/10 rounded-md">INCLUDED</span>
                </div>
              </div>
 
              <div className="flex justify-between items-end pt-4 border-t border-white/5">
-                <span className="text-[11px] font-black uppercase tracking-[0.4em] text-ojo-mustard">TOTAL LEDGER</span>
+                <span className="text-[11px] font-black uppercase tracking-[0.4em] text-ojo-mustard">ORDER TOTAL</span>
                 <span className="text-5xl font-serif tracking-tighter">₹{(total + 450).toLocaleString()}</span>
              </div>
 
              <div className="pt-6 flex items-center justify-center gap-4 text-ojo-soft-cream/30">
                 <Lock size={14} />
-                <span className="text-[8px] font-black uppercase tracking-[0.2em]">AES-256 Sovereign Encryption Active</span>
+                <span className="text-[8px] font-black uppercase tracking-[0.2em]">Secure 256-bit SSL Connection</span>
              </div>
           </div>
         </div>
@@ -149,14 +149,14 @@ function AddressStep({ onNext }: { onNext: () => void }) {
       className="space-y-12"
     >
       <div className="space-y-4">
-        <h2 className="text-5xl font-serif text-ojo-charcoal tracking-tighter">Shipment <br /><span className="italic text-ojo-terracotta">Endpoints</span></h2>
-        <p className="text-sm text-ojo-stone max-w-sm">Select the secure location for artifact delivery.</p>
+        <h2 className="text-5xl font-serif text-ojo-charcoal tracking-tighter">Shipping <br /><span className="italic text-ojo-terracotta">Address</span></h2>
+        <p className="text-sm text-ojo-stone max-w-sm">Select where you'd like your order delivered.</p>
       </div>
 
       <div className="grid grid-cols-1 gap-6">
         {[
-          { id: 1, title: "Primary Vault", addr: "88 Haven Road, Indiranagar, Bangalore - 560038", active: true },
-          { id: 2, title: "Studio Gallery", addr: "12 Creative Plaza, HSR Layout, Bangalore - 560102", active: false },
+          { id: 1, title: "Home", addr: "88 Haven Road, Indiranagar, Bangalore - 560038", active: true },
+          { id: 2, title: "Office", addr: "12 Creative Plaza, HSR Layout, Bangalore - 560102", active: false },
         ].map(addr => (
           <div key={addr.id} className={`p-8 rounded-[40px] border-2 transition-all cursor-pointer group ${addr.active ? 'border-ojo-mustard bg-white shadow-2xl' : 'border-ojo-stone/20 hover:border-ojo-mustard/40 bg-white/50'}`}>
             <div className="flex items-center justify-between mb-4">
@@ -173,7 +173,7 @@ function AddressStep({ onNext }: { onNext: () => void }) {
         ))}
 
         <button className="flex items-center justify-center gap-3 p-8 rounded-[40px] border-2 border-dashed border-ojo-stone/30 text-ojo-stone hover:border-ojo-mustard hover:text-ojo-mustard transition-all text-[10px] font-black uppercase tracking-widest">
-           <MapPin size={18} /> Establish New Location
+           <MapPin size={18} /> Add New Address
         </button>
       </div>
 
@@ -181,7 +181,7 @@ function AddressStep({ onNext }: { onNext: () => void }) {
         onClick={onNext}
         className="ojo-btn-primary w-full py-8 text-[11px] font-black uppercase tracking-[0.6em] mt-8"
       >
-        Proceed to Ledger <ArrowRight size={16} />
+        Proceed to Payment <ArrowRight size={16} />
       </button>
     </motion.div>
   );
@@ -196,8 +196,8 @@ function PaymentStep({ onNext, onPrev }: { onNext: () => void, onPrev: () => voi
       className="space-y-12"
     >
       <div className="space-y-4">
-        <h2 className="text-5xl font-serif text-ojo-charcoal tracking-tighter">Fiscal <br /><span className="italic text-ojo-terracotta">Settlement</span></h2>
-        <p className="text-sm text-ojo-stone max-w-sm">Select your preferred sovereign payment protocol.</p>
+        <h2 className="text-5xl font-serif text-ojo-charcoal tracking-tighter">Payment <br /><span className="italic text-ojo-terracotta">Method</span></h2>
+        <p className="text-sm text-ojo-stone max-w-sm">Select how you'd like to pay.</p>
       </div>
 
       <div className="space-y-6">
@@ -206,17 +206,17 @@ function PaymentStep({ onNext, onPrev }: { onNext: () => void, onPrev: () => voi
            <div className="relative z-10 space-y-10">
               <div className="flex justify-between items-start">
                  <CreditCard size={32} className="text-ojo-mustard" />
-                 <span className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard px-3 py-1 bg-ojo-mustard/10 rounded-full">Primary Protocol</span>
+                 <span className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard px-3 py-1 bg-ojo-mustard/10 rounded-full">Primary Card</span>
               </div>
               <div className="space-y-2">
-                 <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Account Linked</p>
+                 <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Saved Card</p>
                  <h4 className="text-3xl font-mono tracking-tighter">•••• •••• •••• 9920</h4>
               </div>
            </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-           {['UPI Ledger', 'Net Vault', 'Noble Credit', 'Crypto Proof'].map(method => (
+           {['UPI', 'Net Banking', 'Credit Card', 'Digital Wallet'].map(method => (
              <button key={method} className="p-6 rounded-[30px] border-2 border-ojo-stone/20 hover:border-ojo-mustard transition-all text-[10px] font-black uppercase tracking-widest text-ojo-charcoal">
                {method}
              </button>
@@ -232,7 +232,7 @@ function PaymentStep({ onNext, onPrev }: { onNext: () => void, onPrev: () => voi
           onClick={onNext}
           className="ojo-btn-primary flex-1 py-8 text-[11px] font-black uppercase tracking-[0.6em]"
         >
-          Final Verification <ArrowRight size={16} />
+          Review Order <ArrowRight size={16} />
         </button>
       </div>
     </motion.div>
@@ -248,23 +248,23 @@ function ReviewStep({ items, total, onNext, onPrev, loading }: { items: any[], t
       className="space-y-12"
     >
       <div className="space-y-4">
-        <h2 className="text-5xl font-serif text-ojo-charcoal tracking-tighter">Final <br /><span className="italic text-ojo-terracotta">Review</span></h2>
-        <p className="text-sm text-ojo-stone max-w-sm">Confirm the acquisition details before executing transit.</p>
+        <h2 className="text-5xl font-serif text-ojo-charcoal tracking-tighter">Review <br /><span className="italic text-ojo-terracotta">Order</span></h2>
+        <p className="text-sm text-ojo-stone max-w-sm">Check your order details before placing it.</p>
       </div>
 
       <div className="space-y-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
            <div className="space-y-4">
-              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-stone">Delivery Logic</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-stone">Delivery Address</label>
               <div className="flex items-center gap-4">
                  <div className="w-12 h-12 rounded-2xl bg-ojo-cream border border-ojo-stone/20 flex items-center justify-center text-ojo-terracotta">
                     <MapPin size={20} />
                  </div>
-                 <p className="text-sm font-serif italic text-ojo-charcoal">"Primary Vault, Bangalore Hub"</p>
+                 <p className="text-sm font-serif italic text-ojo-charcoal">"Home, Bangalore"</p>
               </div>
            </div>
            <div className="space-y-4">
-              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-stone">Settlement Method</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-stone">Payment Method</label>
               <div className="flex items-center gap-4">
                  <div className="w-12 h-12 rounded-2xl bg-ojo-cream border border-ojo-stone/20 flex items-center justify-center text-ojo-mustard">
                     <CreditCard size={20} />
@@ -277,10 +277,10 @@ function ReviewStep({ items, total, onNext, onPrev, loading }: { items: any[], t
         <div className="bg-ojo-mustard/5 p-10 rounded-[40px] border border-ojo-mustard/20 space-y-6">
            <div className="flex items-center gap-4 text-ojo-mustard">
               <ShieldCheck size={24} />
-              <h4 className="text-[11px] font-black uppercase tracking-[0.4em]">Sovereign Trust Guarantee</h4>
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em]">OJO Quality Guarantee</h4>
            </div>
            <p className="text-sm font-light text-ojo-charcoal/60 leading-relaxed italic">
-             "By proceeding, you acknowledge the provenance audit of {items.length} artifacts. OJO takes full custodial responsibility during transit until the physical handshake at your vault."
+             "By proceeding, you acknowledge the authenticity check for {items.length} items. OJO takes full responsibility for your items until they reach your doorstep."
            </p>
         </div>
       </div>
@@ -294,7 +294,7 @@ function ReviewStep({ items, total, onNext, onPrev, loading }: { items: any[], t
           disabled={loading}
           className="ojo-btn-primary flex-1 py-8 text-[11px] font-black uppercase tracking-[0.6em] disabled:opacity-50"
         >
-          {loading ? "EXECUTING ACQUISITION..." : "EXECUTE ACQUISITION"}
+          {loading ? "PLACING ORDER..." : "PLACE ORDER"}
         </button>
       </div>
     </motion.div>

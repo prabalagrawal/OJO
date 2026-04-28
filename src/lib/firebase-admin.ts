@@ -12,6 +12,6 @@ if (!admin.apps.length) {
   });
 }
 
-export const db = getFirestore();
+export const db = getFirestore(config.firestoreDatabaseId);
 export const auth = admin.auth();
 export { admin };

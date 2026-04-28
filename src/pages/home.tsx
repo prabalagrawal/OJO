@@ -42,7 +42,9 @@ import { ProductCard } from "../components/ProductCard.tsx";
 import { toast } from "sonner";
 import { PRODUCT_DATASET, Product } from "../data/product-dataset";
 
-const DECISION_TAGS = ["Most Trusted", "Best for Gifting", "Premium Pick", "Masterpiece"];
+import { UI_COPY } from "../constants/copy.ts";
+
+const DECISION_TAGS = ["Most Trusted", "Best for Gifting", "Premium Pick", "Popular Choice"];
 
 export function HomePage() {
   const navigate = useNavigate();
@@ -81,11 +83,11 @@ export function HomePage() {
           description: p.short_description,
           images: JSON.stringify([p.image]),
           artisanName: "Master Artisan",
-          story: "Each piece is hand-crafted using heritage methods passed down through generations."
+          story: "Each piece is handcrafted using traditional methods passed down through generations."
         })) as any;
         setProducts(items);
       } catch (err) {
-        toast.error("Failed to load cultural archives.");
+        toast.error("Failed to load products.");
       } finally {
         setLoading(false);
       }
@@ -141,11 +143,11 @@ export function HomePage() {
           >
             <div className="space-y-6">
               <h1 className="text-6xl md:text-[120px] font-serif text-white leading-[0.95] font-medium tracking-tight">
-                India’s Authentic <br /> 
-                Products. <span className="text-ojo-mustard italic">Verified.</span>
+                {UI_COPY.home.hero.title.split(',')[0]}, <br /> 
+                {UI_COPY.home.hero.title.split(',')[1]}. <span className="text-ojo-mustard italic">Verified.</span>
               </h1>
               <p className="text-xl md:text-3xl text-white/80 font-serif max-w-xl leading-relaxed">
-                Discover India’s authentic products by origin.
+                {UI_COPY.home.hero.subtitle}
               </p>
             </div>
             
@@ -154,7 +156,7 @@ export function HomePage() {
                 onClick={() => navigate("/category")}
                 className="ojo-btn-primary !px-16 !py-5 !text-[14px] !tracking-[0.3em] hover:!bg-white hover:!text-ojo-charcoal group"
               >
-                Explore Collection
+                {UI_COPY.home.hero.cta}
                 <ArrowRight size={20} className="ml-4 group-hover:translate-x-2 transition-transform" />
               </button>
             </div>
@@ -176,8 +178,8 @@ export function HomePage() {
               <MotifSystem type="mandala" variant="single" scale={0.8} />
             </div>
             <div className="space-y-4 relative z-10">
-              <span className="text-[12px] font-bold text-ojo-mustard uppercase tracking-[0.4em]">Curated Archives</span>
-              <h2 className="text-4xl md:text-6xl font-serif leading-tight">Authentic Collections</h2>
+              <span className="text-[12px] font-bold text-ojo-mustard uppercase tracking-[0.4em]">Handpicked Collection</span>
+              <h2 className="text-4xl md:text-6xl font-serif leading-tight">{UI_COPY.home.sections.newArrivals}</h2>
             </div>
             <button onClick={() => navigate("/category")} className="text-[11px] font-bold uppercase tracking-[0.25em] border-b border-ojo-charcoal/20 pb-2 hover:text-ojo-mustard hover:border-ojo-mustard transition-all">
               Explore All
@@ -212,7 +214,7 @@ export function HomePage() {
              <span className="text-[11px] font-bold tracking-[0.4em] uppercase text-ojo-mustard block">
                The Heritage of Haste-free Making
              </span>
-             <h2 className="text-5xl md:text-7xl font-serif text-ojo-charcoal leading-tight">Master Craft Traditions</h2>
+             <h2 className="text-5xl md:text-7xl font-serif text-ojo-charcoal leading-tight">{UI_COPY.home.sections.categories}</h2>
              <p className="text-lg text-ojo-charcoal/60 font-light leading-relaxed">
                Explore India's rich heritage through timeless crafts, each piece telling a story of mastery and origin.
              </p>
@@ -235,7 +237,7 @@ export function HomePage() {
                    </div>
                    <div className="text-center space-y-1">
                       <h4 className="font-serif text-2xl font-medium text-ojo-charcoal group-hover:text-ojo-mustard transition-colors leading-none">{craft.name}</h4>
-                      <p className="text-[10px] uppercase tracking-widest text-ojo-charcoal/40 font-bold">Explore Archive</p>
+                      <p className="text-[10px] uppercase tracking-widest text-ojo-charcoal/40 font-bold">Explore Collection</p>
                    </div>
                 </div>
              ))}
@@ -260,10 +262,10 @@ export function HomePage() {
              </div>
              <div className="space-y-6 relative z-10">
                 <span className="text-[11px] font-bold text-ojo-mustard uppercase tracking-[0.4em]">The Favorites</span>
-                <h2 className="text-5xl md:text-7xl font-serif text-ojo-charcoal leading-tight">Most Loved Pieces</h2>
+                <h2 className="text-5xl md:text-7xl font-serif text-ojo-charcoal leading-tight">{UI_COPY.home.sections.mostLoved}</h2>
              </div>
              <button onClick={() => navigate("/category")} className="ojo-btn-outline !px-10 hover:!bg-ojo-mustard">
-                Explore The Archive
+                View All Items
              </button>
           </div>
 
@@ -319,20 +321,20 @@ export function HomePage() {
           <div className="flex-1 space-y-16">
             <div className="space-y-8">
               <div className="space-y-4">
-                <span className="text-ojo-mustard font-bold uppercase tracking-[0.5em] text-[11px]">The Ojo Promise</span>
-                <h2 className="text-5xl md:text-8xl font-serif leading-[1] font-medium">Authentic by Origin. <br /> <span className="text-ojo-mustard italic">Trusted by OJO.</span></h2>
+                <span className="text-ojo-mustard font-bold uppercase tracking-[0.5em] text-[11px]">{UI_COPY.common.ojoQualityPromise}</span>
+                <h2 className="text-5xl md:text-8xl font-serif leading-[1] font-medium">Authenticity by Origin. <br /> <span className="text-ojo-mustard italic">Verified by OJO.</span></h2>
               </div>
               <p className="text-xl md:text-2xl text-white/40 font-light leading-relaxed max-w-2xl">
-                We bridge the gap between pure Indian provenance and modern trust. Every item is hand-selected and origin-verified.
+                We bridge the gap between traditional Indian craftsmanship and modern quality standards. Every item is hand-selected and verified for authenticity.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-12 gap-x-16">
                {[
-                 { title: "Verified Source", desc: "Direct from the artisan clusters.", icon: <ShieldCheck size={24} /> },
-                 { title: "Origin Tracked", desc: "Every thread and clay with a journey map.", icon: <MapPin size={24} /> },
-                 { title: "Authentic Always", desc: "GI Certified and material tested.", icon: <Award size={24} /> },
-                 { title: "Global Safety", desc: "Insured transit for heritage goods.", icon: <Truck size={24} /> }
+                 { title: "Authentic Sourcing", desc: "Direct from traditional artisan clusters.", icon: <ShieldCheck size={24} /> },
+                 { title: "Direct Mapping", desc: "Every item's journey is tracked and shared.", icon: <MapPin size={24} /> },
+                 { title: "Quality Guarantee", desc: "Certified materials and genuine craft.", icon: <Award size={24} /> },
+                 { title: "Safe Shipping", desc: "Secure delivery for your valuable items.", icon: <Truck size={24} /> }
                ].map((point) => (
                  <div key={point.title} className="flex gap-6 group">
                     <div className="w-14 h-14 shrink-0 rounded-full border border-ojo-mustard/30 flex items-center justify-center text-ojo-mustard group-hover:bg-ojo-mustard group-hover:text-ojo-charcoal transition-all duration-500">
@@ -399,18 +401,18 @@ export function HomePage() {
         <div className="max-w-[1440px] mx-auto px-6 relative z-10">
            <div className="max-w-4xl mx-auto text-center space-y-16">
               <div className="space-y-6">
-                 <h2 className="text-5xl md:text-7xl font-serif text-white leading-tight">Join the archive.</h2>
-                 <p className="text-white/60 text-lg md:text-xl font-light tracking-wide">Stay connected with the world of authentic Indian crafts.</p>
+                 <h2 className="text-5xl md:text-7xl font-serif text-white leading-tight">Stay Connected.</h2>
+                 <p className="text-white/60 text-lg md:text-xl font-light tracking-wide">Be the first to hear about new arrivals and artisan stories.</p>
               </div>
 
-              <form className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto" onSubmit={(e) => { e.preventDefault(); toast.success("Subscribed to the archive."); }}>
+              <form className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto" onSubmit={(e) => { e.preventDefault(); toast.success("Subscribed to the newsletter."); }}>
                  <input 
                    type="email" 
                    placeholder="Your email address" 
                    className="flex-1 bg-white/10 backdrop-blur-md text-white border border-white/20 px-10 py-6 text-[12px] uppercase tracking-widest focus:outline-none focus:bg-white/20 transition-all font-bold placeholder:text-white/40"
                    required
                  />
-                 <button type="submit" className="bg-white text-ojo-charcoal px-12 py-6 text-[12px] font-black uppercase tracking-[0.3em] hover:bg-ojo-mustard hover:text-white transition-all">Subscribe</button>
+                 <button type="submit" className="bg-white text-ojo-charcoal px-12 py-6 text-[12px] font-black uppercase tracking-[0.3em] hover:bg-ojo-mustard hover:text-white transition-all">Subscribe Now</button>
               </form>
            </div>
         </div>

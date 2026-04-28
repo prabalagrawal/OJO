@@ -17,12 +17,12 @@ export function ForgotPasswordPage() {
     setLoading(true);
     try {
       await sendPasswordResetEmail(auth, email);
-      toast.success("Recovery Transmission Sent", {
-        description: "Check your encrypted inbox for the reset link."
+      toast.success("Reset link sent", {
+        description: "Check your email for the reset link."
       });
       navigate("/login");
     } catch (error: any) {
-      toast.error("Recovery Failed", {
+      toast.error("Error sending reset link", {
         description: error.message
       });
     } finally {
@@ -45,20 +45,20 @@ export function ForgotPasswordPage() {
               <Shield size={32} />
             </div>
           </div>
-          <h1 className="text-4xl font-serif italic text-ojo-charcoal tracking-tight">Recover Access</h1>
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-ojo-charcoal/40">Request a secure registry reset</p>
+          <h1 className="text-4xl font-serif italic text-ojo-charcoal tracking-tight">Reset Password</h1>
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-ojo-charcoal/40">Request a password reset link</p>
         </div>
 
         <form onSubmit={handleReset} className="space-y-10">
           <div className="space-y-4">
-            <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40 ml-6">Registry Email</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40 ml-6">Email Address</label>
             <div className="relative group">
               <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-ojo-stone group-focus-within:text-ojo-mustard transition-colors" size={18} />
               <input 
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="master.artisan@ojo.heritage"
+                placeholder="your@email.com"
                 className="w-full bg-ojo-cream/50 border border-ojo-stone/20 rounded-full pl-16 pr-8 py-5 text-sm outline-none focus:border-ojo-mustard transition-all"
                 required
               />
@@ -69,7 +69,7 @@ export function ForgotPasswordPage() {
             disabled={loading}
             className="ojo-btn-primary w-full py-6 !text-[11px] shadow-4xl shadow-ojo-mustard/20"
           >
-            {loading ? "Transmitting..." : "Send Recovery Link"}
+            {loading ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
 
@@ -78,7 +78,7 @@ export function ForgotPasswordPage() {
             to="/login" 
             className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40 hover:text-ojo-mustard transition-colors inline-flex items-center gap-2"
           >
-            <ChevronLeft size={14} /> Return to Login
+            <ChevronLeft size={14} /> Back to Login
           </Link>
         </div>
       </motion.div>

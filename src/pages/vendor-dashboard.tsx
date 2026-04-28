@@ -47,7 +47,7 @@ export function VendorDashboard() {
         addedAt: new Date().toISOString()
       });
       setShowAdd(false);
-      toast.success("Artifact submitted for verification");
+      toast.success("Product submitted for review");
       loadProducts();
     } catch (err) {
       handleFirestoreError(err, OperationType.WRITE, path);
@@ -68,14 +68,14 @@ export function VendorDashboard() {
     <div className="space-y-12">
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-4xl font-serif">Vendor Atelier</h1>
-          <p className="text-sm text-charcoal/50">Manage your authentic creations and tracking</p>
+          <h1 className="text-4xl font-serif">Seller Dashboard</h1>
+          <p className="text-sm text-charcoal/50">Manage your authentic products and orders</p>
         </div>
         <button 
           onClick={() => setShowAdd(true)}
           className="ojo-btn-primary flex items-center gap-2"
         >
-          <Plus size={18} /> New Creation
+          <Plus size={18} /> Add New Product
         </button>
       </div>
 
@@ -92,7 +92,7 @@ export function VendorDashboard() {
         </div>
         <div className="ojo-card flex flex-col items-center justify-center py-10 space-y-2 col-span-2">
           <div className="text-3xl font-mono text-ojo-charcoal">₹{products.reduce((acc, p) => acc + (p.price || 0), 0).toLocaleString()}</div>
-          <div className="text-[10px] uppercase font-bold tracking-widest opacity-40">Registry Estimated Value</div>
+          <div className="text-[10px] uppercase font-bold tracking-widest opacity-40">Total Inventory Value</div>
         </div>
       </div>
 
@@ -138,7 +138,7 @@ export function VendorDashboard() {
             animate={{ scale: 1, opacity: 1 }}
             className="ojo-card max-w-xl w-full space-y-8 bg-ojo-cream"
           >
-            <h2 className="text-3xl font-serif italic">New Submission</h2>
+            <h2 className="text-3xl font-serif italic">Add New Product</h2>
             <form onSubmit={handleAddProduct} className="grid grid-cols-2 gap-6">
               <div className="col-span-2 space-y-2">
                 <label className="text-[10px] uppercase tracking-widest font-bold">Product Name</label>
@@ -207,7 +207,7 @@ export function VendorDashboard() {
                   className="ojo-btn-primary flex-1 flex items-center justify-center gap-2"
                 >
                   {submitting && <Loader2 size={14} className="animate-spin" />}
-                  Submit for Verification
+                  Submit for Review
                 </button>
                 <button type="button" onClick={() => setShowAdd(false)} className="px-8 py-3 text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/40 hover:text-ojo-charcoal transition-colors">Cancel</button>
               </div>

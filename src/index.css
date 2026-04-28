@@ -1,50 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-ojo-cream: #F5F2E9;
-  --color-ojo-charcoal: #1C1C1C;
-  --color-ojo-mustard: #B07E1E;
-  --color-ojo-terracotta: #C1440E;
-  --color-ojo-brown: #2A1F1A;
-  --color-ojo-stone: #E5DFD3;
+  --color-ojo-gold: #C4AF27;
+  --color-ojo-red: #8B0F1A;
+  --color-ojo-terracotta: #C1441A;
+  --color-ojo-beige: #F3E9D6;
+  --color-ojo-charcoal: #111111;
   --color-ojo-white: #FFFFFF;
+  --color-ojo-stone: #4A4A4A;
+  
+  /* Legacy aliases for stability */
+  --color-ojo-mustard: #C4AF27;
+  --color-ojo-cream: #F3E9D6;
+  --color-ojo-charcoal-light: #222222;
 
-  --font-serif: "Playfair Display", serif;
-  --font-sans: "Inter", sans-serif;
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "DM Sans", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  --shadow-premium: 0 8px 24px rgba(0, 0, 0, 0.06);
-  --shadow-warm: 0 12px 30px rgba(176, 126, 30, 0.18);
-  --shadow-deep: 0 24px 60px rgba(176, 126, 30, 0.18);
+  --shadow-premium: 0 8px 32px rgba(17, 17, 17, 0.1);
+  --shadow-warm: 0 12px 40px rgba(196, 175, 39, 0.15);
+  --shadow-deep: 0 24px 60px rgba(139, 15, 26, 0.1);
 }
 
 @layer base {
   body {
-    @apply bg-ojo-cream text-ojo-charcoal font-sans text-[16px] leading-[1.6] antialiased selection:bg-ojo-mustard selection:text-white;
+    @apply bg-ojo-beige text-ojo-charcoal font-sans text-[16px] leading-[1.6] antialiased selection:bg-ojo-gold selection:text-ojo-charcoal;
   }
 
   h1, h2, h3, h4, .font-serif {
-    @apply font-serif font-medium text-ojo-charcoal tracking-[-0.02em] leading-[1.3];
+    @apply font-serif font-medium text-ojo-charcoal tracking-[-0.01em] leading-[1.2];
   }
 }
 
 @layer components {
-  /* Premium Button System */
+  /* Premium architectural UI system */
   .ojo-btn-primary {
-    @apply bg-ojo-mustard text-ojo-white px-8 py-3.5 text-[12px] font-medium uppercase tracking-[0.2em] transition-all duration-500 shadow-premium active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 rounded-full;
+    @apply bg-ojo-gold text-ojo-charcoal px-8 py-4 text-[11px] font-black uppercase tracking-[0.3em] transition-all duration-500 shadow-premium active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 rounded-none;
   }
 
   .ojo-btn-primary:hover {
-    @apply bg-ojo-charcoal shadow-warm -translate-y-1;
+    @apply bg-ojo-red text-ojo-beige shadow-deep;
+  }
+
+  .ojo-btn-secondary {
+    @apply bg-ojo-red text-ojo-beige px-8 py-4 text-[11px] font-black uppercase tracking-[0.3em] transition-all duration-500 shadow-premium active:scale-95 flex items-center justify-center gap-3 rounded-none;
+  }
+
+  .ojo-btn-secondary:hover {
+    @apply bg-ojo-charcoal text-ojo-gold;
   }
 
   .ojo-btn-outline {
-    @apply border border-ojo-charcoal/20 text-ojo-charcoal px-8 py-3.5 text-[12px] font-medium uppercase tracking-[0.2em] transition-all duration-500 flex items-center justify-center gap-3 bg-transparent rounded-full;
+    @apply border border-ojo-charcoal/20 text-ojo-charcoal px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 flex items-center justify-center gap-3 bg-transparent rounded-none;
   }
 
   .ojo-btn-outline:hover {
-    @apply border-ojo-charcoal bg-ojo-charcoal text-ojo-white shadow-premium;
+    @apply border-ojo-gold text-ojo-gold bg-ojo-charcoal shadow-premium;
   }
 
   /* Premium Cards */
@@ -67,11 +80,11 @@
   }
 
   .ojo-badge-verified {
-    @apply bg-ojo-mustard/5 text-ojo-mustard border-ojo-mustard/20;
+    @apply bg-ojo-gold/5 text-ojo-gold border-ojo-gold/20;
   }
   
   .ojo-badge-new {
-    @apply bg-ojo-terracotta text-white border-ojo-terracotta;
+    @apply bg-ojo-red text-ojo-beige border-ojo-red;
   }
 }
 

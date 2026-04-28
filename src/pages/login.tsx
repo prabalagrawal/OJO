@@ -20,14 +20,14 @@ export function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       const isAdmin = email.toLowerCase() === 'prabalagrawal23@gmail.com';
-      toast.success("Identity Verified. Welcome back.");
+      toast.success("Successfully logged in. Welcome back!");
       if (isAdmin) {
         navigate("/admin");
       } else {
         navigate("/");
       }
     } catch (err: any) {
-      toast.error(err.message || "Failed to establish secure session");
+      toast.error(err.message || "Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
@@ -51,27 +51,27 @@ export function LoginPage() {
           <div className="flex justify-center mb-10">
             <OjoLogo size="lg" />
           </div>
-          <h1 className="text-5xl font-serif italic text-ojo-charcoal">Sovereign Access</h1>
-          <p className="text-[11px] font-black uppercase tracking-[0.5em] text-ojo-mustard">Establish Your Identity</p>
+          <h1 className="text-5xl font-serif italic text-ojo-charcoal">Login</h1>
+          <p className="text-[11px] font-black uppercase tracking-[0.5em] text-ojo-mustard">Sign in to your account</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-10 relative z-10">
           <div className="space-y-8">
             <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/50 ml-8">Registry Identity</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/50 ml-8">Email Address</label>
               <input 
                 type="email" 
                 required 
                 className="w-full bg-ojo-cream/50 border border-ojo-stone/10 rounded-full px-10 py-6 text-[15px] outline-none focus:border-ojo-mustard transition-all"
-                placeholder="patron@heritage.com"
+                placeholder="your@email.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
               />
             </div>
             <div className="space-y-4">
               <div className="flex justify-between items-center px-8">
-                <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/50">Passcode</label>
-                <Link to="/forgot-password" className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard hover:opacity-70 transition-all">Recover?</Link>
+                <label className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/50">Password</label>
+                <Link to="/forgot-password" className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard hover:opacity-70 transition-all">Forgot Password?</Link>
               </div>
               <input 
                 type="password" 
@@ -91,7 +91,7 @@ export function LoginPage() {
           >
             {loading ? <Loader2 className="animate-spin" size={20} /> : (
               <>
-                <span>Secure Identity Verification</span> 
+                <span>Sign In</span> 
                 <ArrowRight size={20} className="group-hover:translate-x-3 transition-transform" />
               </>
             )}
@@ -100,10 +100,10 @@ export function LoginPage() {
 
         <div className="text-center space-y-10 pt-6">
           <p className="text-xl text-ojo-charcoal/50 font-light italic">
-            No Registry Access? <Link to="/register" className="text-ojo-mustard !not-italic font-bold hover:underline">Establish Membership</Link>
+            New to OJO? <Link to="/register" className="text-ojo-mustard !not-italic font-bold hover:underline">Create Account</Link>
           </p>
           <div className="flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-ojo-terracotta opacity-60">
-            <ShieldCheck size={14} /> Encrypted Origin Protection Active
+            <ShieldCheck size={14} /> Secure Login Protected
           </div>
         </div>
       </motion.div>
