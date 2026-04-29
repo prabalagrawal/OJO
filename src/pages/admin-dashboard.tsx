@@ -10,6 +10,8 @@ import { toast } from "sonner";
 
 type TabType = 'overview' | 'audit' | 'orders' | 'vendors';
 
+import { DashboardSkeleton } from "../components/DashboardSkeleton";
+
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [stats, setStats] = useState<any>(null);
@@ -50,6 +52,10 @@ export function AdminDashboard() {
       toast.error("Audit authorization failed.");
     }
   };
+
+  if (loading && !stats && activeTab === 'overview') {
+    return <div className="p-16"><DashboardSkeleton /></div>;
+  }
 
   return (
     <div className="min-h-screen bg-ojo-cream/30 p-8 md:p-16 space-y-16">

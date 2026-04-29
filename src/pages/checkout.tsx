@@ -9,6 +9,8 @@ import {
   ChevronRight, 
   ChevronLeft,
   CheckCircle,
+  Truck,
+  Globe,
   Clock,
   Lock,
   ArrowRight
@@ -26,7 +28,14 @@ export function Checkout() {
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) setCartItems(JSON.parse(savedCart));
-  }, []);
+
+    // Check for auth
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please login to complete your purchase");
+      navigate("/login?redirect=/checkout");
+    }
+  }, [navigate]);
 
   const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -143,46 +152,62 @@ export function Checkout() {
 function AddressStep({ onNext }: { onNext: () => void }) {
   return (
     <motion.div 
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="space-y-12"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="space-y-12 pb-32 md:pb-0"
     >
       <div className="space-y-4">
-        <h2 className="text-5xl font-serif text-ojo-charcoal tracking-tighter">Shipping <br /><span className="italic text-ojo-terracotta">Address</span></h2>
-        <p className="text-sm text-ojo-stone max-w-sm">Select where you'd like your order delivered.</p>
+        <h2 className="text-4xl md:text-5xl font-serif text-ojo-charcoal tracking-tighter">Where shall we <br /><span className="italic text-ojo-terracotta">Deliver?</span></h2>
+        <p className="text-sm text-ojo-stone max-w-sm">Authenticity starts with the right orientation.</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
-        {[
-          { id: 1, title: "Home", addr: "88 Haven Road, Indiranagar, Bangalore - 560038", active: true },
-          { id: 2, title: "Office", addr: "12 Creative Plaza, HSR Layout, Bangalore - 560102", active: false },
-        ].map(addr => (
-          <div key={addr.id} className={`p-8 rounded-[40px] border-2 transition-all cursor-pointer group ${addr.active ? 'border-ojo-mustard bg-white shadow-2xl' : 'border-ojo-stone/20 hover:border-ojo-mustard/40 bg-white/50'}`}>
-            <div className="flex items-center justify-between mb-4">
-               <div className="flex items-center gap-4">
-                  <div className={`w-6 h-6 rounded-full border-2 transition-all flex items-center justify-center ${addr.active ? 'border-ojo-mustard' : 'border-ojo-stone'}`}>
-                     {addr.active && <div className="w-2.5 h-2.5 rounded-full bg-ojo-mustard" />}
-                  </div>
-                  <span className="text-[10px] font-black uppercase tracking-widest">{addr.title}</span>
-               </div>
-               <ShieldCheck size={20} className={addr.active ? 'text-ojo-mustard' : 'text-ojo-stone opacity-20'} />
-            </div>
-            <p className="text-xl font-serif text-ojo-charcoal opacity-60 px-10 italic">"{addr.addr}"</p>
-          </div>
-        ))}
+      <div className="space-y-8">
+        {/* PINCODE FIRST */}
+        <div className="space-y-4">
+           <label className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-stone">Pincode (Start Here)</label>
+           <input 
+             type="text" 
+             inputMode="numeric"
+             placeholder="560038"
+             className="w-full h-16 bg-white border border-ojo-stone/20 rounded-2xl px-6 text-xl font-mono tracking-widest focus:border-ojo-gold outline-none transition-all"
+           />
+        </div>
 
-        <button className="flex items-center justify-center gap-3 p-8 rounded-[40px] border-2 border-dashed border-ojo-stone/30 text-ojo-stone hover:border-ojo-mustard hover:text-ojo-mustard transition-all text-[10px] font-black uppercase tracking-widest">
-           <MapPin size={18} /> Add New Address
+        <div className="grid grid-cols-1 gap-6">
+          {[
+            { id: 1, title: "Home", addr: "88 Haven Road, Indiranagar, Bangalore - 560038", active: true },
+            { id: 2, title: "Office", addr: "12 Creative Plaza, HSR Layout, Bangalore - 560102", active: false },
+          ].map(addr => (
+            <div key={addr.id} className={`p-6 md:p-8 rounded-[30px] md:rounded-[40px] border-2 transition-all cursor-pointer group ${addr.active ? 'border-ojo-mustard bg-white shadow-2xl' : 'border-ojo-stone/20 hover:border-ojo-mustard/40 bg-white/50'}`}>
+              <div className="flex items-center justify-between mb-4">
+                 <div className="flex items-center gap-4">
+                    <div className={`w-6 h-6 rounded-full border-2 transition-all flex items-center justify-center ${addr.active ? 'border-ojo-mustard' : 'border-ojo-stone'}`}>
+                       {addr.active && <div className="w-2.5 h-2.5 rounded-full bg-ojo-mustard" />}
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-widest">{addr.title}</span>
+                 </div>
+                 <ShieldCheck size={20} className={addr.active ? 'text-ojo-mustard' : 'text-ojo-stone opacity-20'} />
+              </div>
+              <p className="text-lg md:text-xl font-serif text-ojo-charcoal opacity-60 px-10 italic">"{addr.addr}"</p>
+            </div>
+          ))}
+
+          <button className="flex items-center justify-center gap-3 p-8 rounded-[30px] border-2 border-dashed border-ojo-stone/30 text-ojo-stone hover:border-ojo-mustard hover:text-ojo-mustard transition-all text-[10px] font-black uppercase tracking-widest">
+             <MapPin size={18} /> Add New Address
+          </button>
+        </div>
+      </div>
+
+      {/* MOBILE FIXED BOTTOM */}
+      <div className="fixed bottom-0 inset-x-0 p-4 md:relative md:p-0 bg-white md:bg-transparent border-t border-ojo-stone/10 md:border-t-0 z-50">
+        <button 
+          onClick={onNext}
+          className="ojo-btn-primary w-full h-16 text-[12px] font-black uppercase tracking-[0.6em]"
+        >
+          Proceed to Payment <ArrowRight size={16} />
         </button>
       </div>
-
-      <button 
-        onClick={onNext}
-        className="ojo-btn-primary w-full py-8 text-[11px] font-black uppercase tracking-[0.6em] mt-8"
-      >
-        Proceed to Payment <ArrowRight size={16} />
-      </button>
     </motion.div>
   );
 }
@@ -190,49 +215,56 @@ function AddressStep({ onNext }: { onNext: () => void }) {
 function PaymentStep({ onNext, onPrev }: { onNext: () => void, onPrev: () => void }) {
   return (
     <motion.div 
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="space-y-12"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="space-y-12 pb-32 md:pb-0"
     >
       <div className="space-y-4">
-        <h2 className="text-5xl font-serif text-ojo-charcoal tracking-tighter">Payment <br /><span className="italic text-ojo-terracotta">Method</span></h2>
-        <p className="text-sm text-ojo-stone max-w-sm">Select how you'd like to pay.</p>
+        <h2 className="text-4xl md:text-5xl font-serif text-ojo-charcoal tracking-tighter">Sovereign <br /><span className="italic text-ojo-terracotta">Payment</span></h2>
+        <p className="text-sm text-ojo-stone max-w-sm">Secure transactions for centuries of craftsmanship.</p>
       </div>
 
-      <div className="space-y-6">
-        <div className="bg-ojo-charcoal rounded-[40px] p-10 text-ojo-white relative overflow-hidden group border-2 border-transparent">
-           <div className="absolute top-0 right-0 w-32 h-32 pattern-jali opacity-10 bg-ojo-mustard -mr-16 -mt-16 rounded-full" />
-           <div className="relative z-10 space-y-10">
-              <div className="flex justify-between items-start">
-                 <CreditCard size={32} className="text-ojo-mustard" />
-                 <span className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard px-3 py-1 bg-ojo-mustard/10 rounded-full">Primary Card</span>
+      <div className="space-y-8">
+        {/* UPI SECTION FIRST */}
+        <div className="space-y-4">
+           <label className="text-[10px] font-black uppercase tracking-widest text-ojo-mustard">Preferred: UPI (Instant Verification)</label>
+           <button className="w-full h-20 bg-ojo-mustard/5 border-2 border-ojo-mustard rounded-[30px] flex items-center justify-between px-8 group hover:bg-ojo-mustard/10 transition-all">
+              <div className="flex items-center gap-6">
+                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" className="h-4" alt="UPI" />
+                 <span className="text-[11px] font-black uppercase tracking-widest text-ojo-charcoal">Pay with PhonePe / GPay</span>
               </div>
-              <div className="space-y-2">
-                 <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Saved Card</p>
-                 <h4 className="text-3xl font-mono tracking-tighter">•••• •••• •••• 9920</h4>
-              </div>
-           </div>
+              <ChevronRight size={20} className="text-ojo-mustard group-hover:translate-x-1 transition-transform" />
+           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-           {['UPI', 'Net Banking', 'Credit Card', 'Digital Wallet'].map(method => (
-             <button key={method} className="p-6 rounded-[30px] border-2 border-ojo-stone/20 hover:border-ojo-mustard transition-all text-[10px] font-black uppercase tracking-widest text-ojo-charcoal">
-               {method}
+        <div className="grid grid-cols-1 gap-4">
+           {[
+             { name: 'Credit / Debit Card', icon: <CreditCard size={20} /> },
+             { name: 'Net Banking', icon: <Globe size={20} /> },
+             { name: 'Digital Wallets', icon: <ShoppingBag size={20} /> },
+             { name: 'Cash on Delivery (₹50 Extra)', icon: <Truck size={20} /> }
+           ].map(method => (
+             <button key={method.name} className="h-16 rounded-[20px] border-2 border-ojo-stone/10 hover:border-ojo-mustard transition-all flex items-center justify-between px-8 text-ojo-charcoal">
+               <div className="flex items-center gap-4">
+                 <span className="text-ojo-stone">{method.icon}</span>
+                 <span className="text-[10px] font-black uppercase tracking-widest">{method.name}</span>
+               </div>
+               <div className="w-5 h-5 rounded-full border-2 border-ojo-stone/20" />
              </button>
            ))}
         </div>
       </div>
 
-      <div className="flex gap-6 mt-8">
-        <button onClick={onPrev} className="px-10 py-8 rounded-full border-2 border-ojo-stone/20 text-[11px] font-black uppercase tracking-widest hover:border-ojo-terracotta transition-all">
+      <div className="fixed bottom-0 inset-x-0 p-4 md:relative md:p-0 bg-white md:bg-transparent border-t border-ojo-stone/10 md:border-t-0 z-50 flex gap-4">
+        <button onClick={onPrev} className="px-8 h-16 rounded-2xl border-2 border-ojo-stone/20 text-[11px] font-black uppercase tracking-widest hover:border-ojo-terracotta transition-all">
           Back
         </button>
         <button 
           onClick={onNext}
-          className="ojo-btn-primary flex-1 py-8 text-[11px] font-black uppercase tracking-[0.6em]"
+          className="ojo-btn-primary flex-1 h-16 text-[12px] font-black uppercase tracking-[0.6em]"
         >
-          Review Order <ArrowRight size={16} />
+          Review Final <ArrowRight size={16} />
         </button>
       </div>
     </motion.div>

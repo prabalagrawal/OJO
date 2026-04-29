@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { doc, getDoc, collection, query, where, limit, getDocs } from "firebase/firestore";
-import { db } from "../lib/firebase";
+import { doc, getDoc, collection, query, where, limit, getDocs, setDoc, deleteDoc } from "firebase/firestore";
+import { db, auth } from "../lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   ShieldCheck, 
@@ -11,6 +12,7 @@ import {
   ChevronUp, 
   ArrowLeft,
   ShoppingCart,
+  Heart,
   CheckCircle,
   Truck,
   RotateCcw,
@@ -22,7 +24,9 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { MotifSystem, PatternDivider, MandalaHalo } from "../components/motifs.tsx";
-import { ProductCard } from "../components/ProductCard.tsx";
+import { ProductCard } from "../components/Product/ProductCard";
+import { ProductDetailSkeleton } from "../components/Product/ProductDetailSkeleton";
+import { StickyAddToCart } from "../components/StickyAddToCart";
 import { handleFirestoreError, OperationType } from "../lib/firestore-errors";
 
 export function ProductDetailPage() {
@@ -35,25 +39,95 @@ export function ProductDetailPage() {
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
   const [activeAccordion, setActiveAccordion] = useState<string | null>("provenance");
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+      if (u && id) {
+        checkWishlist(u.uid, id);
+      }
+    });
+    return () => unsub();
+  }, [id]);
+
+  const checkWishlist = async (uid: string, productId: string) => {
+    try {
+      const wishlistRef = doc(db, `users/${uid}/wishlist`, productId);
+      const snap = await getDoc(wishlistRef);
+      setIsInWishlist(snap.exists());
+    } catch (err) {
+      console.error("Error checking wishlist", err);
+    }
+  };
+
+  const toggleWishlist = async () => {
+    if (!user) {
+      toast.error("Please login to save pieces to your wishlist", {
+        action: {
+          label: "Login",
+          onClick: () => navigate("/login")
+        }
+      });
+      return;
+    }
+
+    const path = `users/${user.uid}/wishlist/${id}`;
+    try {
+      const wishlistRef = doc(db, `users/${user.uid}/wishlist`, id!);
+      if (isInWishlist) {
+        await deleteDoc(wishlistRef);
+        setIsInWishlist(false);
+        toast.success("Removed from Wishlist");
+      } else {
+        await setDoc(wishlistRef, {
+          productId: id,
+          addedAt: new Date().toISOString(),
+          name: product.name,
+          price: product.price,
+          image: images[0]
+        });
+        setIsInWishlist(true);
+        toast.success("Added to Wishlist");
+      }
+    } catch (err) {
+      handleFirestoreError(err, OperationType.WRITE, path);
+    }
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
-      const path = `products/${id}`;
       try {
+        // Try Express Backend first
+        const response = await fetch(`/api/products/${id}`);
+        if (response.ok) {
+          const p = await response.json();
+          setProduct(p);
+          if (p.availableColors?.length > 0) setSelectedColor(p.availableColors[0]);
+          if (p.availableSizes?.length > 0) setSelectedSize(p.availableSizes[0]);
+          
+          // Try to fetch related from backend
+          const relRes = await fetch("/api/products");
+          if (relRes.ok) {
+            const all = await relRes.json();
+            setRelatedProducts(all.filter((item: any) => item.id !== id).slice(0, 4));
+          }
+          return;
+        }
+
+        // Fallback to Firebase
         const docRef = doc(db, "products", id!);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const p = { id: docSnap.id, ...docSnap.data() } as any;
           setProduct(p);
-          
           if (p.availableColors?.length > 0) setSelectedColor(p.availableColors[0]);
           if (p.availableSizes?.length > 0) setSelectedSize(p.availableSizes[0]);
           
-          // Fetch related
-          const relatedPath = 'products';
           const qRelated = query(
-            collection(db, relatedPath), 
+            collection(db, 'products'), 
             where("category", "==", (p as any).category), 
             limit(5)
           );
@@ -67,17 +141,24 @@ export function ProductDetailPage() {
           navigate("/");
         }
       } catch (err) {
-        handleFirestoreError(err, OperationType.GET, path);
+        console.error("Fetch error", err);
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) fetchProduct();
+    if (id) {
+      fetchProduct();
+      // Track recently viewed
+      localStorage.setItem("ojo_last_viewed", JSON.stringify({ 
+        id, 
+        timestamp: Date.now() 
+      }));
+    }
     window.scrollTo(0, 0);
   }, [id, navigate]);
 
-  const addToCart = () => {
+  const addToCart = (silent = false) => {
     const savedCart = localStorage.getItem("cart");
     const cart = savedCart ? JSON.parse(savedCart) : [];
     const images = Array.isArray(product.images) ? product.images : JSON.parse(product.images || "[]");
@@ -92,7 +173,7 @@ export function ProductDetailPage() {
       cart.push({
         productId: product.id,
         name: product.name,
-        price: product.price,
+        price: displayedPrice,
         image: selectedColor?.image || images[0],
         quantity: 1,
         origin: product.origin,
@@ -102,17 +183,15 @@ export function ProductDetailPage() {
     localStorage.setItem("cart", JSON.stringify(cart));
     window.dispatchEvent(new Event("storage"));
     window.dispatchEvent(new Event("cartUpdated"));
-    toast.success("Added to Cart");
+    if (!silent) toast.success("Added to Cart");
   };
 
-  if (loading) return (
-    <div className="h-screen flex items-center justify-center bg-white">
-      <div className="space-y-6 text-center">
-        <div className="w-16 h-16 border-4 border-ojo-stone/20 border-t-ojo-mustard rounded-full animate-spin mx-auto" />
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-ojo-stone">Loading item details...</p>
-      </div>
-    </div>
-  );
+  const buyNow = () => {
+    addToCart(true);
+    navigate("/checkout");
+  };
+
+  if (loading) return <ProductDetailSkeleton />;
 
   if (!product) return null;
 
@@ -148,6 +227,8 @@ export function ProductDetailPage() {
       </AnimatePresence>
     </div>
   );
+
+  const displayedPrice = selectedColor?.price || product.price;
 
   return (
     <div className="bg-white min-h-screen pb-40">
@@ -222,7 +303,7 @@ export function ProductDetailPage() {
                         key={color.name}
                         onClick={() => setSelectedColor(color)}
                         className={`group relative w-10 h-10 rounded-full border-2 transition-all p-1 ${
-                          selectedColor?.name === color.name ? 'border-ojo-terracotta scale-110 shadow-lg' : 'border-transparent hover:border-ojo-charcoal/20'
+                          selectedColor?.name === color.name ? 'border-ojo-terracotta scale-110 shadow-lg ring-2 ring-ojo-terracotta/20 ring-offset-2' : 'border-transparent hover:border-ojo-charcoal/20'
                         }`}
                       >
                         <div className="w-full h-full rounded-full" style={{ backgroundColor: color.hex }} />
@@ -257,21 +338,41 @@ export function ProductDetailPage() {
 
           <div className="space-y-10">
             <div className="flex items-end gap-4">
-              <span className="text-4xl font-mono font-medium text-ojo-charcoal">₹{product.price?.toLocaleString()}</span>
+              <span className="text-4xl font-mono font-medium text-ojo-charcoal">₹{displayedPrice?.toLocaleString()}</span>
               <span className="text-[10px] text-ojo-charcoal/30 uppercase font-black tracking-widest mb-2 font-sans">Inclusive of all taxes</span>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-6">
+            <div className="flex flex-col gap-4">
               <button 
-                onClick={addToCart}
-                className="ojo-btn-primary flex-1 flex items-center justify-center gap-3 !py-6"
+                onClick={buyNow}
+                className="w-full bg-ojo-charcoal text-white py-6 text-[12px] font-black uppercase tracking-[0.4em] hover:bg-ojo-terracotta transition-all rounded-xl shadow-xl shadow-ojo-charcoal/10"
               >
-                <ShoppingCart size={18} /> Add to Cart
+                Buy Now — ₹{displayedPrice?.toLocaleString()}
               </button>
-              <button className="ojo-btn-outline !py-6">
-                Inquire
-              </button>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button 
+                  onClick={() => addToCart()}
+                  className="ojo-btn-outline flex-1 flex items-center justify-center gap-3 !py-5"
+                >
+                  <ShoppingCart size={18} /> Add to Cart
+                </button>
+                <button className="ojo-btn-outline !py-5 px-10">
+                  Inquire
+                </button>
+              </div>
             </div>
+
+            <button 
+              onClick={toggleWishlist}
+              className={`w-full py-5 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] transition-all rounded-xl border ${
+                isInWishlist 
+                  ? 'bg-ojo-terracotta/10 border-ojo-terracotta text-ojo-terracotta' 
+                  : 'bg-white border-ojo-charcoal/10 text-ojo-charcoal/60 hover:border-ojo-charcoal hover:text-ojo-charcoal'
+              }`}
+            >
+              <Heart size={16} fill={isInWishlist ? "currentColor" : "none"} />
+              {isInWishlist ? "Saved in Collection" : "Add to Wishlist"}
+            </button>
             
             <div className="grid grid-cols-2 gap-8 pt-8 border-t border-ojo-stone/10 font-sans">
               <div className="flex gap-4">
@@ -334,13 +435,15 @@ export function ProductDetailPage() {
                 <ProductCard 
                   key={p.id} 
                   product={p as any} 
-                  onClick={() => navigate(`/product/${p.id}`)}
+                  onQuickView={() => navigate(`/product/${p.id}`)}
                 />
               ))}
             </div>
           </div>
         </section>
       )}
+
+      <StickyAddToCart product={product} />
     </div>
   );
 }

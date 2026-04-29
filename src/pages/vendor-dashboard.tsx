@@ -6,6 +6,8 @@ import { Plus, Package, ShoppingBag, Loader2 } from "lucide-react";
 import { motion } from "motion/react";
 import { toast } from "sonner";
 
+import { DashboardSkeleton } from "../components/DashboardSkeleton";
+
 export function VendorDashboard() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +19,6 @@ export function VendorDashboard() {
     setLoading(true);
     const path = "products";
     try {
-      // In a real app we'd filter by vendorId
       const q = query(collection(db, path));
       const querySnapshot = await getDocs(q);
       const items = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -57,11 +58,7 @@ export function VendorDashboard() {
   };
 
   if (loading && products.length === 0) {
-    return (
-      <div className="h-64 flex items-center justify-center">
-        <Loader2 className="animate-spin text-ojo-mustard" size={32} />
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (

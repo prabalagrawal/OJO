@@ -19,6 +19,8 @@ import { api } from "../lib/api.ts";
 import { toast } from "sonner";
 import { MotifSystem } from "../components/motifs.tsx";
 
+import { OrderTrackingSkeleton } from "../components/Product/OrderTrackingSkeleton";
+
 export function OrderTracking() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -41,11 +43,7 @@ export function OrderTracking() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-ojo-cream">
-        <Loader2 className="animate-spin text-ojo-mustard" size={48} />
-      </div>
-    );
+    return <OrderTrackingSkeleton />;
   }
 
   if (!order) {

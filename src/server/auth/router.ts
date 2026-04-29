@@ -7,43 +7,46 @@ const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || "ojo-secret-key-123";
 
 router.post("/register", async (req, res) => {
-  const { email, password, name, role } = req.body;
+  const { email, password, fullName, role } = req.body;
   
   try {
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) return res.status(400).json({ error: "User already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userRole = (role === "ADMIN" || role === "VENDOR") ? role : "CUSTOMER";
+    const userRole = (role === "ADMIN" || role === "ARTISAN") ? role : "CUSTOMER";
 
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
-        name,
+        fullName,
         role: userRole,
       },
     });
 
-    if (userRole === "VENDOR") {
-      await prisma.vendor.create({
+    if (userRole === "ARTISAN") {
+      await prisma.artisan.create({
         data: {
           userId: user.id,
-          name: name || "New Vendor",
+          displayName: fullName || "New Artisan",
+          region: "India", // Default
+          state: "Karnataka", // Default
+          craftType: "General", // Default
         },
       });
     }
 
     const token = jwt.sign({ id: user.id, role: user.role, email: user.email }, JWT_SECRET, { expiresIn: "7d" });
-    res.status(201).json({ user: { id: user.id, email: user.email, role: user.role, name: user.name }, token });
+    res.status(201).json({ user: { id: user.id, email: user.email, role: user.role, fullName: user.fullName }, token });
   } catch (error) {
+    console.error("Register error:", error);
     res.status(500).json({ error: "Failed to register" });
   }
 });
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return res.status(400).json({ error: "Invalid credentials" });
@@ -52,7 +55,7 @@ router.post("/login", async (req, res) => {
     if (!valid) return res.status(400).json({ error: "Invalid credentials" });
 
     const token = jwt.sign({ id: user.id, role: user.role, email: user.email }, JWT_SECRET, { expiresIn: "7d" });
-    res.json({ user: { id: user.id, email: user.email, role: user.role, name: user.name }, token });
+    res.json({ user: { id: user.id, email: user.email, role: user.role, fullName: user.fullName }, token });
   } catch (error) {
     res.status(500).json({ error: "Failed to login" });
   }
@@ -120,7 +123,7 @@ router.get("/google/callback", async (req, res) => {
       user = await prisma.user.create({
         data: {
           email,
-          name: name || email.split("@")[0],
+          fullName: name || email.split("@")[0],
           password: hashedPassword,
           role: "CUSTOMER",
         },
@@ -128,7 +131,7 @@ router.get("/google/callback", async (req, res) => {
     }
 
     const token = jwt.sign({ id: user.id, role: user.role, email: user.email }, JWT_SECRET, { expiresIn: "7d" });
-    const userPayload = JSON.stringify({ user: { id: user.id, email: user.email, role: user.role, name: user.name }, token });
+    const userPayload = JSON.stringify({ user: { id: user.id, email: user.email, role: user.role, fullName: user.fullName }, token });
 
     res.send(`
       <html>

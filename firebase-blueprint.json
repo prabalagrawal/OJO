@@ -69,6 +69,19 @@
         "timestamp": { "type": "string", "format": "date-time" }
       },
       "required": ["productId", "adminId", "status", "timestamp"]
+    },
+    "WishlistItem": {
+      "title": "Wishlist Item",
+      "description": "Product saved by user",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "addedAt": { "type": "string", "format": "date-time" },
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "image": { "type": "string" }
+      },
+      "required": ["productId", "addedAt"]
     }
   },
   "firestore": {
@@ -76,6 +89,7 @@
     "users": { "schema": "User", "description": "User profiles and roles" },
     "orders": { "schema": "Order", "description": "Orders and transactions" },
     "activity_logs": { "schema": "ActivityLog", "description": "System audit logs" },
-    "verification_logs": { "schema": "VerificationLog", "description": "Product verification history" }
+    "verification_logs": { "schema": "VerificationLog", "description": "Product verification history" },
+    "users/{userId}/wishlist": { "schema": "WishlistItem", "description": "User saved products" }
   }
 }

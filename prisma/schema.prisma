@@ -8,100 +8,276 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String?
-  role      String   @default("CUSTOMER") // ADMIN, VENDOR, CUSTOMER
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  vendor    Vendor?
-  orders    Order[]
+  id                 String    @id @default(cuid())
+  email              String?   @unique
+  phone              String?   @unique
+  fullName           String?
+  avatarUrl          String?
+  role               String    @default("CUSTOMER") // CUSTOMER, ADMIN, ARTISAN
+  preferredLanguage  String    @default("EN")
+  preferredCurrency  String    @default("INR")
+  deviceToken        String?
+  isActive           Boolean   @default(true)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  addresses          Address[]
+  orders             Order[]
+  wishlist           Wishlist[]
+  reviews            Review[]
+  artisan            Artisan?
+  cart               Cart?
 }
 
-model Vendor {
-  id          String    @id @default(cuid())
-  userId      String    @unique
-  user        User      @relation(fields: [userId], references: [id])
+model Address {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  fullName        String
+  phone           String
+  addressLine1    String
+  addressLine2    String?
+  landmark        String?
+  city            String
+  state           String
+  pincode         String
+  country         String   @default("India")
+  addressType     String   @default("HOME") // HOME, WORK, OTHER
+  isDefault       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  orders          Order[]
+}
+
+model Artisan {
+  id                 String    @id @default(cuid())
+  userId             String    @unique
+  user               User      @relation(fields: [userId], references: [id])
+  displayName        String
+  bio                String?
+  profilePhotoUrl    String?
+  coverPhotoUrl      String?
+  region             String
+  state              String
+  district           String?
+  craftType          String
+  yearsExperience    Int?
+  isVerified         Boolean   @default(false)
+  totalProducts      Int       @default(0)
+  totalSales         Int       @default(0)
+  rating             Float     @default(0)
+  createdAt          DateTime  @default(now())
+  products           Product[]
+  orderItems         OrderItem[]
+}
+
+model Category {
+  id          String     @id @default(cuid())
   name        String
+  slug        String     @unique
   description String?
-  status      String    @default("PENDING") // PENDING, APPROVED, REJECTED
+  parentId    String?
+  parent      Category?  @relation("SubCategories", fields: [parentId], references: [id])
+  children    Category[] @relation("SubCategories")
+  imageUrl    String?
+  iconName    String?
+  sortOrder   Int        @default(0)
+  isActive    Boolean    @default(true)
   products    Product[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
 }
 
 model Product {
-  id                 String            @id @default(cuid())
-  vendorId           String
-  vendor             Vendor            @relation(fields: [vendorId], references: [id])
-  name               String
-  description        String
-  price              Float
-  origin             String
-  artisanName        String            @default("Master Artisan")
-  color              String?
-  dimensions         String? // e.g. "6ft x 4ft" or "12 inch"
-  story              String? // The journey behind the artifact
-  stock              Int               @default(0)
-  verificationStatus String            @default("PENDING") // PENDING, VERIFIED, REJECTED
-  images             String? // JSON string of image URLs
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
-  orderItems         OrderItem[]
-  verificationLogs   VerificationLog[]
+  id                String           @id @default(cuid())
+  artisanId         String
+  artisan           Artisan          @relation(fields: [artisanId], references: [id])
+  categoryId        String
+  category          Category         @relation(fields: [categoryId], references: [id])
+  name              String
+  slug              String           @unique
+  description       String
+  shortDescription  String?
+  price             Float
+  compareAtPrice    Float?
+  currency          String           @default("INR")
+  stockQuantity     Int              @default(0)
+  lowStockThreshold Int              @default(5)
+  weightGrams       Int?
+  lengthCm          Float?
+  widthCm           Float?
+  heightCm          Float?
+  originRegion      String?
+  originState       String?
+  craftType         String?
+  materials         String?          // Comma separated or JSON
+  careInstructions  String?
+  isHandmade        Boolean          @default(true)
+  isOjoVerified     Boolean          @default(false)
+  isFeatured        Boolean          @default(false)
+  isActive          Boolean          @default(true)
+  isArchived        Boolean          @default(false)
+  images            String           // JSON string of URLs
+  tags              String?          // Comma separated
+  avgRating         Float            @default(0)
+  reviewCount       Int              @default(0)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  variants          ProductVariant[]
+  orderItems        OrderItem[]
+  wishlist          Wishlist[]
   reviews            Review[]
+  cartItems         CartItem[]
 }
 
-model Review {
-  id        String   @id @default(cuid())
-  productId String
-  product   Product  @relation(fields: [productId], references: [id])
-  rating    Int
-  comment   String
-  userName  String
-  createdAt DateTime @default(now())
+model ProductVariant {
+  id            String      @id @default(cuid())
+  productId     String
+  product       Product     @relation(fields: [productId], references: [id])
+  variantName   String
+  sku           String      @unique
+  priceModifier Float       @default(0)
+  stockQuantity Int         @default(0)
+  isActive      Boolean     @default(true)
+  orderItems    OrderItem[]
+  cartItems     CartItem[]
 }
 
 model Order {
-  id         String      @id @default(cuid())
-  customerId String
-  customer   User        @relation(fields: [customerId], references: [id])
-  total      Float
-  status     String      @default("PENDING") // PENDING, PAID, SHIPPED, DELIVERED, RELEASED
-  items      OrderItem[]
-  payment    Payment?
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id                     String      @id @default(cuid())
+  orderNumber            String      @unique
+  userId                 String
+  user                   User        @relation(fields: [userId], references: [id])
+  addressId              String
+  address                Address     @relation(fields: [addressId], references: [id])
+  status                 String      @default("PENDING")
+  paymentStatus          String      @default("PENDING")
+  paymentMethod          String?
+  paymentGateway         String?
+  razorpayOrderId        String?
+  razorpayPaymentId      String?
+  razorpaySignature      String?
+  stripePaymentIntentId String?
+  subtotal               Float
+  shippingAmount         Float       @default(0)
+  discountAmount         Float       @default(0)
+  taxAmount              Float       @default(0)
+  totalAmount            Float
+  currency               String      @default("INR")
+  trackingNumber         String?
+  trackingUrl            String?
+  courierName            String?
+  estimatedDeliveryDate  DateTime?
+  deliveredAt            DateTime?
+  notes                  String?
+  cancellationReason     String?
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+  items                  OrderItem[]
+  reviews                Review[]
 }
 
 model OrderItem {
+  id           String          @id @default(cuid())
+  orderId      String
+  order        Order           @relation(fields: [orderId], references: [id])
+  productId    String
+  product      Product         @relation(fields: [productId], references: [id])
+  variantId    String?
+  variant      ProductVariant? @relation(fields: [variantId], references: [id])
+  artisanId    String
+  artisan      Artisan         @relation(fields: [artisanId], references: [id])
+  productName  String
+  productImage String
+  quantity     Int
+  unitPrice    Float
+  totalPrice   Float
+  isReviewed   Boolean         @default(false)
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String?    @unique
+  user      User?      @relation(fields: [userId], references: [id])
+  sessionId String?    @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  expiresAt DateTime?
+  items     CartItem[]
+}
+
+model CartItem {
+  id        String          @id @default(cuid())
+  cartId    String
+  cart      Cart            @relation(fields: [cartId], references: [id])
+  productId String
+  product   Product         @relation(fields: [productId], references: [id])
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+  quantity  Int
+  addedAt   DateTime        @default(now())
+}
+
+model Wishlist {
   id        String   @id @default(cuid())
-  orderId   String
-  order     Order    @relation(fields: [orderId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
   productId String
   product   Product  @relation(fields: [productId], references: [id])
-  quantity  Int
-  price     Float
   createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
 }
 
-model Payment {
-  id            String   @id @default(cuid())
-  orderId       String   @unique
-  order     Order    @relation(fields: [orderId], references: [id])
-  amount        Float
-  status        String // PENDING, COMPLETED, FAILED
-  transactionId String?
-  createdAt     DateTime @default(now())
+model Review {
+  id                 String   @id @default(cuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id])
+  productId          String
+  product            Product  @relation(fields: [productId], references: [id])
+  orderId            String?
+  order              Order?   @relation(fields: [orderId], references: [id])
+  rating             Int
+  title              String?
+  body               String
+  images             String?  // JSON string
+  isVerifiedPurchase Boolean  @default(false)
+  isApproved         Boolean  @default(false)
+  helpfulCount       Int      @default(0)
+  createdAt          DateTime @default(now())
 }
 
-model VerificationLog {
+model Coupon {
+  id                   String   @id @default(cuid())
+  code                 String   @unique
+  description          String?
+  type                 String // PERCENTAGE, FIXED, FREE_SHIPPING
+  value                Float
+  minOrderValue        Float?
+  maxDiscountAmount    Float?
+  maxUses              Int?
+  usedCount            Int      @default(0)
+  perUserLimit         Int      @default(1)
+  validFrom            DateTime @default(now())
+  validUntil           DateTime?
+  isActive             Boolean  @default(true)
+  applicableCategories String? // JSON string or comma separated
+  applicableProducts   String? // JSON string or comma separated
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String // ORDER_PLACED, etc.
+  title       String
+  message     String
+  deepLink    String?
+  isRead      Boolean  @default(false)
+  sentViaPush Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model SearchHistory {
   id           String   @id @default(cuid())
-  productId    String
-  product      Product  @relation(fields: [productId], references: [id])
-  adminId      String
-  status       String // VERIFIED, REJECTED
-  comments     String?
-  timestamp    DateTime @default(now())
+  userId       String?
+  sessionId    String?
+  query        String
+  resultsCount Int      @default(0)
+  createdAt    DateTime @default(now())
 }

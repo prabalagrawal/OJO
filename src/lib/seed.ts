@@ -1,9 +1,6 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
-import firebaseConfig from '../../firebase-applet-config.json';
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { db } from './firebase';
+import { handleFirestoreError, OperationType } from './firestore-errors';
 
 const PRODUCTS = [
   {
@@ -42,18 +39,20 @@ const PRODUCTS = [
 ];
 
 export async function seedDatabase() {
+  const path = "products";
   try {
-    const querySnapshot = await getDocs(collection(db, "products"));
+    const querySnapshot = await getDocs(collection(db, path));
     if (!querySnapshot.empty) {
       console.log("Database already seeded.");
       return;
     }
 
+    console.log("Starting database seeding...");
     for (const prod of PRODUCTS) {
-      await addDoc(collection(db, "products"), prod);
+      await addDoc(collection(db, path), prod);
     }
     console.log("Seed data injected successfully.");
   } catch (err) {
-    console.error("Seeding error:", err);
+    handleFirestoreError(err, OperationType.WRITE, path);
   }
 }

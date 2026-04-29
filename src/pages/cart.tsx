@@ -199,10 +199,11 @@ export function Cart() {
                 </div>
 
                 <div className="pt-6 space-y-8">
+                  {/* DESKTOP BUTTON */}
                   <button 
                     onClick={checkout}
                     disabled={checkingOut}
-                    className="w-full bg-ojo-mustard text-ojo-charcoal hover:bg-white py-8 rounded-full text-[12px] font-black uppercase tracking-[0.6em] transition-all shadow-3xl disabled:opacity-50 flex items-center justify-center gap-4"
+                    className="hidden md:flex w-full bg-ojo-mustard text-ojo-charcoal hover:bg-white py-8 rounded-full text-[12px] font-black uppercase tracking-[0.6em] transition-all shadow-3xl disabled:opacity-50 items-center justify-center gap-4"
                   >
                     {checkingOut ? (
                        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}>
@@ -212,6 +213,17 @@ export function Cart() {
                       <>EXECUTE ACQUISITION <ArrowRight size={16} /></>
                     )}
                   </button>
+                  
+                  {/* MOBILE STICKY BUTTON */}
+                  <div className="fixed bottom-0 inset-x-0 p-4 bg-white border-t border-ojo-stone/10 z-[110] md:hidden">
+                    <button 
+                      onClick={checkout}
+                      disabled={checkingOut}
+                      className="w-full bg-ojo-mustard text-ojo-charcoal h-16 rounded-full text-[12px] font-black uppercase tracking-[0.6em] flex items-center justify-center gap-4 shadow-xl"
+                    >
+                      {checkingOut ? "Processing..." : `Checkout ₹${total.toLocaleString()}`}
+                    </button>
+                  </div>
                   
                   <div className="grid grid-cols-2 gap-4">
                      <div className="text-center space-y-2">

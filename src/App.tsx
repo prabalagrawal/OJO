@@ -15,7 +15,13 @@ import { OrderTracking } from "./pages/order-tracking.tsx";
 import { Checkout } from "./pages/checkout.tsx";
 import { AuthProvider, useAuth } from "./context/AuthContext.tsx";
 import { Toaster } from "sonner";
+import { PageLoader } from "./components/PageLoader.tsx";
+import { CustomCursor } from "./components/CustomCursor.tsx";
+import { BottomTabBar } from "./components/BottomTabBar.tsx";
+import { WhatsAppButton } from "./components/WhatsAppButton.tsx";
 import { seedDatabase } from "./lib/seed.ts";
+
+import { GeneralSkeleton } from "./components/GeneralSkeleton";
 
 function AppRoutes() {
   const { user, loading, logout } = useAuth();
@@ -24,11 +30,7 @@ function AppRoutes() {
     seedDatabase();
   }, []);
 
-  if (loading) return (
-    <div className="min-h-screen bg-ojo-cream flex items-center justify-center">
-      <div className="w-12 h-12 border-4 border-ojo-mustard border-t-transparent rounded-full animate-spin" />
-    </div>
-  );
+  if (loading) return <GeneralSkeleton />;
 
   return (
     <Layout user={user} onLogout={logout}>
@@ -64,6 +66,10 @@ export default function App() {
   return (
     <AuthProvider>
       <Router>
+        <PageLoader />
+        <CustomCursor />
+        <BottomTabBar />
+        <WhatsAppButton />
         <Toaster position="top-center" expand={true} richColors />
         <AppRoutes />
       </Router>

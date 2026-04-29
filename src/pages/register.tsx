@@ -20,6 +20,7 @@ export function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     try {
+      // 1. Firebase Register (existing)
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, "users", userCredential.user.uid), {
         displayName: name,
@@ -27,6 +28,24 @@ export function RegisterPage() {
         role: "customer",
         createdAt: serverTimestamp()
       });
+
+      // 2. Express Backend Register (NEW)
+      try {
+        const response = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, name, role: "CUSTOMER" })
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("ojo_user", JSON.stringify(data.user));
+        }
+      } catch (backendErr) {
+        console.error("Backend registration failed", backendErr);
+      }
+      
       toast.success("Account created successfully. Welcome to OJO!");
       navigate("/");
     } catch (err: any) {

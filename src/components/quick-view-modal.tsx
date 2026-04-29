@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 import { 
   X, 
   ShoppingBag, 
@@ -55,6 +56,7 @@ interface QuickViewModalProps {
 }
 
 export function QuickViewModal({ product, isOpen, onClose, onAddToCart, onProductUpdate }: QuickViewModalProps) {
+  const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState<ColorOption | null>(null);
@@ -232,7 +234,14 @@ export function QuickViewModal({ product, isOpen, onClose, onAddToCart, onProduc
           Acquire Piece
         </button>
         
-        <button className="bg-ojo-terracotta text-ojo-beige px-10 py-5 rounded-none font-black text-[12px] uppercase tracking-[0.4em] hover:bg-ojo-charcoal transition-all duration-500 flex items-center justify-center">
+        <button 
+          onClick={() => {
+            onAddToCart(product, quantity, { color: selectedColor, size: selectedSize });
+            onClose();
+            navigate("/checkout");
+          }}
+          className="bg-ojo-terracotta text-ojo-beige px-10 py-5 rounded-none font-black text-[12px] uppercase tracking-[0.4em] hover:bg-ojo-charcoal transition-all duration-500 flex items-center justify-center"
+        >
           Buy Now
         </button>
       </div>

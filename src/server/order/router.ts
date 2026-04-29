@@ -6,21 +6,30 @@ const router = Router();
 
 // Create order
 router.post("/", authenticate, async (req: AuthRequest, res) => {
-  const { items, address, paymentId } = req.body; 
+  const { items, addressId, paymentMethod } = req.body; 
   
   try {
-    const total = items.reduce((acc: number, item: any) => acc + item.price * item.quantity, 0);
+    const subtotal = items.reduce((acc: number, item: any) => acc + item.price * item.quantity, 0);
+    const orderNumber = `OJO-${new Date().getFullYear()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
 
     const order = await prisma.order.create({
       data: {
-        customerId: req.user!.id,
-        total,
+        userId: req.user!.id,
+        addressId: addressId || 'default-addr-id', // Placeholder for demo
+        orderNumber,
+        subtotal,
+        totalAmount: subtotal + 450, // Shipping placeholder
         status: "PENDING",
+        paymentMethod: paymentMethod || "UPI",
         items: {
           create: items.map((item: any) => ({
             productId: item.productId,
+            artisanId: item.artisanId || 'default-artisan-id',
+            productName: item.name,
+            productImage: item.image,
             quantity: item.quantity,
-            price: item.price
+            unitPrice: item.price,
+            totalPrice: item.price * item.quantity
           }))
         }
       },
@@ -42,7 +51,7 @@ router.post("/", authenticate, async (req: AuthRequest, res) => {
 router.get("/me", authenticate, async (req: AuthRequest, res) => {
   try {
     const orders = await prisma.order.findMany({
-      where: { customerId: req.user!.id },
+      where: { userId: req.user!.id },
       orderBy: { createdAt: "desc" },
       include: {
         items: {
@@ -65,14 +74,14 @@ router.get("/:id", authenticate, async (req: AuthRequest, res) => {
         items: {
           include: { product: true }
         },
-        customer: { select: { name: true, email: true } }
+        user: { select: { fullName: true, email: true } }
       }
     });
     
     if (!order) return res.status(404).json({ error: "Order not found" });
     
     // Check ownership
-    if (order.customerId !== req.user!.id && req.user!.role !== 'ADMIN') {
+    if (order.userId !== req.user!.id && req.user!.role !== 'ADMIN') {
       return res.status(403).json({ error: "Forbidden" });
     }
 

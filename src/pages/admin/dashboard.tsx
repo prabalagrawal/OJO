@@ -18,6 +18,7 @@ import { collection, query, getDocs, orderBy, limit, doc, updateDoc, addDoc, ser
 import { db } from "../../lib/firebase";
 import { handleFirestoreError, OperationType } from "../../lib/firestore-errors";
 import { MotifSystem } from "../../components/motifs.tsx";
+import { DashboardSkeleton } from "../../components/DashboardSkeleton";
 
 interface Order {
   id: string;
@@ -97,6 +98,14 @@ export function AdminDashboard() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-ojo-cream p-4 md:p-8">
+        <DashboardSkeleton />
+      </div>
+    );
+  }
 
   const handleCreateProduct = async (e: React.FormEvent) => {
     e.preventDefault();

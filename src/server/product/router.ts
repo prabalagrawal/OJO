@@ -4,12 +4,19 @@ import { authenticate, authorize, AuthRequest } from "../auth/middleware.ts";
 
 const router = Router();
 
-// List all verified products
+// List all active verified products
 router.get("/", async (req, res) => {
   try {
     const products = await prisma.product.findMany({
-      where: { verificationStatus: "VERIFIED" },
-      include: { vendor: { select: { name: true, status: true } } },
+      where: { 
+        isActive: true,
+        isOjoVerified: req.query.verified === 'true' ? true : undefined,
+        isFeatured: req.query.featured === 'true' ? true : undefined
+      },
+      include: { 
+        artisan: { select: { displayName: true, isVerified: true } },
+        category: { select: { name: true, slug: true } }
+      },
     });
     res.json(products);
   } catch (error) {
@@ -23,7 +30,12 @@ router.get("/:id", async (req, res) => {
   try {
     const product = await prisma.product.findUnique({
       where: { id: req.params.id },
-      include: { vendor: true, verificationLogs: true, reviews: true },
+      include: { 
+        artisan: true, 
+        category: true,
+        reviews: { include: { user: { select: { fullName: true, avatarUrl: true } } } },
+        variants: true
+      },
     });
     if (!product) return res.status(404).json({ error: "Product not found" });
     res.json(product);
@@ -32,27 +44,25 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Create product (Vendor only)
-router.post("/", authenticate, authorize(["VENDOR", "ADMIN"]), async (req: AuthRequest, res) => {
-  const { name, description, price, origin, stock, images } = req.body;
+// Create product (Artisan only)
+router.post("/", authenticate, authorize(["ARTISAN", "ADMIN"]), async (req: AuthRequest, res) => {
+  const { name, description, price, artisanId, categoryId, images, slug } = req.body;
   try {
-    const vendor = await prisma.vendor.findUnique({ where: { userId: req.user!.id } });
-    if (!vendor) return res.status(400).json({ error: "Vendor profile not found" });
-
     const product = await prisma.product.create({
       data: {
         name,
+        slug,
         description,
         price: parseFloat(price),
-        origin,
-        stock: parseInt(stock),
-        images,
-        vendorId: vendor.id,
-        verificationStatus: "PENDING",
+        artisanId,
+        categoryId,
+        images: JSON.stringify(images),
+        isActive: true,
       },
     });
     res.status(201).json(product);
   } catch (error) {
+    console.error("Create product error:", error);
     res.status(500).json({ error: "Failed to create product" });
   }
 });

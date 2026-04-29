@@ -1,0 +1,19 @@
+{
+  "name": "OJO — See. Verify. Trust.",
+  "short_name": "OJO",
+  "description": "Premium Marketplace for Authenticated Indian Handicrafts",
+  "theme_color": "#C4AF27",
+  "background_color": "#111111",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "https://ais-dev-uli3xmefln7b5vdc7wwhh2-348819014642.asia-east1.run.app/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"]
+}

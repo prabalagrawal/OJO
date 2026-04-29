@@ -4,6 +4,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { getDoc, doc } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 
+import { GeneralSkeleton } from "./GeneralSkeleton";
+
 export function AdminGuard({ children }: { children: React.ReactNode }) {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
@@ -44,14 +46,7 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-ojo-cream">
-        <div className="space-y-6 text-center">
-          <div className="w-20 h-20 border-4 border-ojo-mustard border-t-transparent rounded-full animate-spin mx-auto shadow-2xl" />
-          <p className="text-[10px] font-black uppercase tracking-[0.6em] text-ojo-mustard">Verifying OJO Credentials</p>
-        </div>
-      </div>
-    );
+    return <GeneralSkeleton />;
   }
 
   if (!isAdmin) {

@@ -18,7 +18,27 @@ export function LoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
+      // 1. Firebase Login (existing)
       await signInWithEmailAndPassword(auth, email, password);
+      
+      // 2. Express Backend Login (NEW)
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("ojo_user", JSON.stringify(data.user));
+        }
+      } catch (backendErr) {
+        console.error("Backend auth failed", backendErr);
+        // We still have firebase login so we can continue, but some features might be degraded
+      }
+
       const isAdmin = email.toLowerCase() === 'prabalagrawal23@gmail.com';
       toast.success("Successfully logged in. Welcome back!");
       if (isAdmin) {
