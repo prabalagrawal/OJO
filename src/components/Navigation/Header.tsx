@@ -9,7 +9,8 @@ import {
   ChevronDown, 
   X, 
   Instagram,
-  ChevronRight
+  ChevronRight,
+  Maximize2
 } from 'lucide-react';
 import { 
   GopuramTrim, 
@@ -20,6 +21,7 @@ import {
   JaliPattern 
 } from './Patterns';
 import { OjoLogo } from '../brand';
+import { CartDrawer } from '../CartDrawer';
 
 // --- Icons ---
 
@@ -126,11 +128,12 @@ const MegaDropdown = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
   );
 };
 
-export const Header = ({ onCartClick, onAccountClick }: { onCartClick?: () => void, onAccountClick?: () => void }) => {
+export const Header = ({ onAccountClick }: { onAccountClick?: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isShopHovered, setIsShopHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
@@ -140,14 +143,17 @@ export const Header = ({ onCartClick, onAccountClick }: { onCartClick?: () => vo
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     const updateCount = () => {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      setCartCount(cart.length);
+      const count = cart.reduce((acc: number, item: any) => acc + (item.quantity || 1), 0);
+      setCartCount(count);
     };
     updateCount();
     window.addEventListener('scroll', handleScroll);
     window.addEventListener("storage", updateCount);
+    window.addEventListener("cartUpdated", updateCount);
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener("storage", updateCount);
+      window.removeEventListener("cartUpdated", updateCount);
     };
   }, []);
 
@@ -271,7 +277,7 @@ export const Header = ({ onCartClick, onAccountClick }: { onCartClick?: () => vo
               <Heart size={20} />
             </Link>
             <button 
-              onClick={onCartClick}
+              onClick={() => setIsCartOpen(true)}
               className="relative text-ojo-charcoal hover:text-ojo-terracotta transition-colors p-2 rounded-full hover:bg-ojo-charcoal/5"
             >
               <ShoppingBag size={20} />
@@ -309,6 +315,8 @@ export const Header = ({ onCartClick, onAccountClick }: { onCartClick?: () => vo
           onClose={() => setIsShopHovered(false)} 
         />
       </div>
+
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
       {/* LAYER 3: Mughal Arch Bottom */}
       <div className="relative z-[90] pointer-events-none -mt-px overflow-hidden h-2">

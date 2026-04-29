@@ -1,8 +1,6 @@
 {
   "name": "OJO | Authentic Indian Crafts",
   "description": "A curated marketplace for authentic Indian handicrafts, textiles, and artisanal goods. Directly from traditional artisans to your home.",
-  "requestFramePermissions": [
-    "camera"
-  ],
+  "requestFramePermissions": [],
   "majorCapabilities": []
 }

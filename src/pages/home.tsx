@@ -56,23 +56,28 @@ export function HomePage() {
   const { scrollYProgress } = useScroll({ target: heroRef });
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
 
-  const addItem = (product: any) => {
+  const addItem = (product: any, quantity: number = 1, options: any = {}) => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const existing = cart.find((i: any) => i.productId === product.id);
+    const existing = cart.find((i: any) => 
+      i.productId === product.id && 
+      JSON.stringify(i.options || {}) === JSON.stringify(options || {})
+    );
     if (existing) {
-      existing.quantity += 1;
+      existing.quantity += quantity;
     } else {
       cart.push({
         productId: product.id,
         name: product.name,
         price: product.price,
-        image: Array.isArray(product.images) ? product.images[0] : JSON.parse(product.images || "[]")[0],
+        image: Array.isArray(product.images) ? product.images[0] : (product.images ? JSON.parse(product.images)[0] : product.image),
         origin: product.origin,
-        quantity: 1
+        quantity: quantity,
+        options: options
       });
     }
     localStorage.setItem("cart", JSON.stringify(cart));
     window.dispatchEvent(new Event("storage"));
+    window.dispatchEvent(new Event("cartUpdated"));
   };
 
   useEffect(() => {
@@ -81,9 +86,8 @@ export function HomePage() {
         const items = PRODUCT_DATASET.slice(0, 12).map((p, i) => ({
           ...p,
           description: p.short_description,
-          images: JSON.stringify([p.image]),
-          artisanName: "Master Artisan",
-          story: "Each piece is handcrafted using traditional methods passed down through generations."
+          artisanName: p.artisanName || "Master Artisan",
+          story: p.originStory || "Each piece is handcrafted using traditional methods passed down through generations."
         })) as any;
         setProducts(items);
       } catch (err) {
@@ -485,8 +489,8 @@ export function HomePage() {
         isOpen={!!quickViewProduct}
         onClose={() => setQuickViewProduct(null)}
         onProductUpdate={(p) => setQuickViewProduct(p)}
-        onAddToCart={(p) => {
-          // addItem(p); // Assuming addItem exists or use local logic
+        onAddToCart={(p, q, opts) => {
+          addItem(p, q, opts);
           toast.success("Added to cart", {
             description: `${p.name} has been added to your vault.`
           });

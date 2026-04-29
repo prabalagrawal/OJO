@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { QuickViewModal } from "../components/quick-view-modal.tsx";
+import { MiniQuickView } from "../components/MiniQuickView.tsx";
 import { MotifSystem } from "../components/motifs.tsx";
 import { ProductCard } from "../components/ProductCard.tsx";
 import { PRODUCT_DATASET } from "../data/product-dataset";
@@ -38,8 +39,18 @@ export function CategoryPage() {
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [quickViewProduct, setQuickViewProduct] = useState<any>(null);
+  const [hoveredProduct, setHoveredProduct] = useState<any>(null);
+  const [hoverPosition, setHoverPosition] = useState<{ x: number, y: number } | null>(null);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const navigate = useNavigate();
+
+  const handleProductHover = (product: any, e: React.MouseEvent) => {
+    // Only show mini quick view on desktop
+    if (window.innerWidth < 1024) return;
+    
+    setHoveredProduct(product);
+    setHoverPosition({ x: e.clientX, y: e.clientY });
+  };
 
   const itemsPerPage = 12;
 
@@ -62,10 +73,9 @@ export function CategoryPage() {
         setProducts(PRODUCT_DATASET.map(p => ({
           ...p,
           description: p.short_description,
-          images: JSON.stringify([p.image]),
           verificationStatus: "VERIFIED",
-          artisanName: "Master Artisan",
-          story: "A genuine handcrafted piece, verified for authenticity."
+          artisanName: p.artisanName || "Master Artisan",
+          story: p.originStory || "A genuine handcrafted piece, verified for authenticity."
         })));
       }
     } catch (err) {
@@ -73,10 +83,9 @@ export function CategoryPage() {
       setProducts(PRODUCT_DATASET.map(p => ({
         ...p,
         description: p.short_description,
-        images: JSON.stringify([p.image]),
         verificationStatus: "VERIFIED",
-        artisanName: "Master Artisan",
-        story: "A genuine handcrafted piece, verified for authenticity."
+        artisanName: p.artisanName || "Master Artisan",
+        story: p.originStory || "A genuine handcrafted piece, verified for authenticity."
       })));
       toast.error("Failed to load products. Using local data.");
     } finally {
@@ -127,27 +136,32 @@ export function CategoryPage() {
   const categories = ["Saree", "Handicraft", "Jewelry", "Tea", "Spice", "Art"];
   const origins = ["Kashmir", "Rajasthan", "Gujarat", "Tamil Nadu", "Maharashtra", "West Bengal", "Odisha"];
 
-  const addToCart = (product: any) => {
+  const addToCart = (product: any, quantity: number = 1, options: any = {}) => {
     const savedCart = localStorage.getItem("cart");
     const cart = savedCart ? JSON.parse(savedCart) : [];
-    const images = Array.isArray(product.images) ? product.images : JSON.parse(product.images || "[]");
+    const images = Array.isArray(product.images) ? product.images : (product.images ? JSON.parse(product.images) : [product.image]);
     
-    const existing = cart.find((i: any) => i.productId === product.id);
+    const existing = cart.find((i: any) => 
+      i.productId === product.id && 
+      JSON.stringify(i.options || {}) === JSON.stringify(options || {})
+    );
     if (existing) {
-      existing.quantity += 1;
+      existing.quantity += quantity;
     } else {
       cart.push({
         productId: product.id,
         name: product.name,
         price: product.price,
         image: images[0],
-        quantity: 1,
-        origin: product.origin
+        quantity: quantity,
+        origin: product.origin,
+        options: options
       });
     }
     localStorage.setItem("cart", JSON.stringify(cart));
     window.dispatchEvent(new Event("storage"));
-    toast.success(`${product.name} Added to Cart`);
+    window.dispatchEvent(new Event("cartUpdated"));
+    toast.success(`${product.name} Added to Collection`);
   };
 
   return (
@@ -294,6 +308,8 @@ export function CategoryPage() {
                    key={p.id} 
                    product={p as any} 
                    onClick={() => setQuickViewProduct(p)}
+                   onHover={handleProductHover}
+                   onHoverEnd={() => setHoveredProduct(null)}
                  />
                ))}
             </div>
@@ -335,13 +351,24 @@ export function CategoryPage() {
           )}
       </main>
 
+      <MiniQuickView 
+        product={hoveredProduct}
+        position={hoverPosition}
+        onClose={() => setHoveredProduct(null)}
+        onFullView={(p) => {
+          setHoveredProduct(null);
+          setQuickViewProduct(p);
+        }}
+        onAddToCart={(p) => addToCart(p)}
+      />
+
       {/* QUICK VIEW Modal */}
       <QuickViewModal 
         product={quickViewProduct} 
         isOpen={!!quickViewProduct}
         onClose={() => setQuickViewProduct(null)} 
         onProductUpdate={(p) => setQuickViewProduct(p)}
-        onAddToCart={addToCart}
+        onAddToCart={(p, q, opts) => addToCart(p, q, opts)}
       />
       
       {/* Decorative Footer Spacer */}

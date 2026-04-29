@@ -203,7 +203,6 @@ export function Layout({ children, user, onLogout }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-ojo-beige font-sans">
       <Header 
-        onCartClick={() => setIsMiniCartOpen(true)}
         onAccountClick={() => navigate(user ? "/dashboard" : "/login")}
       />
 

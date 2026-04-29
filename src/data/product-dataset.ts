@@ -10,6 +10,13 @@ export interface Product {
   popularity_score: number; // 1-100
   short_description: string;
   image: string;
+  images?: string[];
+  artisanName?: string;
+  artisanPhoto?: string;
+  artisanBio?: string;
+  originStory?: string;
+  availableColors?: { name: string; hex: string; image: string }[];
+  availableSizes?: string[];
 }
 
 export const PRODUCT_DATASET: Product[] = [
@@ -25,7 +32,22 @@ export const PRODUCT_DATASET: Product[] = [
     gi_tag: true,
     popularity_score: 95,
     short_description: "Exquisite hand-loomed mulberry silk with pure gold zari work.",
-    image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220"
+    image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220",
+    images: [
+      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220",
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c",
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b"
+    ],
+    artisanName: "Rajesh Kumar",
+    artisanPhoto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+    artisanBio: "A 5th generation weaver from Varanasi with 30+ years of experience in hand-looming pure silk. Rajesh has trained over 50 youth in the traditional art of Zari work, ensuring the legacy of Banarasi textiles remains vibrant.",
+    originStory: "Born in the ancient alleys of Varanasi, this saree is a testament to the city's 500-year-old weaving tradition. Every thread of mulberry silk is hand-spun and dyed using natural minerals. The pure gold Zari patterns are inspired by Mughal architecture, specifically the floral motifs found in the Taj Mahal. It takes approximately 18-25 days for a single master weaver to complete this masterpiece on a traditional handloom.",
+    availableColors: [
+      { name: "Royal Crimson", hex: "#9B1B30", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220" },
+      { name: "Midnight Sapphire", hex: "#0F2344", image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c" },
+      { name: "Emerald Forest", hex: "#043927", image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b" }
+    ],
+    availableSizes: ["Standard Saree (5.5m + 1m Blouse)"]
   },
   {
     id: "tx_002",

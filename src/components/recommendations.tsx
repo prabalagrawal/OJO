@@ -34,17 +34,17 @@ export function Recommendations({ currentProductId, onProductClick }: Recommenda
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="flex gap-8 overflow-x-auto pb-12 scrollbar-hide -mx-2 px-2 snap-x">
           {recommendations.map((product, idx) => (
             <motion.div
               key={product.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ delay: idx * 0.1 }}
-              className="group cursor-pointer space-y-4"
+              className="min-w-[280px] w-[280px] group cursor-pointer space-y-4 snap-start"
               onClick={() => onProductClick(product)}
             >
-              <div className="relative aspect-square rounded-[2rem] overflow-hidden bg-ojo-cream border border-ojo-stone/5">
+              <div className="relative aspect-square rounded-[2rem] overflow-hidden bg-ojo-beige/40 border border-ojo-charcoal/5">
                 <img 
                   src={product.image} 
                   alt={product.name}
@@ -54,8 +54,8 @@ export function Recommendations({ currentProductId, onProductClick }: Recommenda
                 
                 {product.gi_tag && (
                   <div className="absolute top-4 left-4">
-                    <div className="ojo-badge !bg-white/90 backdrop-blur-md !py-1 !px-3 font-black text-[8px] tracking-widest text-ojo-mustard border-ojo-mustard/20 shadow-sm">
-                       GI Tagged
+                    <div className="bg-white/90 backdrop-blur-md py-1 px-3 font-black text-[8px] tracking-widest text-ojo-gold border border-ojo-gold/20 shadow-sm rounded-full">
+                       GI-Tagged
                     </div>
                   </div>
                 )}
@@ -68,11 +68,11 @@ export function Recommendations({ currentProductId, onProductClick }: Recommenda
               <div className="space-y-1">
                 <div className="flex justify-between items-baseline gap-2">
                    <h4 className="text-lg font-serif italic text-ojo-charcoal truncate flex-1">{product.name}</h4>
-                   <span className="text-sm font-mono text-ojo-mustard font-bold italic">₹{product.price.toLocaleString()}</span>
+                   <span className="text-sm font-mono text-ojo-terracotta font-bold italic">₹{product.price.toLocaleString()}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                   <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/30">{product.origin.replace('_', ' ')}</span>
-                   {product.verified_status && <ShieldCheck size={12} className="text-ojo-mustard opacity-40" />}
+                   <span className="text-[10px] font-black uppercase tracking-widest text-ojo-charcoal/30">{product.origin.toUpperCase().replace('_', ' ')}</span>
+                   {product.verified_status && <ShieldCheck size={12} className="text-ojo-gold opacity-60" />}
                 </div>
               </div>
             </motion.div>
