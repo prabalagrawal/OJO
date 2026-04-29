@@ -129,6 +129,8 @@ const MegaDropdown = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
 };
 
 export const Header = ({ onAccountClick }: { onAccountClick?: () => void }) => {
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isShopHovered, setIsShopHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -140,7 +142,20 @@ export const Header = ({ onAccountClick }: { onAccountClick?: () => void }) => {
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 20);
+      
+      // Smart header visibility
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
     const updateCount = () => {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
       const count = cart.reduce((acc: number, item: any) => acc + (item.quantity || 1), 0);
@@ -155,7 +170,7 @@ export const Header = ({ onAccountClick }: { onAccountClick?: () => void }) => {
       window.removeEventListener("storage", updateCount);
       window.removeEventListener("cartUpdated", updateCount);
     };
-  }, []);
+  }, [lastScrollY]);
 
   const navLinks = [
     { name: "SHOP", path: "/category", hasDropdown: true },
@@ -176,7 +191,12 @@ export const Header = ({ onAccountClick }: { onAccountClick?: () => void }) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-[100] group/header">
+    <motion.header 
+      initial={{ y: 0 }}
+      animate={{ y: isVisible ? 0 : -200 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed top-0 left-0 w-full z-[100] group/header"
+    >
       {/* LAYER 0: Gopuram Trim */}
       <GopuramTrim />
 
@@ -396,6 +416,6 @@ export const Header = ({ onAccountClick }: { onAccountClick?: () => void }) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 };

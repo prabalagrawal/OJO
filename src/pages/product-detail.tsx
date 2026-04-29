@@ -31,6 +31,8 @@ export function ProductDetailPage() {
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
+  const [selectedColor, setSelectedColor] = useState<any>(null);
+  const [selectedSize, setSelectedSize] = useState<string>("");
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
   const [activeAccordion, setActiveAccordion] = useState<string | null>("provenance");
 
@@ -42,8 +44,11 @@ export function ProductDetailPage() {
         const docRef = doc(db, "products", id!);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          const p = { id: docSnap.id, ...docSnap.data() };
+          const p = { id: docSnap.id, ...docSnap.data() } as any;
           setProduct(p);
+          
+          if (p.availableColors?.length > 0) setSelectedColor(p.availableColors[0]);
+          if (p.availableSizes?.length > 0) setSelectedSize(p.availableSizes[0]);
           
           // Fetch related
           const relatedPath = 'products';
@@ -77,7 +82,10 @@ export function ProductDetailPage() {
     const cart = savedCart ? JSON.parse(savedCart) : [];
     const images = Array.isArray(product.images) ? product.images : JSON.parse(product.images || "[]");
     
-    const existing = cart.find((i: any) => i.productId === product.id);
+    const existing = cart.find((i: any) => 
+      i.productId === product.id && 
+      JSON.stringify(i.options || {}) === JSON.stringify({ color: selectedColor, size: selectedSize })
+    );
     if (existing) {
       existing.quantity += 1;
     } else {
@@ -85,13 +93,15 @@ export function ProductDetailPage() {
         productId: product.id,
         name: product.name,
         price: product.price,
-        image: images[0],
+        image: selectedColor?.image || images[0],
         quantity: 1,
-        origin: product.origin
+        origin: product.origin,
+        options: { color: selectedColor, size: selectedSize }
       });
     }
     localStorage.setItem("cart", JSON.stringify(cart));
     window.dispatchEvent(new Event("storage"));
+    window.dispatchEvent(new Event("cartUpdated"));
     toast.success("Added to Cart");
   };
 
@@ -161,7 +171,7 @@ export function ProductDetailPage() {
           <div className="relative aspect-square rounded-[4rem] overflow-hidden shadow-premium group bg-ojo-cream/50">
              <MandalaHalo className="text-ojo-mustard opacity-20 scale-150" scale={1.5} />
              <img 
-               src={images[activeImage]} 
+               src={selectedColor?.image || images[activeImage]} 
                alt={product.name} 
                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 relative z-10"
                referrerPolicy="no-referrer"
@@ -200,6 +210,49 @@ export function ProductDetailPage() {
             <p className="text-lg text-ojo-charcoal/60 leading-relaxed font-sans font-light italic">
               {product.description}
             </p>
+
+            {/* Customization Options */}
+            <div className="space-y-8 pt-4">
+              {product.availableColors && product.availableColors.length > 0 && (
+                <div className="space-y-4">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ojo-charcoal/40">Select Hue</span>
+                  <div className="flex gap-4">
+                    {product.availableColors.map((color: any) => (
+                      <button
+                        key={color.name}
+                        onClick={() => setSelectedColor(color)}
+                        className={`group relative w-10 h-10 rounded-full border-2 transition-all p-1 ${
+                          selectedColor?.name === color.name ? 'border-ojo-terracotta scale-110 shadow-lg' : 'border-transparent hover:border-ojo-charcoal/20'
+                        }`}
+                      >
+                        <div className="w-full h-full rounded-full" style={{ backgroundColor: color.hex }} />
+                        <div className={`absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-[8px] font-black uppercase tracking-widest transition-opacity ${selectedColor?.name === color.name ? 'opacity-100' : 'opacity-0'}`}>
+                          {color.name}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {product.availableSizes && product.availableSizes.length > 0 && (
+                <div className="space-y-4">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ojo-charcoal/40">Select Dimension</span>
+                  <div className="relative max-w-xs">
+                    <select 
+                      value={selectedSize}
+                      onChange={(e) => setSelectedSize(e.target.value)}
+                      className="w-full appearance-none bg-ojo-beige/20 border border-ojo-charcoal/10 rounded-xl px-6 py-4 text-[10px] font-black uppercase tracking-widest focus:border-ojo-terracotta outline-none transition-all cursor-pointer"
+                    >
+                      {product.availableSizes.map((size: string) => (
+                        <option key={size} value={size}>{size}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-40" size={14} />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="space-y-10">
